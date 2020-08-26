@@ -34,8 +34,8 @@ namespace WrestlerPose
         //i got this counter timer basic setup from online somewhere but changed it to count down and not up
         //here https://stackoverflow.com/questions/13394892/how-to-create-a-timer-counter-in-c-sharp-xna
         //dunno if that sort of thing needs to be documented
-        int counter = 10;
-        int counterStart = 10;
+        int counter = 5;
+        int counterStart = 5;
         float countDuration = 1f;
         float currentTime = 0f;
         int roundNumber = 1;
@@ -282,7 +282,9 @@ namespace WrestlerPose
                 0f
                 );
 
-            _spriteBatch.DrawString(_countDown, counter.ToString(), new Vector2(10, 10), Color.Yellow);
+            //_spriteBatch.DrawString(_countDown, counter.ToString(), new Vector2(10, 10), Color.Yellow);
+            _spriteBatch.DrawString(_countDown, counter.ToString(), new Vector2(10, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+
             //make below color changes based on wether won or lost?
             //so rather than having outcome as a string it could be a class with a string name and a color and
             //maybe some other stuff and above player outcome is set to that class rather than a hardcoded string
