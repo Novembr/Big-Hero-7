@@ -20,6 +20,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Countdown.spritefont
 
+#begin OverallWinner.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:OverallWinner.spritefont
+
 #begin PlayerOneOutcome.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -54,6 +61,13 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Round.spritefont
+
+#begin Title.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Title.spritefont
 
 #begin Wrestler1.png
 /importer:TextureImporter

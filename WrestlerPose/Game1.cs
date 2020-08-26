@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace WrestlerPose
@@ -31,11 +32,14 @@ namespace WrestlerPose
 
         //countdown timer
         //i got this counter timer basic setup from online somewhere but changed it to count down and not up
-        int counter = 1;
+        //here https://stackoverflow.com/questions/13394892/how-to-create-a-timer-counter-in-c-sharp-xna
+        //dunno if that sort of thing needs to be documented
+        int counter = 10;
         int counterStart = 10;
         float countDuration = 1f;
         float currentTime = 0f;
-        int roundNumber = 0;
+        int roundNumber = 1;
+        string overallWinnerString = "";
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -45,6 +49,10 @@ namespace WrestlerPose
         private SpriteFont _playerOneScore;
         private SpriteFont _playerTwoScore;
         private SpriteFont _round;
+        private SpriteFont _overAllWinner;
+        private SpriteFont _title;
+
+
 
 
         public Game1()
@@ -78,6 +86,10 @@ namespace WrestlerPose
             _playerOneScore = Content.Load<SpriteFont>("PlayerOneScore");
             _playerTwoScore = Content.Load<SpriteFont>("PlayerTwoScore");
             _round = Content.Load<SpriteFont>("Round");
+            _overAllWinner = Content.Load<SpriteFont>("OverallWinner");
+            _title = Content.Load<SpriteFont>("Title");
+
+
 
             //load textures
             WrestlerTextureIdle = Content.Load<Texture2D>("WrestlerIdle");
@@ -177,6 +189,8 @@ namespace WrestlerPose
             //you will just be both clicking back and forth to counter one another's poses
             if ((player1.GetPose().GetPoseName() != 0) && (player2.GetPose().GetPoseName() != 0))
             {
+                overallWinnerString = null;//putting this here to reset the overall winner once the game ends
+
                 currentTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (currentTime >= countDuration)
                 {
@@ -217,6 +231,18 @@ namespace WrestlerPose
                         player2.SetCurrentOutcome("Tie");
                     }
 
+                    //do some kind of check score here
+                    overallWinnerString = CheckOverallWinner(player1, player2);
+
+                    if(overallWinnerString != null)
+                    {
+                        //somebody won
+                        ResetGame();
+                    }
+
+                    player1.SetPose(poses[0]);
+                    player2.SetPose(poses[0]);
+
                     //then pause at the end of this to display final outcome for a few seconds and then restart timer?
                     //need to do that later, will have to mess with timer so it pauses while waiting at the round victory screen
                     //could just change both players pose back to idle once round ends
@@ -224,6 +250,8 @@ namespace WrestlerPose
             }
             base.Update(gameTime);
         }
+
+       
 
         protected override void Draw(GameTime gameTime)
         {
@@ -258,11 +286,24 @@ namespace WrestlerPose
             //make below color changes based on wether won or lost?
             //so rather than having outcome as a string it could be a class with a string name and a color and
             //maybe some other stuff and above player outcome is set to that class rather than a hardcoded string
-            _spriteBatch.DrawString(_playerOneOutcome, player1.GetCurrentOutcome(), new Vector2(200, 200), Color.Red);
-            _spriteBatch.DrawString(_playerTwoOutcome, player2.GetCurrentOutcome(), new Vector2(1500, 200), Color.Red);
+            _spriteBatch.DrawString(_playerOneOutcome, "Last Round Outcome: " + player1.GetCurrentOutcome(), new Vector2(200, 200), Color.Red);
+            _spriteBatch.DrawString(_playerTwoOutcome, "Last Round Outcome: " + player2.GetCurrentOutcome(), new Vector2(1500, 200), Color.Red);
             _spriteBatch.DrawString(_playerOneScore, "Player 1 Score:  " + player1.GetScore(), new Vector2(200, 100), Color.YellowGreen);
             _spriteBatch.DrawString(_playerTwoScore, "Player 2 Score:  " + player2.GetScore(), new Vector2(1500, 100), Color.YellowGreen);
             _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 50), Color.Orange);
+
+            //so below is a test scaled up text, but it is of course distorted and pixellated, so there 
+            _spriteBatch.DrawString(_title, "Wrestler Mania! ", new Vector2(850, 50), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(),1);
+
+
+            //would be whitespace at first
+            if (!String.IsNullOrWhiteSpace(overallWinnerString))
+            {
+                //_spriteBatch.DrawString(_overAllWinner, "Overall Winner: " + overallWinnerString, new Vector2(500, 150), Color.Fuchsia);
+                _spriteBatch.DrawString(_overAllWinner, "Overall Winner: " + overallWinnerString, new Vector2(850, 150), Color.Fuchsia, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+
+            }
+
 
 
 
@@ -297,14 +338,14 @@ namespace WrestlerPose
             int poseName1FirstValueItBeats = ((int)poseName1 + 1);//%5;
             if (poseName1FirstValueItBeats > 5)
             {
-                int newNum = poseName1FirstValueItBeats - 5 + 1;//manual modulo so if done then add 1 to skip idle
+                int newNum = poseName1FirstValueItBeats - 5;//manual modulo so if done then add 1 to skip idle
                 poseName1FirstValueItBeats = newNum;
             }
             PoseName poseName1FirstPoseItBeats = (PoseName)poseName1FirstValueItBeats;
             int poseName1SecondValueItBeats = ((int)poseName1 + 3);// % 5;
             if (poseName1SecondValueItBeats > 5)
             {
-                int newNum = poseName1SecondValueItBeats - 5 + 1;//manual modulo so if done then add 1 to skip idle
+                int newNum = poseName1SecondValueItBeats - 5;//manual modulo so if done then add 1 to skip idle
                 poseName1SecondValueItBeats = newNum;
             }
             PoseName poseName1SecondPoseItBeats = (PoseName)poseName1SecondValueItBeats;
@@ -317,6 +358,36 @@ namespace WrestlerPose
             {
                 return player2;
             }
+        }
+
+        private string CheckOverallWinner(Player player1, Player player2)
+        {
+            if(player1.GetScore() >= 3)
+            {
+                return player1.GetName();//so player 1 would win if they both got to score 3 simultaneously but that should never happen
+            }
+            else if(player2.GetScore() >= 3)
+            {
+                return player2.GetName();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private void ResetGame()
+        {
+            player1.SetPose(poses[0]);
+            player2.SetPose(poses[0]);
+            //overallWinnerString = null;//don't set it here because then you never see the overall winner displayed, instead set it 
+            //back to null once someone has initiated a new game of 3 rounds I guess by selecting a non idle pose again?
+            roundNumber = 1;
+            player1.SetScore(0);
+            player2.SetScore(0);
+            player1.SetCurrentOutcome("Pending");
+            player2.SetCurrentOutcome("Pending");
+
         }
     }
 

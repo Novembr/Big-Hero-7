@@ -34,6 +34,8 @@ namespace WrestlerPose
         public Pose GetPose() { return _currentPose; }
         public Vector2 GetPosition() { return _wrestlerPosition; }
         public string GetCurrentOutcome() { return _currentOutcome; }
+        public string GetName() { return _name; }
+
 
     }
 }
