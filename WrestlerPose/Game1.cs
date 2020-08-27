@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using WrestlerPose.Models;
+using WrestlerPose.Sprites;
 
 namespace WrestlerPose
 {
@@ -10,26 +12,14 @@ namespace WrestlerPose
 
     public class Game1 : Game
     {
-        //chosen textures
-        //Texture2D textureAtPosition1;
-        //Texture2D textureAtPosition2;
-        //positions
         Vector2 WrestlerPosition1;
         Vector2 WrestlerPosition2;
 
         Player player1;
         Player player2;
 
-        //added textures
-        Texture2D WrestlerTexture1;
-        Texture2D WrestlerTexture2;
-        Texture2D WrestlerTexture3;
-        Texture2D WrestlerTexture4;
-        Texture2D WrestlerTexture5;
-        Texture2D WrestlerTextureIdle;
-
-        List<Texture2D> wrestlerTextures = new List<Texture2D>(6);
-        List<Pose> poses = new List<Pose>(6);
+        List<Animation> animations = new List<Animation>(12);
+        List<Pose> poses = new List<Pose>(12);
 
 
         //countdown timer
@@ -56,9 +46,6 @@ namespace WrestlerPose
         private SpriteFont _overAllWinner;
         private SpriteFont _title;
 
-
-
-
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -75,7 +62,6 @@ namespace WrestlerPose
 
             WrestlerPosition1 = new Vector2(_graphics.PreferredBackBufferWidth / 4, _graphics.PreferredBackBufferHeight / 2);
             WrestlerPosition2 = new Vector2(_graphics.PreferredBackBufferWidth * 3 / 4, _graphics.PreferredBackBufferHeight / 2);
-
 
             base.Initialize();
         }
@@ -94,44 +80,33 @@ namespace WrestlerPose
             _overAllWinner = Content.Load<SpriteFont>("OverallWinner");
             _title = Content.Load<SpriteFont>("Title");
 
-            /*
-             LowHands,
-            HighHands,
-            OneHandUp,
-            Pointing,
-            Hercules
-             */
+            //DOUBled number of animations because same one can't be in two places it seems and
+            //will need different ones anyway once getting new characters etc...
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/wrestleidleonerow"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/download"), 6));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/capguy-walk"), 8));
+            animations.Add(new Animation(Content.Load<Texture2D>("onehandup"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("pointing"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("hercules"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/wrestleidleonerow"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("twohandsdown"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("twohandsup"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("onehandup"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("astronaught"), 9));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/wrestleidleonerow"), 12));
 
-            //load textures
-            WrestlerTextureIdle = Content.Load<Texture2D>("idle");
-            WrestlerTexture1 = Content.Load<Texture2D>("twohandsdown");
-            WrestlerTexture2 = Content.Load<Texture2D>("twohandsup");
-            WrestlerTexture3 = Content.Load<Texture2D>("onehandup");
-            WrestlerTexture4 = Content.Load<Texture2D>("pointing");
-            WrestlerTexture5 = Content.Load<Texture2D>("hercules");//preferred the image at 6 over the one at 5, 5 is too large, not sure how to resize in here yet
-
-            //place textures in texture list
-            //definitely smarter ways to fill out this list
-            wrestlerTextures.Add(WrestlerTextureIdle);
-            wrestlerTextures.Add(WrestlerTexture1);
-            wrestlerTextures.Add(WrestlerTexture2);
-            wrestlerTextures.Add(WrestlerTexture3);
-            wrestlerTextures.Add(WrestlerTexture4);
-            wrestlerTextures.Add(WrestlerTexture5);
-
-            //replace this with player texture at position
-            //textureAtPosition1 = WrestlerTextureIdle;
-            //textureAtPosition2 = WrestlerTextureIdle;
-
-            //setup each pose with it's pose name enum and associated texture, Poses may want more members 
-            //using arbitrary number here
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 12; i++)
             {
-                poses.Add(new Pose(wrestlerTextures[i], (PoseName)i));
+                int poseInt = i;
+                if(i > 5)
+                {
+                    poseInt = poseInt - 5;
+                }
+                poses.Add(new Pose(animations[i], (PoseName)poseInt));
             }
 
             player1 = new Player("Player One", WrestlerPosition1, poses[0]);
-            player2 = new Player("Player Two", WrestlerPosition2, poses[0]);
+            player2 = new Player("Player Two", WrestlerPosition2, poses[6]);
 
         }
 
@@ -139,9 +114,6 @@ namespace WrestlerPose
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            //game pad added
-            //just for player one right now
 
             StickDirection playerOneLeftStick = StickDirection.None;
             StickDirection playerOneRightStick = StickDirection.None;
@@ -223,29 +195,14 @@ namespace WrestlerPose
                     }
                 }
 
-                // You can also check the controllers "type"
-                //if (capabilities.GamePadType == GamePadType.GamePad)
-                //{
-                //    if (state.IsButtonDown(Buttons.A))
-                //        Exit();
-                //}
             }
-            //end game pad added
 
             var inputState = Keyboard.GetState();
-
-            /*
-             * poses in order:
-             LowHands,
-             HighHands,
-             OneHandUp,
-             Pointing,
-             Kneeling
-             */
 
             //below is kind of awkward and not very safe, just a bunch of conditionals with hard coded indexes that incidentally correspond to poses
             //along with hard coded input, is it worth it to do some input refactoring, so the keyboard input state is not directly exposed
             //here but instead there's some layer of abstraction that handles input more elegantly? may not be worth doing for prototype
+            //poses[0] and poses[6] are idle poses
             if (inputState.IsKeyDown(Keys.A) || ((playerOneLeftStick == StickDirection.Down) && (playerOneRightStick == StickDirection.Down)))
             {
                 player1.SetPose(poses[1]);
@@ -268,24 +225,29 @@ namespace WrestlerPose
             }
             else if (inputState.IsKeyDown(Keys.NumPad1) || ((playerTwoLeftStick == StickDirection.Down) && (playerTwoRightStick == StickDirection.Down)))
             {
-                player2.SetPose(poses[1]);
+                player2.SetPose(poses[7]);
             }
             else if (inputState.IsKeyDown(Keys.NumPad2) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Up)))
             {
-                player2.SetPose(poses[2]);
+                player2.SetPose(poses[8]);
             }
             else if (inputState.IsKeyDown(Keys.NumPad3) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Down)))
             {
-                player2.SetPose(poses[3]);
+                player2.SetPose(poses[9]);
             }
             else if (inputState.IsKeyDown(Keys.NumPad4) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Right)))
             {
-                player2.SetPose(poses[4]);
+                player2.SetPose(poses[10]);
             }
             else if (inputState.IsKeyDown(Keys.NumPad5) || ((playerTwoLeftStick == StickDirection.Left) && (playerTwoRightStick == StickDirection.Right)))
             {
-                player2.SetPose(poses[5]);
+                player2.SetPose(poses[11]);
             }
+
+            //update animations:
+            //seems like only one sprite copy for each so can't both display same sprite at same time?
+            player1.GetPose().GetSprite().Update(gameTime, player1.GetPosition());
+            player2.GetPose().GetSprite().Update(gameTime, player2.GetPosition());
 
             //timer
             //mess with this later to get it to pause between rounds, etc...
@@ -300,8 +262,6 @@ namespace WrestlerPose
             //presumably you pose should be hidden from the opponent, or not displayed i guess, until the countdown ends, because then
             //you will just be both clicking back and forth to counter one another's poses
 
-
-
             if ((player1.GetPose().GetPoseName() != 0) && (player2.GetPose().GetPoseName() != 0))
             {
                 overallWinnerString = null;//putting this here to reset the overall winner once the game ends
@@ -314,13 +274,8 @@ namespace WrestlerPose
                 }
                 if (counter < 0)
                 {
-                    counter = counterStart;//Reset the counter;
-                                           //any actions to perform
+                    counter = counterStart;
                     roundNumber++;
-                    //here will call the compare poses***
-                    //BUT either you can change your pose, and it visibly changes, as many times as you like during countdown, and then completes
-                    //them when the count is 0, like player vs player, OR, the players wrestle pose changes as many times as they like during countdown
-                    //but the AI will retain an idle pose until the last final moment
                     Player winner = ComparePoses(player1, player2);
                     //should separate all the below out into some ResolveOutcome() type function rather than just putting it in update
                     //that displays proper values and sets scores etc...
@@ -373,30 +328,10 @@ namespace WrestlerPose
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(
-                player1.GetPose().GetTexture(),
-                player1.GetPosition(),
-                null,
-                Color.White,
-                0f,
-                new Vector2(player1.GetPose().GetTexture().Width / 2, player1.GetPose().GetTexture().Height / 2),
-                0.5f,
-                SpriteEffects.None,
-                0f
-                );
-            _spriteBatch.Draw(
-                player2.GetPose().GetTexture(),
-                player2.GetPosition(),
-                null,
-                Color.White,
-                0f,
-                new Vector2(player2.GetPose().GetTexture().Width / 2, player2.GetPose().GetTexture().Height / 2),
-                0.5f,//scalse changed from vector2d.one
-                SpriteEffects.None,
-                0f
-                );
 
-            //_spriteBatch.DrawString(_countDown, counter.ToString(), new Vector2(10, 10), Color.Yellow);
+            player1.GetPose().GetSprite().Draw(_spriteBatch);
+            player2.GetPose().GetSprite().Draw(_spriteBatch);
+
             _spriteBatch.DrawString(_countDown, counter.ToString(), new Vector2(10, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
 
             //make below color changes based on wether won or lost?
@@ -421,12 +356,7 @@ namespace WrestlerPose
 
             }
 
-
-
-
-
             _spriteBatch.End();
-
 
             base.Draw(gameTime);
         }
@@ -444,9 +374,6 @@ namespace WrestlerPose
                 return null;//just return null if it's a tie? might be better way
             }
 
-            //pictures not currently matching enums? i think they are but with new animations and sprites they will have to be manually
-            //made to match, and of course nothing here is animated so rather than a list of textures it will be some kind of list of 
-            //animations I guess
             //below comparison with modulo doesn't work because of idle, which occupies the 0 slot in the posname enum
             //so I have to not use modulo and instead wrap the pose and 
             //then add 1 more, but below doesn't look very good because of it.
@@ -512,9 +439,6 @@ namespace WrestlerPose
             {
                 ResetGame();
             }
-            //call some kind of if matchnumber > 3 then restart game totally
-            //score is just for winning a match, if you don't win the match then the match resets? that's only against the ai
-            //against the player it continues either way
         }
 
         private void ResetGame()
