@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace WrestlerPose
 {
 
-    
+
     public class Game1 : Game
     {
         //chosen textures
@@ -94,15 +94,21 @@ namespace WrestlerPose
             _overAllWinner = Content.Load<SpriteFont>("OverallWinner");
             _title = Content.Load<SpriteFont>("Title");
 
-
+            /*
+             LowHands,
+            HighHands,
+            OneHandUp,
+            Pointing,
+            Hercules
+             */
 
             //load textures
             WrestlerTextureIdle = Content.Load<Texture2D>("WrestlerIdle");
-            WrestlerTexture1 = Content.Load<Texture2D>("Wrestler1");
-            WrestlerTexture2 = Content.Load<Texture2D>("Wrestler2");
-            WrestlerTexture3 = Content.Load<Texture2D>("Wrestler3");
-            WrestlerTexture4 = Content.Load<Texture2D>("Wrestler4");
-            WrestlerTexture5 = Content.Load<Texture2D>("Wrestler6");//preferred the image at 6 over the one at 5, 5 is too large, not sure how to resize in here yet
+            WrestlerTexture1 = Content.Load<Texture2D>("twohandsdown");
+            WrestlerTexture2 = Content.Load<Texture2D>("twohandsup");
+            WrestlerTexture3 = Content.Load<Texture2D>("onehandup");
+            WrestlerTexture4 = Content.Load<Texture2D>("pointing");
+            WrestlerTexture5 = Content.Load<Texture2D>("hercules");//preferred the image at 6 over the one at 5, 5 is too large, not sure how to resize in here yet
 
             //place textures in texture list
             //definitely smarter ways to fill out this list
@@ -136,66 +142,88 @@ namespace WrestlerPose
 
             //game pad added
             //just for player one right now
-            GamePadCapabilities capabilities = GamePad.GetCapabilities(PlayerIndex.One);
 
             StickDirection playerOneLeftStick = StickDirection.None;
             StickDirection playerOneRightStick = StickDirection.None;
+            StickDirection playerTwoLeftStick = StickDirection.None;
+            StickDirection playerTwoRightStick = StickDirection.None;
 
-
-            if (capabilities.IsConnected)
+            for (int i = 0; i < 2; i++)
             {
-                GamePadState state = GamePad.GetState(PlayerIndex.One);
+                //this is looping but is never showing player two as connected, so I think you need two controllers connected at once for that and can't 
+                //just manually change one xbox controller to slot 2 and back
+                PlayerIndex playerIndex = (PlayerIndex)i;
+                GamePadCapabilities capabilities = GamePad.GetCapabilities(playerIndex);
 
-                if (capabilities.HasLeftXThumbStick && capabilities.HasLeftYThumbStick)
+                if (capabilities.IsConnected)
                 {
-                    if (state.ThumbSticks.Left.X < -0.5f)
+                    GamePadState state = GamePad.GetState(playerIndex);
+                    Player player = player1;
+
+                    if (i == 1)
                     {
-                        player1.SetLeftStickDirection(StickDirection.Left);
+                        player = player2;
                     }
-                    else if (state.ThumbSticks.Left.X > 0.5f)
+
+                    if (capabilities.HasLeftXThumbStick && capabilities.HasLeftYThumbStick)
                     {
-                        player1.SetLeftStickDirection(StickDirection.Right);
+                        if (state.ThumbSticks.Left.X < -0.5f)
+                        {
+                            player.SetLeftStickDirection(StickDirection.Left);
+                        }
+                        else if (state.ThumbSticks.Left.X > 0.5f)
+                        {
+                            player.SetLeftStickDirection(StickDirection.Right);
+                        }
+                        else if (state.ThumbSticks.Left.Y < -0.5f)
+                        {
+                            player.SetLeftStickDirection(StickDirection.Down);
+                        }
+                        else if (state.ThumbSticks.Left.Y > 0.5f)
+                        {
+                            player.SetLeftStickDirection(StickDirection.Up);
+                        }
+                        else
+                        {
+                            player.SetLeftStickDirection(StickDirection.None);
+                        }
                     }
-                    else if (state.ThumbSticks.Left.Y < -0.5f)
+
+                    if (capabilities.HasRightXThumbStick && capabilities.HasRightYThumbStick)
                     {
-                        player1.SetLeftStickDirection(StickDirection.Down);
+                        if (state.ThumbSticks.Right.X < -0.5f)
+                        {
+                            player.SetRightStickDirection(StickDirection.Left);
+                        }
+                        else if (state.ThumbSticks.Right.X > 0.5f)
+                        {
+                            player.SetRightStickDirection(StickDirection.Right);
+                        }
+                        else if (state.ThumbSticks.Right.Y < -0.5f)
+                        {
+                            player.SetRightStickDirection(StickDirection.Down);
+                        }
+                        else if (state.ThumbSticks.Right.Y > 0.5f)
+                        {
+                            player.SetRightStickDirection(StickDirection.Up);
+                        }
+                        else
+                        {
+                            player.SetLeftStickDirection(StickDirection.None);
+                        }
                     }
-                    else if (state.ThumbSticks.Left.Y > 0.5f)
+
+                    if (i == 0)
                     {
-                        player1.SetLeftStickDirection(StickDirection.Up);
+                        playerOneLeftStick = player.GetLeftStickDirection();
+                        playerOneRightStick = player.GetRightStickDirection();
                     }
                     else
                     {
-                        player1.SetLeftStickDirection(StickDirection.None);
+                        playerTwoLeftStick = player.GetLeftStickDirection();
+                        playerTwoRightStick = player.GetRightStickDirection();
                     }
                 }
-               
-                if (capabilities.HasRightXThumbStick && capabilities.HasRightYThumbStick)
-                {
-                    if (state.ThumbSticks.Right.X < -0.5f)
-                    {
-                        player1.SetRightStickDirection(StickDirection.Left);
-                    }
-                    else if (state.ThumbSticks.Right.X > 0.5f)
-                    {
-                        player1.SetRightStickDirection(StickDirection.Right);
-                    }
-                    else if (state.ThumbSticks.Right.Y < -0.5f)
-                    {
-                        player1.SetRightStickDirection(StickDirection.Down);
-                    }
-                    else if (state.ThumbSticks.Right.Y > 0.5f)
-                    {
-                        player1.SetRightStickDirection(StickDirection.Up);
-                    }
-                    else
-                    {
-                        player1.SetLeftStickDirection(StickDirection.None);
-                    }
-                }
-
-                playerOneLeftStick = player1.GetLeftStickDirection();
-                playerOneRightStick = player1.GetRightStickDirection();
 
                 // You can also check the controllers "type"
                 //if (capabilities.GamePadType == GamePadType.GamePad)
@@ -240,23 +268,23 @@ namespace WrestlerPose
             {
                 player1.SetPose(poses[5]);
             }
-            else if (inputState.IsKeyDown(Keys.NumPad1))
+            else if (inputState.IsKeyDown(Keys.NumPad1) || ((playerTwoLeftStick == StickDirection.Down) && (playerTwoRightStick == StickDirection.Down)))
             {
                 player2.SetPose(poses[1]);
             }
-            else if (inputState.IsKeyDown(Keys.NumPad2))
+            else if (inputState.IsKeyDown(Keys.NumPad2) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Up)))
             {
                 player2.SetPose(poses[2]);
             }
-            else if (inputState.IsKeyDown(Keys.NumPad3))
+            else if (inputState.IsKeyDown(Keys.NumPad3) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Down)))
             {
                 player2.SetPose(poses[3]);
             }
-            else if (inputState.IsKeyDown(Keys.NumPad4))
+            else if (inputState.IsKeyDown(Keys.NumPad4) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Right)))
             {
                 player2.SetPose(poses[4]);
             }
-            else if (inputState.IsKeyDown(Keys.NumPad5))
+            else if (inputState.IsKeyDown(Keys.NumPad5) || ((playerTwoLeftStick == StickDirection.Left) && (playerTwoRightStick == StickDirection.Right)))
             {
                 player2.SetPose(poses[5]);
             }
@@ -274,7 +302,7 @@ namespace WrestlerPose
             //presumably you pose should be hidden from the opponent, or not displayed i guess, until the countdown ends, because then
             //you will just be both clicking back and forth to counter one another's poses
 
-            
+
 
             if ((player1.GetPose().GetPoseName() != 0) && (player2.GetPose().GetPoseName() != 0))
             {
@@ -284,7 +312,7 @@ namespace WrestlerPose
                 if (currentTime >= countDuration)
                 {
                     counter--;
-                    currentTime -= countDuration; 
+                    currentTime -= countDuration;
                 }
                 if (counter < 0)
                 {
@@ -323,7 +351,7 @@ namespace WrestlerPose
                     //do some kind of check score here
                     overallWinnerString = CheckOverallWinner(player1, player2);
 
-                    if(overallWinnerString != null)
+                    if (overallWinnerString != null)
                     {
                         //somebody won
                         ResetMatch();
@@ -340,7 +368,7 @@ namespace WrestlerPose
             base.Update(gameTime);
         }
 
-       
+
 
         protected override void Draw(GameTime gameTime)
         {
@@ -350,12 +378,11 @@ namespace WrestlerPose
             _spriteBatch.Draw(
                 player1.GetPose().GetTexture(),
                 player1.GetPosition(),
-                //new Rectangle(50, 50, 300,300), //this can resize, seems to mess with images, might be bad for fixed size photos and not sprites, dunno
                 null,
                 Color.White,
                 0f,
                 new Vector2(player1.GetPose().GetTexture().Width / 2, player1.GetPose().GetTexture().Height / 2),
-                Vector2.One,
+                0.5f,
                 SpriteEffects.None,
                 0f
                 );
@@ -366,7 +393,7 @@ namespace WrestlerPose
                 Color.White,
                 0f,
                 new Vector2(player2.GetPose().GetTexture().Width / 2, player2.GetPose().GetTexture().Height / 2),
-                Vector2.One,
+                0.5f,//scalse changed from vector2d.one
                 SpriteEffects.None,
                 0f
                 );
@@ -385,7 +412,7 @@ namespace WrestlerPose
             _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
 
             //so below is a test scaled up text, but it is of course distorted and pixellated, so there 
-            _spriteBatch.DrawString(_title, "Wrestler Mania! ", new Vector2(850, 50), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(),1);
+            _spriteBatch.DrawString(_title, "Wrestler Mania! ", new Vector2(850, 50), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
 
 
             //would be whitespace at first
@@ -454,11 +481,11 @@ namespace WrestlerPose
 
         private string CheckOverallWinner(Player player1, Player player2)
         {
-            if(player1.GetScore() >= 3)
+            if (player1.GetScore() >= 3)
             {
                 return player1.GetName();//so player 1 would win if they both got to score 3 simultaneously but that should never happen
             }
-            else if(player2.GetScore() >= 3)
+            else if (player2.GetScore() >= 3)
             {
                 return player2.GetName();
             }
@@ -483,7 +510,7 @@ namespace WrestlerPose
             player1.SetCurrentOutcome("Pending");
             player2.SetCurrentOutcome("Pending");
 
-            if(matchNumber > 3)
+            if (matchNumber > 3)
             {
                 ResetGame();
             }

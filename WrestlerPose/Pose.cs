@@ -15,7 +15,7 @@ namespace WrestlerPose
         HighHands,
         OneHandUp,
         Pointing,
-        Kneeling
+        Hercules
     }
 
     //pose needs to be set with its texture
