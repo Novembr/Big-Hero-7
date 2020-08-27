@@ -7,6 +7,15 @@ using Microsoft.Xna.Framework.Input;
 
 namespace WrestlerPose
 {
+
+    public enum StickDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right,
+        None
+    }
     public class Player
     {
         Pose _currentPose;
@@ -14,6 +23,9 @@ namespace WrestlerPose
         int _score;
         string _name;
         string _currentOutcome;
+        StickDirection _leftStickDirection;
+        StickDirection _rightStickDirection;
+
 
 
         public Player(string name, Vector2 wrestlerPosition, Pose currentPose)
@@ -26,12 +38,16 @@ namespace WrestlerPose
         }
 
         public void SetPose(Pose pose) { _currentPose = pose; }
+        public void SetLeftStickDirection(StickDirection stickDirection) { _leftStickDirection = stickDirection; }
+        public void SetRightStickDirection(StickDirection stickDirection) { _rightStickDirection = stickDirection; }
         public void SetScore(int score) { _score = score; }
         public void SetCurrentOutcome(string outcome) { _currentOutcome = outcome; }
 
 
         public int GetScore() { return _score; }
         public Pose GetPose() { return _currentPose; }
+        public StickDirection GetLeftStickDirection() { return _leftStickDirection; }
+        public StickDirection GetRightStickDirection() { return _rightStickDirection; }
         public Vector2 GetPosition() { return _wrestlerPosition; }
         public string GetCurrentOutcome() { return _currentOutcome; }
         public string GetName() { return _name; }

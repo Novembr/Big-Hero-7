@@ -18,7 +18,7 @@ namespace WrestlerPose
         Kneeling
     }
 
-    //pose needs to be set with its texture test
+    //pose needs to be set with its texture
 
     public class Pose
     {

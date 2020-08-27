@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 namespace WrestlerPose
 {
+
+    
     public class Game1 : Game
     {
         //chosen textures
@@ -132,28 +134,109 @@ namespace WrestlerPose
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            //game pad added
+            //just for player one right now
+            GamePadCapabilities capabilities = GamePad.GetCapabilities(PlayerIndex.One);
+
+            StickDirection playerOneLeftStick = StickDirection.None;
+            StickDirection playerOneRightStick = StickDirection.None;
+
+
+            if (capabilities.IsConnected)
+            {
+                GamePadState state = GamePad.GetState(PlayerIndex.One);
+
+                if (capabilities.HasLeftXThumbStick && capabilities.HasLeftYThumbStick)
+                {
+                    if (state.ThumbSticks.Left.X < -0.5f)
+                    {
+                        player1.SetLeftStickDirection(StickDirection.Left);
+                    }
+                    else if (state.ThumbSticks.Left.X > 0.5f)
+                    {
+                        player1.SetLeftStickDirection(StickDirection.Right);
+                    }
+                    else if (state.ThumbSticks.Left.Y < -0.5f)
+                    {
+                        player1.SetLeftStickDirection(StickDirection.Down);
+                    }
+                    else if (state.ThumbSticks.Left.Y > 0.5f)
+                    {
+                        player1.SetLeftStickDirection(StickDirection.Up);
+                    }
+                    else
+                    {
+                        player1.SetLeftStickDirection(StickDirection.None);
+                    }
+                }
+               
+                if (capabilities.HasRightXThumbStick && capabilities.HasRightYThumbStick)
+                {
+                    if (state.ThumbSticks.Right.X < -0.5f)
+                    {
+                        player1.SetRightStickDirection(StickDirection.Left);
+                    }
+                    else if (state.ThumbSticks.Right.X > 0.5f)
+                    {
+                        player1.SetRightStickDirection(StickDirection.Right);
+                    }
+                    else if (state.ThumbSticks.Right.Y < -0.5f)
+                    {
+                        player1.SetRightStickDirection(StickDirection.Down);
+                    }
+                    else if (state.ThumbSticks.Right.Y > 0.5f)
+                    {
+                        player1.SetRightStickDirection(StickDirection.Up);
+                    }
+                    else
+                    {
+                        player1.SetLeftStickDirection(StickDirection.None);
+                    }
+                }
+
+                playerOneLeftStick = player1.GetLeftStickDirection();
+                playerOneRightStick = player1.GetRightStickDirection();
+
+                // You can also check the controllers "type"
+                //if (capabilities.GamePadType == GamePadType.GamePad)
+                //{
+                //    if (state.IsButtonDown(Buttons.A))
+                //        Exit();
+                //}
+            }
+            //end game pad added
+
             var inputState = Keyboard.GetState();
+
+            /*
+             * poses in order:
+             LowHands,
+             HighHands,
+             OneHandUp,
+             Pointing,
+             Kneeling
+             */
 
             //below is kind of awkward and not very safe, just a bunch of conditionals with hard coded indexes that incidentally correspond to poses
             //along with hard coded input, is it worth it to do some input refactoring, so the keyboard input state is not directly exposed
             //here but instead there's some layer of abstraction that handles input more elegantly? may not be worth doing for prototype
-            if (inputState.IsKeyDown(Keys.A))
+            if (inputState.IsKeyDown(Keys.A) || ((playerOneLeftStick == StickDirection.Down) && (playerOneRightStick == StickDirection.Down)))
             {
                 player1.SetPose(poses[1]);
             }
-            else if (inputState.IsKeyDown(Keys.S))
+            else if (inputState.IsKeyDown(Keys.S) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Up)))
             {
                 player1.SetPose(poses[2]);
             }
-            else if (inputState.IsKeyDown(Keys.D))
+            else if (inputState.IsKeyDown(Keys.D) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Down)))
             {
                 player1.SetPose(poses[3]);
             }
-            else if (inputState.IsKeyDown(Keys.F))
+            else if (inputState.IsKeyDown(Keys.F) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Right)))
             {
                 player1.SetPose(poses[4]);
             }
-            else if (inputState.IsKeyDown(Keys.G))
+            else if (inputState.IsKeyDown(Keys.G) || ((playerOneLeftStick == StickDirection.Left) && (playerOneRightStick == StickDirection.Right)))
             {
                 player1.SetPose(poses[5]);
             }
