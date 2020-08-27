@@ -103,7 +103,7 @@ namespace WrestlerPose
              */
 
             //load textures
-            WrestlerTextureIdle = Content.Load<Texture2D>("WrestlerIdle");
+            WrestlerTextureIdle = Content.Load<Texture2D>("idle");
             WrestlerTexture1 = Content.Load<Texture2D>("twohandsdown");
             WrestlerTexture2 = Content.Load<Texture2D>("twohandsup");
             WrestlerTexture3 = Content.Load<Texture2D>("onehandup");
@@ -150,8 +150,6 @@ namespace WrestlerPose
 
             for (int i = 0; i < 2; i++)
             {
-                //this is looping but is never showing player two as connected, so I think you need two controllers connected at once for that and can't 
-                //just manually change one xbox controller to slot 2 and back
                 PlayerIndex playerIndex = (PlayerIndex)i;
                 GamePadCapabilities capabilities = GamePad.GetCapabilities(playerIndex);
 

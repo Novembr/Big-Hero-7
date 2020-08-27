@@ -32,6 +32,18 @@
 /processorParam:TextureFormat=Color
 /build:hercules.jpg
 
+#begin idle.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:idle.jpg
+
 #begin Match.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
