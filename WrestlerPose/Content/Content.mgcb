@@ -20,6 +20,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Countdown.spritefont
 
+#begin Match.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Match.spritefont
+
 #begin OverallWinner.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

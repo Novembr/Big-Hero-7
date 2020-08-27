@@ -34,12 +34,13 @@ namespace WrestlerPose
         //i got this counter timer basic setup from online somewhere but changed it to count down and not up
         //here https://stackoverflow.com/questions/13394892/how-to-create-a-timer-counter-in-c-sharp-xna
         //dunno if that sort of thing needs to be documented
-        int counter = 5;
-        int counterStart = 5;
+        int counter = 15;
+        int counterStart = 15;
         float countDuration = 1f;
         float currentTime = 0f;
         int roundNumber = 1;
         string overallWinnerString = "";
+        int matchNumber = 1;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -49,6 +50,7 @@ namespace WrestlerPose
         private SpriteFont _playerOneScore;
         private SpriteFont _playerTwoScore;
         private SpriteFont _round;
+        private SpriteFont _match;
         private SpriteFont _overAllWinner;
         private SpriteFont _title;
 
@@ -86,6 +88,7 @@ namespace WrestlerPose
             _playerOneScore = Content.Load<SpriteFont>("PlayerOneScore");
             _playerTwoScore = Content.Load<SpriteFont>("PlayerTwoScore");
             _round = Content.Load<SpriteFont>("Round");
+            _match = Content.Load<SpriteFont>("Match");
             _overAllWinner = Content.Load<SpriteFont>("OverallWinner");
             _title = Content.Load<SpriteFont>("Title");
 
@@ -187,6 +190,9 @@ namespace WrestlerPose
             //players have selected a new pose
             //presumably you pose should be hidden from the opponent, or not displayed i guess, until the countdown ends, because then
             //you will just be both clicking back and forth to counter one another's poses
+
+            
+
             if ((player1.GetPose().GetPoseName() != 0) && (player2.GetPose().GetPoseName() != 0))
             {
                 overallWinnerString = null;//putting this here to reset the overall winner once the game ends
@@ -237,7 +243,7 @@ namespace WrestlerPose
                     if(overallWinnerString != null)
                     {
                         //somebody won
-                        ResetGame();
+                        ResetMatch();
                     }
 
                     player1.SetPose(poses[0]);
@@ -292,7 +298,8 @@ namespace WrestlerPose
             _spriteBatch.DrawString(_playerTwoOutcome, "Last Round Outcome: " + player2.GetCurrentOutcome(), new Vector2(1500, 200), Color.Red);
             _spriteBatch.DrawString(_playerOneScore, "Player 1 Score:  " + player1.GetScore(), new Vector2(200, 100), Color.YellowGreen);
             _spriteBatch.DrawString(_playerTwoScore, "Player 2 Score:  " + player2.GetScore(), new Vector2(1500, 100), Color.YellowGreen);
-            _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 50), Color.Orange);
+            _spriteBatch.DrawString(_match, "Match: " + matchNumber, new Vector2(100, 50), Color.Red);
+            _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
 
             //so below is a test scaled up text, but it is of course distorted and pixellated, so there 
             _spriteBatch.DrawString(_title, "Wrestler Mania! ", new Vector2(850, 50), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(),1);
@@ -378,17 +385,35 @@ namespace WrestlerPose
             }
         }
 
-        private void ResetGame()
+        private void ResetMatch()
         {
             player1.SetPose(poses[0]);
             player2.SetPose(poses[0]);
             //overallWinnerString = null;//don't set it here because then you never see the overall winner displayed, instead set it 
             //back to null once someone has initiated a new game of 3 rounds I guess by selecting a non idle pose again?
             roundNumber = 1;
+            matchNumber++;
+            counterStart = (4 - matchNumber) * 5;
+            counter = counterStart;
             player1.SetScore(0);
             player2.SetScore(0);
             player1.SetCurrentOutcome("Pending");
             player2.SetCurrentOutcome("Pending");
+
+            if(matchNumber > 3)
+            {
+                ResetGame();
+            }
+            //call some kind of if matchnumber > 3 then restart game totally
+            //score is just for winning a match, if you don't win the match then the match resets? that's only against the ai
+            //against the player it continues either way
+        }
+
+        private void ResetGame()
+        {
+            matchNumber = 0;
+            counterStart = 15;
+            counter = 15;
 
         }
     }
