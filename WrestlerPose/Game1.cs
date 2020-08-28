@@ -18,8 +18,10 @@ namespace WrestlerPose
         Player player1;
         Player player2;
 
-        List<Animation> animations = new List<Animation>(12);
-        List<Pose> poses = new List<Pose>(12);
+        const int numAnimations = 12;
+
+        List<Animation> animations = new List<Animation>(numAnimations);
+        List<Pose> poses = new List<Pose>(numAnimations);
 
 
         //countdown timer
@@ -95,9 +97,10 @@ namespace WrestlerPose
             animations.Add(new Animation(Content.Load<Texture2D>("astronaught"), 9));
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/wrestleidleonerow"), 12));
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < numAnimations; i++)
             {
                 int poseInt = i;
+                //should make this a non-arbitrary number later
                 if(i > 5)
                 {
                     poseInt = poseInt - 5;
