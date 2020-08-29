@@ -83,6 +83,7 @@ namespace WrestlerPose
         private SpriteFont _match;
         private SpriteFont _overAllWinner;
         private SpriteFont _title;
+        private Texture2D _allPosesImage;
 
         private List<Texture2D> playerOneSelectedPoseSpritesToChooseFrom = new List<Texture2D>(5);//assumes the most will be 5 
         private List<Texture2D> playerTwoSelectedPoseSpritesToChooseFrom = new List<Texture2D>(5);//assumes the most will be 5
@@ -127,6 +128,8 @@ namespace WrestlerPose
             _match = Content.Load<SpriteFont>("Match");
             _overAllWinner = Content.Load<SpriteFont>("OverallWinner");
             _title = Content.Load<SpriteFont>("Title");
+            _allPosesImage = Content.Load<Texture2D>("AllPosesImage");
+
 
 
             List<string> stillAnimationImageNameStrings = new List<string>(5) { "twohandsdown", "twohandsup", "onehandup", "pointing", "hercules" };
@@ -666,7 +669,21 @@ namespace WrestlerPose
             _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
 
             //so below is a test scaled up text, but it is of course distorted and pixellated, so there 
-            _spriteBatch.DrawString(_title, "Wrestler Mania! ", new Vector2(850, 50), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+            _spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(800, 100), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+
+            _spriteBatch.Draw(
+                    _allPosesImage,
+                    new Vector2(950, 800),
+                    null,
+                    Color.White,
+
+                    0f,
+                    new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
+                    0.5f,
+                    SpriteEffects.None,
+                    0f
+
+                    );
 
 
             //would be whitespace at first
