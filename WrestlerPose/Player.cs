@@ -25,7 +25,9 @@ namespace WrestlerPose
         string _currentOutcome;
         StickDirection _leftStickDirection;
         StickDirection _rightStickDirection;
-
+        private List<Pose> _currentPosePattern;
+        //private int _aiPatternSize;
+        public List<int> _poseValuesForThisAI { get; set; }
 
 
         public Player(string name, Vector2 wrestlerPosition, Pose currentPose)
@@ -37,14 +39,73 @@ namespace WrestlerPose
             _currentOutcome = "Pending";
         }
 
+        public Player(string name, Vector2 wrestlerPosition, List<Pose> currentPosePattern)
+        {
+            _name = name;
+            _score = 0;
+            _currentPosePattern = currentPosePattern;
+            _wrestlerPosition = wrestlerPosition;
+            _currentOutcome = "Pending";
+        }
+
+        public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern)
+        {
+            _name = name;
+            _score = 0;
+            _currentPose = currentPose;
+            _currentPosePattern = currentPosePattern;
+            _wrestlerPosition = wrestlerPosition;
+            _currentOutcome = "Pending";//doesn't need an outcome I guess but it can just go unused
+        }
+
+        public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern, List<int> poseValuesForThisAi)
+        {
+            _name = name;
+            _score = 0;
+            _currentPose = currentPose;
+            _currentPosePattern = currentPosePattern;
+            _wrestlerPosition = wrestlerPosition;
+            _currentOutcome = "Pending";//doesn't need an outcome I guess but it can just go unused
+            _poseValuesForThisAI = poseValuesForThisAi;
+            //_aiPatternSize = patternSize;
+        }
+
         public void SetPose(Pose pose) { _currentPose = pose; }
         public void SetLeftStickDirection(StickDirection stickDirection) { _leftStickDirection = stickDirection; }
         public void SetRightStickDirection(StickDirection stickDirection) { _rightStickDirection = stickDirection; }
-        public void SetScore(int score) { _score = score; }
+        public void SetScore(int score) 
+        {
+            _score = score; 
+        }
         public void SetCurrentOutcome(string outcome) { _currentOutcome = outcome; }
 
+        //can set individual poses in existing pose pattern list or set it to new list of poses
+        //with equals comparison will this need reference cmparison or value comparison?
+        public void SetPosePattern(int index, Pose pose)
+        {
+            _currentPosePattern[index] = pose;
+        }
 
-        public int GetScore() { return _score; }
+        public void SetPosePattern(List<Pose> poses)
+        {
+            _currentPosePattern = poses;
+        }
+
+        public void AddToPosePattern(Pose pose)
+        {
+            _currentPosePattern.Add(pose);
+        }
+
+        public List<Pose> GetPosePattern()
+        {
+            return _currentPosePattern;
+        }
+
+
+        public int GetScore() 
+        {
+            return _score; 
+        }
         public Pose GetPose() { return _currentPose; }
         public StickDirection GetLeftStickDirection() { return _leftStickDirection; }
         public StickDirection GetRightStickDirection() { return _rightStickDirection; }

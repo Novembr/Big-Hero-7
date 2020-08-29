@@ -30,6 +30,12 @@ namespace WrestlerPose.Sprites
             }
         }
 
+        public float GetAnimationTime()
+        {
+            float animationTime = _animation.FrameCount * _animation.FrameSpeed;
+            return animationTime;
+        }
+
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (_texture != null)
@@ -42,7 +48,7 @@ namespace WrestlerPose.Sprites
 
                     0f,
                     new Vector2(_texture.Width / 2, _texture.Height / 2),
-                    0.5f,
+                    0.3f,
                     SpriteEffects.None,
                     0f
 
