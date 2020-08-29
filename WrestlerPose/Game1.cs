@@ -141,36 +141,35 @@ namespace WrestlerPose
 
             //DOUBled number of animations because same one can't be in two places it seems and
             //will need different ones anyway once getting new characters etc...
+            /*
+             LowHands,
+            Pointing,
+            OneHandUp,
+            HighHands,
+            Hercules
+             */
             //player one animations:
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/wrestleidleonerow"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("twohandsdown"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("twohandsup"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("onehandup"), 1));
             animations.Add(new Animation(Content.Load<Texture2D>("pointing"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("onehandup"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("twohandsup"), 1));
             animations.Add(new Animation(Content.Load<Texture2D>("hercules"), 1));
             //player 2 animations
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/wrestleidleonerow"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("twohandsdown"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("twohandsup"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("onehandup"), 1));
             animations.Add(new Animation(Content.Load<Texture2D>("pointing"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("onehandup"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("twohandsup"), 1));
             animations.Add(new Animation(Content.Load<Texture2D>("hercules"), 1));
             //player 3 animations
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/wrestleidleonerow"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("twohandsdown"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("twohandsup"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("onehandup"), 1));
             animations.Add(new Animation(Content.Load<Texture2D>("pointing"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("onehandup"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("twohandsup"), 1));
             animations.Add(new Animation(Content.Load<Texture2D>("hercules"), 1));
 
-            /*
-                Idle,
-                LowHands,
-                HighHands,
-                OneHandUp,
-                Pointing,
-                Hercules
-            */
 
             for (int i = 0; i < numAnimations; i++)
             {
@@ -199,9 +198,9 @@ namespace WrestlerPose
             //displayed 3 times
             AIPlayerList = new List<Player>
             { 
-                new Player("firstAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[14], poses[14] }, new List<int>{ 13, 14}),
-                new Player("secondAI", AIPosition, poses[12], new List<Pose>(4) { poses[14], poses[16], poses[15], poses[14] }, new List<int>{ 13, 14, 15}),
-                new Player("thirdAI", AIPosition, poses[12], new List<Pose>(5) { poses[17], poses[16], poses[17], poses[15], poses[13] }, new List<int>{ 13, 14, 15, 16}),
+                new Player("firstAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[14], poses[14] }, new List<int>{ 13, 14, 15}),
+                new Player("secondAI", AIPosition, poses[12], new List<Pose>(4) { poses[14], poses[16], poses[15], poses[14] }, new List<int>{ 13, 14, 15, 17}),
+                new Player("thirdAI", AIPosition, poses[12], new List<Pose>(5) { poses[17], poses[16], poses[17], poses[15], poses[13] }, new List<int>{ 13, 14, 15, 16, 17}),
             };
 
             currentAI = AIPlayerList[0];//later have a set currentai method rather than just always setting to first ai like here
@@ -676,13 +675,11 @@ namespace WrestlerPose
                     new Vector2(950, 800),
                     null,
                     Color.White,
-
                     0f,
                     new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
                     0.5f,
                     SpriteEffects.None,
                     0f
-
                     );
 
 

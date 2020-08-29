@@ -14,9 +14,9 @@ namespace WrestlerPose
     {
         Idle,
         LowHands,
-        HighHands,
-        OneHandUp,
         Pointing,
+        OneHandUp,
+        HighHands,
         Hercules
     }
 
