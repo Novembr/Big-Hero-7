@@ -157,19 +157,19 @@ namespace WrestlerPose
             Hercules
              */
             //player one animations:
-            animations.Add(new Animation(Content.Load<Texture2D>("Animations/wrestleidleonerow"), 12));
-            animations.Add(new Animation(Content.Load<Texture2D>("twohandsdown"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("pointing"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("onehandup"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("twohandsup"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("hercules"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("idle"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("yellow&crouch"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("purple&lean"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("blue&point"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("red&botharms"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("green&back"), 12));
             //player 2 animations
-            animations.Add(new Animation(Content.Load<Texture2D>("Animations/wrestleidleonerow"), 12));
-            animations.Add(new Animation(Content.Load<Texture2D>("twohandsdown"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("pointing"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("onehandup"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("twohandsup"), 1));
-            animations.Add(new Animation(Content.Load<Texture2D>("hercules"), 1));
+            animations.Add(new Animation(Content.Load<Texture2D>("idlealt"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("yellow&couch-alt"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("purple&lean-alt"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("blue&point-alt"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("red&botharms-alt"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("green&back-alt"), 12));
             //player 3 animations
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/wrestleidleonerow"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("twohandsdown"), 1));
@@ -177,6 +177,8 @@ namespace WrestlerPose
             animations.Add(new Animation(Content.Load<Texture2D>("onehandup"), 1));
             animations.Add(new Animation(Content.Load<Texture2D>("twohandsup"), 1));
             animations.Add(new Animation(Content.Load<Texture2D>("hercules"), 1));
+
+            //**maybe add controller poses animation to animations list for use later? or as a standalone animation?
 
 
             for (int i = 0; i < numAnimations; i++)
