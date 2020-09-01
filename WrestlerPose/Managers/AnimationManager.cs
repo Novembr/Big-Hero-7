@@ -32,7 +32,7 @@ namespace WrestlerPose.Managers
                 Color.White,
                 0f,
                 new Vector2(_animation.Texture.Width / 2, _animation.Texture.Height / 2),
-                0.3f,//either need to make assets all the same size or pass in a scale parameter for this
+                0.7f,//either need to make assets all the same size or pass in a scale parameter for this
                 SpriteEffects.None,
                 0f
                 );
