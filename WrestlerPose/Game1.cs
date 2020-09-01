@@ -84,6 +84,8 @@ namespace WrestlerPose
         private SpriteFont _overAllWinner;
         private SpriteFont _title;
         private Texture2D _allPosesImage;
+        private Texture2D _stageBackground;
+
 
         private List<Texture2D> playerOneSelectedPoseSpritesToChooseFrom = new List<Texture2D>(5);//assumes the most will be 5 
         private List<Texture2D> playerTwoSelectedPoseSpritesToChooseFrom = new List<Texture2D>(5);//assumes the most will be 5
@@ -99,16 +101,16 @@ namespace WrestlerPose
         protected override void Initialize()
         {
             _graphics.IsFullScreen = false;
-            _graphics.PreferredBackBufferWidth = 1900;
-            _graphics.PreferredBackBufferHeight = 1000;
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
             _graphics.ApplyChanges();
 
             int test = _graphics.PreferredBackBufferWidth;
             int test2 = _graphics.PreferredBackBufferHeight;
 
-            WrestlerPosition1 = new Vector2(1400, 500); // new Vector2(_graphics.PreferredBackBufferWidth / 4, _graphics.PreferredBackBufferHeight / 2);
-            WrestlerPosition2 = new Vector2(2600, 500);//new Vector2(_graphics.PreferredBackBufferWidth * 3 / 4, _graphics.PreferredBackBufferHeight / 2);
-            AIPosition = new Vector2(2000, 250); //new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 3);
+            WrestlerPosition1 = new Vector2(2650, 700); // new Vector2(_graphics.PreferredBackBufferWidth / 4, _graphics.PreferredBackBufferHeight / 2);
+            WrestlerPosition2 = new Vector2(3850, 700);//new Vector2(_graphics.PreferredBackBufferWidth * 3 / 4, _graphics.PreferredBackBufferHeight / 2);
+            AIPosition = new Vector2(3200, 300); //new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 3);
 
 
             base.Initialize();
@@ -132,6 +134,8 @@ namespace WrestlerPose
             _overAllWinner = Content.Load<SpriteFont>("OverallWinner");
             _title = Content.Load<SpriteFont>("Title");
             _allPosesImage = Content.Load<Texture2D>("AllPosesImage");
+            _stageBackground = Content.Load<Texture2D>("Stage");
+
 
 
 
@@ -650,6 +654,18 @@ namespace WrestlerPose
 
             _spriteBatch.Begin();
 
+            _spriteBatch.Draw(
+                    _stageBackground,
+                    new Vector2(960, 540),
+                    null,
+                    Color.White,
+                    0f,
+                    new Vector2(_stageBackground.Width / 2, _stageBackground.Height / 2),
+                    new Vector2(3.25f,2.4f),
+                    SpriteEffects.None,
+                    0f
+                    );
+
             player1.GetPose().GetSprite().Draw(_spriteBatch);
             player2.GetPose().GetSprite().Draw(_spriteBatch);
             currentAI.GetPose().GetSprite().Draw(_spriteBatch);
@@ -657,7 +673,7 @@ namespace WrestlerPose
 
             _spriteBatch.DrawString(_countDownPlayerOneMove, counter.ToString(), new Vector2(200, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
             _spriteBatch.DrawString(_countDownPlayerTwoMove, counter2.ToString(), new Vector2(1500, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-            _spriteBatch.DrawString(_countDownAI, counterAI.ToString(), new Vector2(850, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+            _spriteBatch.DrawString(_countDownAI, counterAI.ToString(), new Vector2(890, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
 
 
 
@@ -711,7 +727,7 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne],
-                    new Vector2(400 + i * 100, 800),
+                    new Vector2(200 + i * 100, 400),
                     null,
                     Color.White,
 
@@ -737,7 +753,7 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo],
-                    new Vector2(1300 + i * 100, 800),
+                    new Vector2(1400 + i * 100, 400),
                     null,
                     Color.White,
 
