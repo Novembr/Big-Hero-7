@@ -139,7 +139,7 @@ namespace WrestlerPose
 
 
 
-            List<string> stillAnimationImageNameStrings = new List<string>(5) { "twohandsdown", "twohandsup", "onehandup", "pointing", "hercules" };
+            List<string> stillAnimationImageNameStrings = new List<string>(5) { "twohandsdown", "pointing", "onehandup", "twohandsup", "hercules" };
             for (int i = 0; i < 5; i++)
             {
                 playerOneSelectedPoseSpritesToChooseFrom.Add(Content.Load<Texture2D>(stillAnimationImageNameStrings[i]));
@@ -341,8 +341,8 @@ namespace WrestlerPose
                     }
                     else if (inputState.IsKeyDown(Keys.S) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Up)))
                     {
-                        player1.SetPose(poses[2]);
-                        player1.AddToPosePattern(poses[2]);
+                        player1.SetPose(poses[4]);//*** two hands up
+                        player1.AddToPosePattern(poses[4]);
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -357,8 +357,8 @@ namespace WrestlerPose
                     }
                     else if (inputState.IsKeyDown(Keys.F) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Right)))
                     {
-                        player1.SetPose(poses[4]);
-                        player1.AddToPosePattern(poses[4]);
+                        player1.SetPose(poses[2]); //***pointing
+                        player1.AddToPosePattern(poses[2]);
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -399,8 +399,8 @@ namespace WrestlerPose
                     }
                     else if (inputState.IsKeyDown(Keys.NumPad2) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Up)))
                     {
-                        player2.SetPose(poses[8]);
-                        player2.AddToPosePattern(poses[8]);
+                        player2.SetPose(poses[10]);//**two hands up
+                        player2.AddToPosePattern(poses[10]);
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
@@ -413,8 +413,8 @@ namespace WrestlerPose
                     }
                     else if (inputState.IsKeyDown(Keys.NumPad4) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Right)))
                     {
-                        player2.SetPose(poses[10]);
-                        player2.AddToPosePattern(poses[10]);
+                        player2.SetPose(poses[8]);//**poiting
+                        player2.AddToPosePattern(poses[8]);
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
