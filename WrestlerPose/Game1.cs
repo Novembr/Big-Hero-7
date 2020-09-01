@@ -139,7 +139,7 @@ namespace WrestlerPose
 
 
 
-            List<string> stillAnimationImageNameStrings = new List<string>(5) { "twohandsdown", "pointing", "onehandup", "twohandsup", "hercules" };
+            List<string> stillAnimationImageNameStrings = new List<string>(5) { "twohandsdown", "twohandsup", "onehandup", "pointing", "hercules" };
             for (int i = 0; i < 5; i++)
             {
                 playerOneSelectedPoseSpritesToChooseFrom.Add(Content.Load<Texture2D>(stillAnimationImageNameStrings[i]));
