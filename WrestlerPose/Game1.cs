@@ -39,19 +39,19 @@ namespace WrestlerPose
         //player 1 counter
         int counter = 3;
         int counterStart = 3;
-        float countDuration = 1f;
+        float countDuration = .2f;
         float currentTime = 0f;
 
         //player 2 counter:
         int counter2 = 3;
         int counterStart2 = 3;
-        float countDuration2 = 1f;
+        float countDuration2 = .2f;
         float currentTime2 = 0f;
 
         //ai round timer counter:
         int counterAI = 3;//this should be set to the time for the first animation of the first ai to run, or to run multiple times i guess
         int counterStartAI = 10;
-        float countDurationAI = 1f;
+        float countDurationAI = .3f;
         float currentTimeAI = 0f;
 
         float roundTimer = 0;
@@ -108,8 +108,8 @@ namespace WrestlerPose
             int test = _graphics.PreferredBackBufferWidth;
             int test2 = _graphics.PreferredBackBufferHeight;
 
-            WrestlerPosition1 = new Vector2(2650, 700); // new Vector2(_graphics.PreferredBackBufferWidth / 4, _graphics.PreferredBackBufferHeight / 2);
-            WrestlerPosition2 = new Vector2(3850, 700);//new Vector2(_graphics.PreferredBackBufferWidth * 3 / 4, _graphics.PreferredBackBufferHeight / 2);
+            WrestlerPosition1 = new Vector2(3450, 700); // new Vector2(_graphics.PreferredBackBufferWidth / 4, _graphics.PreferredBackBufferHeight / 2);
+            WrestlerPosition2 = new Vector2(4650, 700);//new Vector2(_graphics.PreferredBackBufferWidth * 3 / 4, _graphics.PreferredBackBufferHeight / 2);
             AIPosition = new Vector2(3200, 300); //new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 3);
 
 
@@ -181,6 +181,7 @@ namespace WrestlerPose
             for (int i = 0; i < numAnimations; i++)
             {
                 int poseInt = i;
+                float scale = 2f;
                 //should make this a non-arbitrary number later
                 if(i > 5)
                 {
@@ -189,8 +190,9 @@ namespace WrestlerPose
                 if (i > 11)
                 {
                     poseInt = poseInt - 6;
+                    scale = 1.5f;
                 }
-                poses.Add(new Pose(animations[i], (PoseName)poseInt));
+                poses.Add(new Pose(animations[i], (PoseName)poseInt, scale));
             }
 
             //make 3 players and set each to it's first animation, idle animation, 
@@ -895,6 +897,8 @@ namespace WrestlerPose
             //these 4 already done in newround() that calls this
            // player1.SetPose(poses[0]);
            // player2.SetPose(poses[6]);
+
+            //this hits out of index ranged exception after 3rd match, but not sure why, match number should be 1 again
             currentAI = AIPlayerList[matchNumber];//.SetPose(poses[12]);//is this a ref or value?
 
             player1.SetPosePattern(new List<Pose>(currentAI.GetPosePattern().Count));//this count doesn't do anything, and shouldn't need to because shouldn't compare again until filled back up after beginning
