@@ -17,6 +17,7 @@ namespace WrestlerPose.Sprites
         Animation _animation;
         protected Vector2 _position;
         protected Texture2D _texture;
+        protected float _scale;
 
         public Vector2 Position
         {
@@ -29,6 +30,8 @@ namespace WrestlerPose.Sprites
                     _animationManager.Position = _position;
             }
         }
+
+        public float Scale { get; set; }
 
         public float GetAnimationTime()
         {
@@ -57,15 +60,16 @@ namespace WrestlerPose.Sprites
             }
             else if (_animationManager != null)
             {
-                _animationManager.Draw(spriteBatch);//it's position is the sprite position
+                _animationManager.Draw(spriteBatch, _scale);//it's position is the sprite position
             }
             else throw new Exception("This ain't right..!");
         }
 
-        public Sprite(Animation animation)
+        public Sprite(Animation animation, float scale)
         {
             _animation = animation;
             _animationManager = new AnimationManager(_animation);
+            _scale = scale;
         }
 
         public Sprite(Texture2D texture)
