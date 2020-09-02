@@ -43,19 +43,19 @@ namespace WrestlerPose
         //player 1 counter
         int counter = 3;
         int counterStart = 3;
-        float countDuration = .2f;
+        float countDuration = .4f;
         float currentTime = 0f;
 
         //player 2 counter:
         int counter2 = 3;
         int counterStart2 = 3;
-        float countDuration2 = .2f;
+        float countDuration2 = .4f;
         float currentTime2 = 0f;
 
         //ai round timer counter:
         int counterAI = 3;//this should be set to the time for the first animation of the first ai to run, or to run multiple times i guess
         int counterStartAI = 10;
-        float countDurationAI = .3f;
+        float countDurationAI = .6f;
         float currentTimeAI = 0f;
 
         float roundTimer = 0;
