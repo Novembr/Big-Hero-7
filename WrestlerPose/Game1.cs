@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using WrestlerPose.Models;
@@ -21,6 +23,11 @@ namespace WrestlerPose
         Player player2;
         //Player firstAI;
         Player currentAI;
+
+        Song song;
+        //Song bellRing;
+
+        List<SoundEffect> soundEffects;
 
         List<Player> AIPlayerList;// = new List<Player>(3);
 
@@ -55,7 +62,7 @@ namespace WrestlerPose
         //ai round timer counter:
         int counterAI = 3;//this should be set to the time for the first animation of the first ai to run, or to run multiple times i guess
         int counterStartAI = 10;
-        float countDurationAI = .3f;
+        float countDurationAI = .6f;
         float currentTimeAI = 0f;
 
         float roundTimer = 0;
@@ -106,6 +113,7 @@ namespace WrestlerPose
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            soundEffects = new List<SoundEffect>();
         }
 
         protected override void Initialize()
@@ -124,6 +132,14 @@ namespace WrestlerPose
 
 
             base.Initialize();
+        }
+
+        //should replay song
+        void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
+        {
+            // 0.0f is silent, 1.0f is full volume
+            //MediaPlayer.Volume -= 0.1f;
+            MediaPlayer.Play(song);
         }
 
         protected override void LoadContent()
@@ -150,8 +166,29 @@ namespace WrestlerPose
             _allPosesImage = Content.Load<Texture2D>("AllPosesImage");
             _stageBackground = Content.Load<Texture2D>("Stage");
 
+            //song
+            song = Content.Load<Song>("Sound/theme_background");//because sound effect and not song
+            MediaPlayer.Play(song);
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0.1f;
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
+            soundEffects.Add(Content.Load<SoundEffect>("Sound/shout1"));
+            soundEffects.Add(Content.Load<SoundEffect>("Sound/shout2"));
+            soundEffects.Add(Content.Load<SoundEffect>("Sound/shout3"));
+            soundEffects.Add(Content.Load<SoundEffect>("Sound/shout4"));
+            soundEffects.Add(Content.Load<SoundEffect>("Sound/shout5"));
+            soundEffects.Add(Content.Load<SoundEffect>("Sound/boxing_bell"));
+            SoundEffect.MasterVolume = 0.7f;//adjust later
 
+            //bellRing = Content.Load<Song>("Sound/bell_ring");//because sound effect and not song
+            //MediaPlayer.Play(bellRing);
+             soundEffects[5].CreateInstance().Play();//do I need to create instance when doing this? if I don't I think taht the same sound will stop itself if called before finishing
 
+            // Play that can be manipulated after the fact
+            //var instance = soundEffects[0].CreateInstance();
+            //instance.IsLooped = true;
+            //instance.Play();
+            //end sound
 
             List<string> stillAnimationImageNameStrings = new List<string>(5) { "twohandsdown", "pointing", "onehandup", "twohandsup", "hercules" };
             for (int i = 0; i < 5; i++)
@@ -370,6 +407,7 @@ namespace WrestlerPose
                         player1.SetPose(poses[1]);
                         player1.AddToPosePattern(poses[1]);
                         ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
+                        soundEffects[0].CreateInstance().Play();
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -379,6 +417,7 @@ namespace WrestlerPose
                         player1.SetPose(poses[4]);//*** two hands up
                         player1.AddToPosePattern(poses[4]);
                         ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
+                        soundEffects[3].CreateInstance().Play();
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -388,6 +427,7 @@ namespace WrestlerPose
                         player1.SetPose(poses[3]);
                         player1.AddToPosePattern(poses[3]);
                         ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
+                        soundEffects[2].CreateInstance().Play();
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -397,6 +437,7 @@ namespace WrestlerPose
                         player1.SetPose(poses[2]); //***pointing
                         player1.AddToPosePattern(poses[2]);
                         ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
+                        soundEffects[1].CreateInstance().Play();
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -406,6 +447,7 @@ namespace WrestlerPose
                         player1.SetPose(poses[5]);
                         player1.AddToPosePattern(poses[5]);
                         ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
+                        soundEffects[4].CreateInstance().Play();
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -434,6 +476,7 @@ namespace WrestlerPose
                         player2.SetPose(poses[7]);
                         player2.AddToPosePattern(poses[7]);
                         ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
+                        soundEffects[0].CreateInstance().Play();
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
@@ -442,6 +485,7 @@ namespace WrestlerPose
                         player2.SetPose(poses[10]);//**two hands up
                         player2.AddToPosePattern(poses[10]);
                         ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
+                        soundEffects[3].CreateInstance().Play();
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
@@ -450,6 +494,7 @@ namespace WrestlerPose
                         player2.SetPose(poses[9]);
                         player2.AddToPosePattern(poses[9]);
                         ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
+                        soundEffects[2].CreateInstance().Play();
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
@@ -458,6 +503,7 @@ namespace WrestlerPose
                         player2.SetPose(poses[8]);//**pointing
                         player2.AddToPosePattern(poses[8]);
                         ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
+                        soundEffects[1].CreateInstance().Play();//if I want these sounds to consistent with the ai sounds then I should swap the index here and with two hands up maybe
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
@@ -466,6 +512,7 @@ namespace WrestlerPose
                         player2.SetPose(poses[11]);
                         player2.AddToPosePattern(poses[11]);
                         ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
+                        soundEffects[4].CreateInstance().Play();
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
@@ -483,33 +530,38 @@ namespace WrestlerPose
                     roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                     thisRoundTallied = true;
 
-                    if(player1.GetScore() > player2.GetScore())
-                    {
-                        player1.SetPose(outComePoses[0]);
-                        player2.SetPose(outComePoses[3]);
-                        //player1.roundScore++;
-                    }
-                    else if(player2.GetScore() > player1.GetScore())
-                    {
-                        player1.SetPose(outComePoses[1]);
-                        player2.SetPose(outComePoses[2]);
-                        //player2.roundScore++;
-                    }
-                    else
-                    {
-                        player1.SetPose(poses[0]);
-                        player2.SetPose(poses[6]);
-                    }
-
-                    
-
+                    //so the last player to finish still doesn't show their pose here***
+                    //now added second round timer so last player has time to display
                     if (roundTimer > 3000)
                     {
-                        playerTurn = false;
-                        roundTimer = 0;
-                        NewRound();
-                    }
 
+                        if (player1.GetScore() > player2.GetScore())
+                        {
+                            player1.SetPose(outComePoses[0]);
+                            player2.SetPose(outComePoses[3]);
+                            //player1.roundScore++;
+                        }
+                        else if (player2.GetScore() > player1.GetScore())
+                        {
+                            player1.SetPose(outComePoses[1]);
+                            player2.SetPose(outComePoses[2]);
+                            //player2.roundScore++;
+                        }
+                        else
+                        {
+                            player1.SetPose(poses[0]);
+                            player2.SetPose(poses[6]);
+                        }
+
+
+
+                        if (roundTimer > 5000)
+                        {
+                            playerTurn = false;
+                            roundTimer = 0;
+                            NewRound();
+                        }
+                    }
 
                     //aiTurn = true;//don't do this here because will start ai turn again before doing comparisons?
                     //isntead do it in like a match restart method
@@ -581,6 +633,7 @@ namespace WrestlerPose
                      float currentTimeAI = 0f;
                      */
 
+
                     currentTimeAI += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     if (currentTimeAI >= countDurationAI)
                     {
@@ -598,6 +651,7 @@ namespace WrestlerPose
                         //why when doing compares later does it not work? like now the display does not match the compares
                         currentAI.SetPose(poses[poseValueFromThisAisRandomSelection]);
                         currentAI.SetPosePattern(numPosesDisplayedAI, poses[poseValueFromThisAisRandomSelection]);
+                        soundEffects[randomPoseIndexFromThisAisPoseNumberslist].CreateInstance().Play();
                         //then wait for the amount of time it takes to play the animation, which is gonna be framespeed * frame count
                         float animationTime = currentAI.GetPosePattern()[numPosesDisplayedAI].GetSprite().GetAnimationTime();
                         int roundedUp = (int)Math.Ceiling(animationTime);
@@ -610,12 +664,17 @@ namespace WrestlerPose
 
                 //added this but why was it displaying at all without it?
 
-
                 if (numPosesDisplayedAI >= currentAI.GetPosePattern().Count)
                 {
-                    aiTurn = false;
-                    playerTurn = true;
-                    //currentAI.SetPose(poses[12]);//doing this means I think that you miss the last one? yes you will because will be overwritten before displaying
+                    roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    if (roundTimer > 3000)
+                    {
+                        currentAI.SetPose(poses[12]);
+                        aiTurn = false;
+                        playerTurn = true; 
+                        roundTimer = 0;
+                        //currentAI.SetPose(poses[12]);//doing this means I think that you miss the last one? yes you will because will be overwritten before displaying
+                    }
                 }
             }
 
@@ -982,7 +1041,7 @@ namespace WrestlerPose
             player1.displayCircle = DisplayCircle.Tied;
             player2.displayCircle = DisplayCircle.Tied;
 
-            
+            soundEffects[5].CreateInstance().Play();
 
             //potentially lots of other bools need to be reset in here?
 

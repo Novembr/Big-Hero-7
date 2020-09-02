@@ -11,8 +11,26 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Content\idle.jpg" />
+    <None Remove="Content\Sound\audience1.wav" />
+    <None Remove="Content\Sound\boxing_bell.wav" />
+    <None Remove="Content\Sound\shout1.wav" />
+    <None Remove="Content\Sound\shout2.wav" />
+    <None Remove="Content\Sound\shout3.wav" />
+    <None Remove="Content\Sound\shout4.wav" />
+    <None Remove="Content\Sound\shout5.wav" />
+    <None Remove="Content\Sound\theme_background.mp3" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Sound\audience1.wav" />
+    <Content Include="Content\Sound\boxing_bell.wav" />
+    <Content Include="Content\Sound\shout1.wav" />
+    <Content Include="Content\Sound\shout2.wav" />
+    <Content Include="Content\Sound\shout3.wav" />
+    <Content Include="Content\Sound\shout4.wav" />
+    <Content Include="Content\Sound\shout5.wav" />
+    <Content Include="Content\Sound\theme_background.mp3" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />

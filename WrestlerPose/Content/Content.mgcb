@@ -397,6 +397,54 @@
 /processorParam:TextureFormat=Compressed
 /build:Round.spritefont
 
+#begin Sound/audience1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/audience1.wav
+
+#begin Sound/boxing_bell.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/boxing_bell.wav
+
+#begin Sound/shout1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/shout1.wav
+
+#begin Sound/shout2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/shout2.wav
+
+#begin Sound/shout3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/shout3.wav
+
+#begin Sound/shout4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/shout4.wav
+
+#begin Sound/shout5.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/shout5.wav
+
+#begin Sound/theme_background.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sound/theme_background.mp3
+
 #begin Stage.png
 /importer:TextureImporter
 /processor:TextureProcessor
