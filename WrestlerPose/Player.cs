@@ -16,6 +16,14 @@ namespace WrestlerPose
         Right,
         None
     }
+
+    public enum DisplayCircle
+    {
+        Tied,
+        Won,
+        Lost
+    }
+
     public class Player
     {
         Pose _currentPose;
@@ -27,7 +35,12 @@ namespace WrestlerPose
         StickDirection _rightStickDirection;
         private List<Pose> _currentPosePattern;
         //private int _aiPatternSize;
-        public List<int> _poseValuesForThisAI { get; set; }
+        public int roundScore { get; set; }
+        public int matchScore { get; set; }
+        public List<int> _poseValuesForThisAI { get; set; }//this should be no _ in front because public
+
+        public DisplayCircle displayCircle { get; set; }
+        //DisplayCircle _displayCircle = DisplayCircle.Tied;//ok to initialize here? because on initialization should always be tied so doesn't need to be in constructor
 
 
         public Player(string name, Vector2 wrestlerPosition, Pose currentPose)
@@ -37,6 +50,7 @@ namespace WrestlerPose
             _currentPose = currentPose;
             _wrestlerPosition = wrestlerPosition;
             _currentOutcome = "Pending";
+            //_displayCircle = DisplayCircle.Tied;
         }
 
         public Player(string name, Vector2 wrestlerPosition, List<Pose> currentPosePattern)

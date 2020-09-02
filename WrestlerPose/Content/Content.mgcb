@@ -152,6 +152,18 @@
 /processorParam:TextureFormat=Color
 /build:green&back-alt.png
 
+#begin green.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:green.png
+
 #begin hercules.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -200,6 +212,18 @@
 /processorParam:TextureFormat=Color
 /build:idlealt.png
 
+#begin lose.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:lose.png
+
 #begin Match.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -226,12 +250,26 @@
 /processorParam:TextureFormat=Compressed
 /build:OverallWinner.spritefont
 
+#begin PlayerOneMatchScore.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:PlayerOneMatchScore.spritefont
+
 #begin PlayerOneOutcome.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:PlayerOneOutcome.spritefont
+
+#begin PlayerOneRoundScore.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:PlayerOneRoundScore.spritefont
 
 #begin PlayerOneScore.spritefont
 /importer:FontDescriptionImporter
@@ -240,12 +278,26 @@
 /processorParam:TextureFormat=Compressed
 /build:PlayerOneScore.spritefont
 
+#begin PlayerTwoMatchScore.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:PlayerTwoMatchScore.spritefont
+
 #begin PlayerTwoOutcome.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:PlayerTwoOutcome.spritefont
+
+#begin PlayerTwoRoundScore.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:PlayerTwoRoundScore.spritefont
 
 #begin PlayerTwoScore.spritefont
 /importer:FontDescriptionImporter
@@ -326,6 +378,18 @@
 /processorParam:TextureFormat=Color
 /build:red&botharms-alt.png
 
+#begin red.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:red.png
+
 #begin Round.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -375,6 +439,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:twohandsup.jpg
+
+#begin white.jfif
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:white.jfif
+
+#begin win.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:win.png
 
 #begin Wrestler1.png
 /importer:TextureImporter

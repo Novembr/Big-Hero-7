@@ -28,7 +28,11 @@ namespace WrestlerPose
         const int numAnimations = 18;
 
         List<Animation> animations = new List<Animation>(numAnimations);
+        List<Animation> outcomeAnimations = new List<Animation>(4);
+        List<Sprite> displayCircles = new List<Sprite>(6);
         List<Pose> poses = new List<Pose>(numAnimations);
+        List<Pose> outComePoses = new List<Pose>(4);
+
 
 
         //countdown timer
@@ -70,6 +74,8 @@ namespace WrestlerPose
         bool player2CanInput = true;
 
 
+
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont _countDownPlayerOneMove;
@@ -79,6 +85,10 @@ namespace WrestlerPose
         private SpriteFont _playerTwoOutcome;
         private SpriteFont _playerOneScore;
         private SpriteFont _playerTwoScore;
+        private SpriteFont _playerOneRoundScore;
+        private SpriteFont _playerTwoRoundScore;
+        private SpriteFont _playerOneMatchScore;
+        private SpriteFont _playerTwoMatchScore;
         private SpriteFont _round;
         private SpriteFont _match;
         private SpriteFont _overAllWinner;
@@ -129,6 +139,10 @@ namespace WrestlerPose
             _playerTwoOutcome = Content.Load<SpriteFont>("PlayerTwoOutcome");
             _playerOneScore = Content.Load<SpriteFont>("PlayerOneScore");
             _playerTwoScore = Content.Load<SpriteFont>("PlayerTwoScore");
+            _playerOneRoundScore = Content.Load<SpriteFont>("PlayerOneRoundScore");
+            _playerTwoRoundScore = Content.Load<SpriteFont>("PlayerTwoRoundScore");
+            _playerOneMatchScore = Content.Load<SpriteFont>("PlayerOneMatchScore");
+            _playerTwoMatchScore = Content.Load<SpriteFont>("PlayerTwoMatchScore");
             _round = Content.Load<SpriteFont>("Round");
             _match = Content.Load<SpriteFont>("Match");
             _overAllWinner = Content.Load<SpriteFont>("OverallWinner");
@@ -177,13 +191,31 @@ namespace WrestlerPose
             animations.Add(new Animation(Content.Load<Texture2D>("red&botharms-alt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("green&back-alt"), 12));
 
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("white"), 1), 1));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("green"), 1), 1));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("red"), 1), 1));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("white"), 1), 1));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("green"), 1), 1));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("red"), 1), 1));
+
+            outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("win"), 12));
+            outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("lose"), 12));
+            outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("win"), 12));
+            outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("lose"), 12));
+
+            outComePoses.Add(new Pose(outcomeAnimations[0], PoseName.Idle, 2));//scalse is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[1], PoseName.Idle, 2));//scalse is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[2], PoseName.Idle, 2));//scalse is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[3], PoseName.Idle, 2));//scalse is 2 for player, does posename matter here though?
+
+
 
             for (int i = 0; i < numAnimations; i++)
             {
                 int poseInt = i;
                 float scale = 2f;
                 //should make this a non-arbitrary number later
-                if(i > 5)
+                if (i > 5)
                 {
                     poseInt = poseInt - 6;
                 }
@@ -206,7 +238,7 @@ namespace WrestlerPose
             //eventually th elist of Poses (lengths 3, 4 and 5 below) should be flipped around between rounds within a match, rather than being the same pattern
             //displayed 3 times
             AIPlayerList = new List<Player>
-            { 
+            {
                 new Player("firstAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[14], poses[14] }, new List<int>{ 13, 14, 15}),
                 new Player("secondAI", AIPosition, poses[12], new List<Pose>(4) { poses[14], poses[16], poses[15], poses[14] }, new List<int>{ 13, 14, 15, 17}),
                 new Player("thirdAI", AIPosition, poses[12], new List<Pose>(5) { poses[17], poses[16], poses[17], poses[15], poses[13] }, new List<int>{ 13, 14, 15, 16, 17}),
@@ -337,6 +369,7 @@ namespace WrestlerPose
                     {
                         player1.SetPose(poses[1]);
                         player1.AddToPosePattern(poses[1]);
+                        ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -345,6 +378,7 @@ namespace WrestlerPose
                     {
                         player1.SetPose(poses[4]);//*** two hands up
                         player1.AddToPosePattern(poses[4]);
+                        ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -353,6 +387,7 @@ namespace WrestlerPose
                     {
                         player1.SetPose(poses[3]);
                         player1.AddToPosePattern(poses[3]);
+                        ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -361,6 +396,7 @@ namespace WrestlerPose
                     {
                         player1.SetPose(poses[2]); //***pointing
                         player1.AddToPosePattern(poses[2]);
+                        ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -369,6 +405,7 @@ namespace WrestlerPose
                     {
                         player1.SetPose(poses[5]);
                         player1.AddToPosePattern(poses[5]);
+                        ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
                         player1CanInput = false;
                         counter = counterStart;
 
@@ -396,6 +433,7 @@ namespace WrestlerPose
                     {
                         player2.SetPose(poses[7]);
                         player2.AddToPosePattern(poses[7]);
+                        ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
@@ -403,6 +441,7 @@ namespace WrestlerPose
                     {
                         player2.SetPose(poses[10]);//**two hands up
                         player2.AddToPosePattern(poses[10]);
+                        ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
@@ -410,13 +449,15 @@ namespace WrestlerPose
                     {
                         player2.SetPose(poses[9]);
                         player2.AddToPosePattern(poses[9]);
+                        ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
                     else if (inputState.IsKeyDown(Keys.NumPad4) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Right)))
                     {
-                        player2.SetPose(poses[8]);//**poiting
+                        player2.SetPose(poses[8]);//**pointing
                         player2.AddToPosePattern(poses[8]);
+                        ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
@@ -424,6 +465,7 @@ namespace WrestlerPose
                     {
                         player2.SetPose(poses[11]);
                         player2.AddToPosePattern(poses[11]);
+                        ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
                         player2CanInput = false;
                         counter2 = counterStart2;
                     }
@@ -436,14 +478,87 @@ namespace WrestlerPose
 
                 if ((player1.GetPosePattern().Count >= currentAI.GetPosePattern().Count) && (player2.GetPosePattern().Count >= currentAI.GetPosePattern().Count))
                 {
+                    //if both players have selected all of their poses:
+                    //this is effectively the post round turn
+                    roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    thisRoundTallied = true;
+
+                    if(player1.GetScore() > player2.GetScore())
+                    {
+                        player1.SetPose(outComePoses[0]);
+                        player2.SetPose(outComePoses[3]);
+                        //player1.roundScore++;
+                    }
+                    else if(player2.GetScore() > player1.GetScore())
+                    {
+                        player1.SetPose(outComePoses[1]);
+                        player2.SetPose(outComePoses[2]);
+                        //player2.roundScore++;
+                    }
+                    else
+                    {
+                        player1.SetPose(poses[0]);
+                        player2.SetPose(poses[6]);
+                    }
+
+                    
+
+                    if (roundTimer > 3000)
+                    {
+                        playerTurn = false;
+                        roundTimer = 0;
+                        NewRound();
+                    }
+
+
                     //aiTurn = true;//don't do this here because will start ai turn again before doing comparisons?
                     //isntead do it in like a match restart method
-                    playerTurn = false;
                 }
 
             }//end player turn section
             player1.GetPose().GetSprite().Update(gameTime, player1.GetPosition());
             player2.GetPose().GetSprite().Update(gameTime, player2.GetPosition());
+            //displayCircles[1].Update(gameTime,/* player1.GetPosition()*/ /*new Vector2(100, 100)*/ player1.GetPosition());
+
+            for (int i = 0; i < 3; i++)
+            {
+                displayCircles[i].Update(gameTime, /*player1.GetPosition()*/ new Vector2(370, 1000));
+            }
+            for (int i = 3; i < 6; i++)
+            {
+                displayCircles[i].Update(gameTime, /*player2.GetPosition()*/ new Vector2(1600, 1000));
+            }
+
+            //switch (player1.displayCircle)
+            //{
+            //    case DisplayCircle.Tied:
+            //        displayCircles[0].Update(gameTime, player1.GetPosition() /*new Vector2(100, 100)*/);
+            //        break;
+            //    case DisplayCircle.Won:
+            //        displayCircles[1].Update(gameTime, player1.GetPosition());
+            //        break;
+            //    case DisplayCircle.Lost:
+            //        displayCircles[2].Update(gameTime, player1.GetPosition());
+            //        break;
+            //    default:
+            //        break;
+            //}
+
+            //switch (player2.displayCircle)
+            //{
+            //    case DisplayCircle.Tied:
+            //        displayCircles[3].Update(gameTime, player2.GetPosition());
+            //        break;
+            //    case DisplayCircle.Won:
+            //        displayCircles[4].Update(gameTime, player2.GetPosition());
+            //        break;
+            //    case DisplayCircle.Lost:
+            //        displayCircles[5].Update(gameTime, player2.GetPosition());
+            //        break;
+            //    default:
+            //        break;
+            //}
+
 
             if (aiTurn)
             {
@@ -456,7 +571,7 @@ namespace WrestlerPose
                 //need to do some kind of while in here rather than for loop?
                 //for (int i = 0; i < currentAI.GetPosePattern().Count; i++)
                 //need if not while here? because if while then it will never get to base.update gametime at the bottom
-                if(numPosesDisplayedAI < currentAI.GetPosePattern().Count)
+                if (numPosesDisplayedAI < currentAI.GetPosePattern().Count)
                 {
 
                     /*
@@ -478,7 +593,7 @@ namespace WrestlerPose
                         //12 is idle
                         //later these will be fed in by the ai pose generator and not just hard coded to be same pose each round
                         Random rnd = new Random();
-                        int randomPoseIndexFromThisAisPoseNumberslist =  rnd.Next(0, currentAI._poseValuesForThisAI.Count);//***this is displaying a random selection but not setting the pose to the reandom selection?
+                        int randomPoseIndexFromThisAisPoseNumberslist = rnd.Next(0, currentAI._poseValuesForThisAI.Count);//***this is displaying a random selection but not setting the pose to the reandom selection?
                         int poseValueFromThisAisRandomSelection = currentAI._poseValuesForThisAI[randomPoseIndexFromThisAisPoseNumberslist];
                         //why when doing compares later does it not work? like now the display does not match the compares
                         currentAI.SetPose(poses[poseValueFromThisAisRandomSelection]);
@@ -521,134 +636,94 @@ namespace WrestlerPose
             //this is like the new end turn condition, when the ai turn condition end is met and so is the player turn condition
             //but really should be able to set this off of whether we already had ai turn true then false, then player turn true then
             //false or something?
-            if(
-                (numPosesDisplayedAI >= currentAI.GetPosePattern().Count) 
-                && (player1.GetPosePattern().Count >= currentAI.GetPosePattern().Count) 
-                && (player2.GetPosePattern().Count >= currentAI.GetPosePattern().Count)
-              )
-            {
-                for (int i = 0; i < currentAI.GetPosePattern().Count; i++)
-                {
-                    if (!thisRoundTallied)
-                    {
-                        Player winnerBetweenPlayerOneAndAI = ComparePoses(player1, currentAI, i);
-                        Player winnerBetweenPlayerTwoAndAI = ComparePoses(player2, currentAI, i);
 
-                        if (winnerBetweenPlayerOneAndAI != null)
-                        {
-                            if (winnerBetweenPlayerOneAndAI == player1)
-                            {
-                                player1.SetScore(player1.GetScore() + 1);
-                            }
-                            else
-                            {
-                                player1.SetScore(player1.GetScore() - 1);
-                            }
-                        }
-                        else
-                        {
-                            //just change scores for now and don't worry about current outcome because that would change rapidly during one round
-                            //player1.SetCurrentOutcome("Tie");
-                            //player2.SetCurrentOutcome("Tie");
-                            //if a tie then no score change but might put something here later
-                        }
+            //now do all of the below as poses are selected by the player? or at the end of the 2ish second period in which you have to select a pose, then display
+            // the green or red or whatever under their feet, then go to another pose turn
 
-                        if (winnerBetweenPlayerTwoAndAI != null)
-                        {
-                            if (winnerBetweenPlayerTwoAndAI == player2)
-                            {
-                                player2.SetScore(player2.GetScore() + 1);
-                            }
-                            else
-                            {
-                                player2.SetScore(player2.GetScore() - 1);
-                            }
-                        }
-                        else
-                        {
-                            //just change scores for now and don't worry about current outcome because that would change rapidly during one round
-                            //player1.SetCurrentOutcome("Tie");
-                            //player2.SetCurrentOutcome("Tie");
-                            //if a tie then no score change but might put something here later
-                        }
-                    }
-
-                    if (i == (currentAI.GetPosePattern().Count - 1))
-                    {
-                        roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                        thisRoundTallied = true;
-                        if (roundTimer > 2000)
-                        {
-                            roundTimer = 0;
-                            NewRound();
-                        }
-                    }
-                }
-            }
-
-            //NOT USED:
-            if ((player1.GetPose().GetPoseName() != 0) && (player2.GetPose().GetPoseName() != 0) && false)//added and false so don't go in here
-            {
-                overallWinnerString = null;//putting this here to reset the overall winner once the game ends
-
-                currentTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (currentTime >= countDuration)
-                {
-                    counter--;
-                    currentTime -= countDuration;
-                }
-                if (counter < 0)
-                {
-                    counter = counterStart;
-                    roundNumber++;
-                    Player winner = null;//ComparePoses(player1, player2);
-                    //should separate all the below out into some ResolveOutcome() type function rather than just putting it in update
-                    //that displays proper values and sets scores etc...
-                    if (winner != null)
-                    {
-                        if (winner == player1)
-                        {
-                            player1.SetCurrentOutcome("Winner");
-                            player2.SetCurrentOutcome("Loser");
-                            player1.SetScore(player1.GetScore() + 1);
-                        }
-                        else
-                        {
-                            player1.SetCurrentOutcome("Loser");
-                            player2.SetCurrentOutcome("Winner");
-                            player2.SetScore(player2.GetScore() + 1);
-                        }
-                    }
-                    else
-                    {
-                        //should make some kind of outcomes enum rather than just hard coded strings
-                        player1.SetCurrentOutcome("Tie");
-                        player2.SetCurrentOutcome("Tie");
-                    }
-
-                    //do some kind of check score here
-                    overallWinnerString = "";//CheckOverallWinner(player1, player2);
-
-                    if (overallWinnerString != null)
-                    {
-                        //somebody won
-                        ResetMatch();
-                    }
-
-                    player1.SetPose(poses[0]);
-                    player2.SetPose(poses[0]);
-
-                    //then pause at the end of this to display final outcome for a few seconds and then restart timer?
-                    //need to do that later, will have to mess with timer so it pauses while waiting at the round victory screen
-                    //could just change both players pose back to idle once round ends
-                }
-            }
 
 
             base.Update(gameTime);
         }
 
+        void ComparePosesAndSetScores(int posePatternIndex, Player player, Player currentAI)
+        {
+            //if (
+            //      (numPosesDisplayedAI >= currentAI.GetPosePattern().Count)
+            //     && (player1.GetPosePattern().Count >= currentAI.GetPosePattern().Count)
+            //     && (player2.GetPosePattern().Count >= currentAI.GetPosePattern().Count)
+            //     )
+            // {
+            //  for (int i = 0; i < currentAI.GetPosePattern().Count; i++)
+            // {
+            // if (!thisRoundTallied)
+            // {
+            // Player winnerBetweenPlayerOneAndAI = ComparePoses(player1, currentAI, i);
+            // Player winnerBetweenPlayerTwoAndAI = ComparePoses(player2, currentAI, i);
 
+            Player winnerBetweenPlayerTwoAndAI = ComparePoses(player, currentAI, posePatternIndex);
+
+
+            if (winnerBetweenPlayerTwoAndAI != null)
+            {
+                if (winnerBetweenPlayerTwoAndAI == player)
+                {
+                    player.SetScore(player.GetScore() + 1);
+                    player.displayCircle = DisplayCircle.Won;
+                    //***SET WINNING Circle draw
+                }
+                else
+                {
+                    player.SetScore(player.GetScore() - 1);
+                    //***SET LOSING Circle draw
+                    player.displayCircle = DisplayCircle.Lost;
+
+
+                }
+            }
+            else
+            {
+                //***SET TIED Circle draw
+                player.displayCircle = DisplayCircle.Tied;
+
+                //just change scores for now and don't worry about current outcome because that would change rapidly during one round
+                //player1.SetCurrentOutcome("Tie");
+                //player2.SetCurrentOutcome("Tie");
+                //if a tie then no score change but might put something here later
+            }
+
+            // if (winnerBetweenPlayerTwoAndAI != null)
+            // {
+            //     if (winnerBetweenPlayerTwoAndAI == player2)
+            //     {
+            //         player2.SetScore(player2.GetScore() + 1);
+            //     }
+            //     else
+            //     {
+            //         player2.SetScore(player2.GetScore() - 1);
+            //     }
+            // }
+            // else
+            // {
+            //     //just change scores for now and don't worry about current outcome because that would change rapidly during one round
+            //     //player1.SetCurrentOutcome("Tie");
+            //     //player2.SetCurrentOutcome("Tie");
+            //     //if a tie then no score change but might put something here later
+            // }
+            // }
+
+            //  if (i == (currentAI.GetPosePattern().Count - 1))
+            //  {
+            //      roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            //      thisRoundTallied = true;
+            //      if (roundTimer > 2000)
+            //      {
+            //          roundTimer = 0;
+            //          NewRound();
+            //      }
+            //  }
+            // }
+            //}
+        }
 
         protected override void Draw(GameTime gameTime)
         {
@@ -663,7 +738,7 @@ namespace WrestlerPose
                     Color.White,
                     0f,
                     new Vector2(_stageBackground.Width / 2, _stageBackground.Height / 2),
-                    new Vector2(3.25f,2.4f),
+                    new Vector2(3.25f, 2.4f),
                     SpriteEffects.None,
                     0f
                     );
@@ -671,6 +746,43 @@ namespace WrestlerPose
             player1.GetPose().GetSprite().Draw(_spriteBatch);
             player2.GetPose().GetSprite().Draw(_spriteBatch);
             currentAI.GetPose().GetSprite().Draw(_spriteBatch);
+
+            //for (int i = 0; i < displayCircles.Count; i++)
+            //{
+            //    //displayCircles[i].Draw(_spriteBatch);
+            //    displayCircles[2].Draw(_spriteBatch);
+            //
+            //}
+
+            switch (player1.displayCircle)
+            {
+                case DisplayCircle.Tied:
+                    displayCircles[0].Draw(_spriteBatch);
+                    break;
+                case DisplayCircle.Won:
+                    displayCircles[1].Draw(_spriteBatch);
+                    break;
+                case DisplayCircle.Lost:
+                    displayCircles[2].Draw(_spriteBatch);
+                    break;
+                default:
+                    break;
+            }
+
+            switch (player2.displayCircle)
+            {
+                case DisplayCircle.Tied:
+                    displayCircles[3].Draw(_spriteBatch);
+                    break;
+                case DisplayCircle.Won:
+                    displayCircles[4].Draw(_spriteBatch);
+                    break;
+                case DisplayCircle.Lost:
+                    displayCircles[5].Draw(_spriteBatch);
+                    break;
+                default:
+                    break;
+            }
 
 
             _spriteBatch.DrawString(_countDownPlayerOneMove, counter.ToString(), new Vector2(200, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
@@ -684,8 +796,12 @@ namespace WrestlerPose
             //maybe some other stuff and above player outcome is set to that class rather than a hardcoded string
             //_spriteBatch.DrawString(_playerOneOutcome, "Last Round Outcome: " + player1.GetCurrentOutcome(), new Vector2(200, 200), Color.Red);
             //_spriteBatch.DrawString(_playerTwoOutcome, "Last Round Outcome: " + player2.GetCurrentOutcome(), new Vector2(1500, 200), Color.Red);
-            _spriteBatch.DrawString(_playerOneScore, "Player 1 Score:  " + player1.GetScore(), new Vector2(200, 100), Color.YellowGreen);
-            _spriteBatch.DrawString(_playerTwoScore, "Player 2 Score:  " + player2.GetScore(), new Vector2(1500, 100), Color.YellowGreen);
+            _spriteBatch.DrawString(_playerOneMatchScore, "Player 1 Match Score:  " + player1.matchScore, new Vector2(200, 100), Color.DarkRed);
+            _spriteBatch.DrawString(_playerTwoMatchScore, "Player 2 Match Score:  " + player2.matchScore, new Vector2(1500, 100), Color.DarkRed);
+            _spriteBatch.DrawString(_playerOneRoundScore, "Player 1 Round Score:  " + player1.roundScore, new Vector2(200, 150), Color.Red);
+            _spriteBatch.DrawString(_playerTwoRoundScore, "Player 2 Round Score:  " + player2.roundScore, new Vector2(1500, 150), Color.Red);
+            _spriteBatch.DrawString(_playerOneScore, "Player 1 Score:  " + player1.GetScore(), new Vector2(200, 200), Color.Pink);
+            _spriteBatch.DrawString(_playerTwoScore, "Player 2 Score:  " + player2.GetScore(), new Vector2(1500, 200), Color.Pink);
             _spriteBatch.DrawString(_match, "Match: " + matchNumber, new Vector2(100, 50), Color.Red);
             _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
 
@@ -718,7 +834,7 @@ namespace WrestlerPose
             for (int i = 0; i < 5; i++)
             {
                 //_spriteBatch.DrawString(_playerOneOutcome, "Last Round Outcome: " + player1.GetCurrentOutcome(), new Vector2(200, 200), Color.Red);
-                if(i >= player1.GetPosePattern().Count)
+                if (i >= player1.GetPosePattern().Count)
                 {
                     continue;
                 }
@@ -745,7 +861,7 @@ namespace WrestlerPose
             //because the next round starts automatically
             for (int i = 0; i < 5; i++)
             {
-               
+
 
                 if (i >= player2.GetPosePattern().Count)
                 {
@@ -823,26 +939,39 @@ namespace WrestlerPose
             }
         }
 
-       //private string CheckOverallWinner(Player player1, Player player2)
-       //{
-       //    if (player1.GetScore() >= 3)
-       //    {
-       //        return player1.GetName();//so player 1 would win if they both got to score 3 simultaneously but that should never happen
-       //    }
-       //    else if (player2.GetScore() >= 3)
-       //    {
-       //        return player2.GetName();
-       //    }
-       //    else
-       //    {
-       //        return null;
-       //    }
-       //}
+        //private string CheckOverallWinner(Player player1, Player player2)
+        //{
+        //    if (player1.GetScore() >= 3)
+        //    {
+        //        return player1.GetName();//so player 1 would win if they both got to score 3 simultaneously but that should never happen
+        //    }
+        //    else if (player2.GetScore() >= 3)
+        //    {
+        //        return player2.GetName();
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
 
         private void NewRound()
         {
             //Before resetting these pose pattersn that the display of the chosen patterns depends on, instead pause in here
             //for a few seconds and display the round winner and keep the chosen things selected, or I guess wait a few seconds utnil newround is called
+
+            if (player1.GetScore() > player2.GetScore())
+            {
+                player1.roundScore++;
+            }
+            else if (player2.GetScore() > player1.GetScore())
+            {
+                player2.roundScore++;
+            }
+
+            //so this is like pose score now, and round score is what adds up to determine an overall round winner I guess
+            player1.SetScore(0);
+            player2.SetScore(0);
 
             player1.SetPose(poses[0]);
             player1.SetPosePattern(new List<Pose>());//should these be reset to empty pose lists?
@@ -850,12 +979,17 @@ namespace WrestlerPose
             player2.SetPosePattern(new List<Pose>());
             currentAI.SetPose(poses[12]);
 
+            player1.displayCircle = DisplayCircle.Tied;
+            player2.displayCircle = DisplayCircle.Tied;
+
+            
+
             //potentially lots of other bools need to be reset in here?
 
             roundNumber++;
             //counterStart = (4 - matchNumber) * 5;
             //counter = counterStart;
-            
+
             //****need to do someting in here with currentai pose list, set it to a new order of the same 4 poses, so that each round within a match is 
             //not the same
 
@@ -884,10 +1018,24 @@ namespace WrestlerPose
                 ResetMatch();//auto new match if round number greater than 3?
             }
         }
-        
+
 
         private void ResetMatch()
         {
+            if (player1.roundScore > player2.roundScore)
+            {
+                player1.matchScore++;
+            }
+            else if (player2.roundScore > player1.roundScore)
+            {
+                player2.matchScore++;
+            }
+            else
+            {
+
+            }
+
+
             if (matchNumber > 3)
             {
                 ResetGame();
@@ -895,8 +1043,8 @@ namespace WrestlerPose
 
 
             //these 4 already done in newround() that calls this
-           // player1.SetPose(poses[0]);
-           // player2.SetPose(poses[6]);
+            // player1.SetPose(poses[0]);
+            // player2.SetPose(poses[6]);
 
             //this hits out of index ranged exception after 3rd match, but not sure why, match number should be 1 again
             currentAI = AIPlayerList[matchNumber];//.SetPose(poses[12]);//is this a ref or value?
@@ -935,6 +1083,10 @@ namespace WrestlerPose
             //there's some other stuff that would likely have to be reset in here
             player1.SetScore(0);
             player2.SetScore(0);
+            player1.roundScore = 0;
+            player2.roundScore = 0;
+            player1.matchScore = 0;
+            player2.matchScore = 0;
             //counterStart = 15;
             //counter = 15;
 
