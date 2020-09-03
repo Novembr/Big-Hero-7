@@ -97,6 +97,9 @@ namespace WrestlerPose
         private Texture2D _stageBackground;
         private Texture2D _stageBackgroundIntro;
         private Texture2D _blackScreenBackground;
+        private Texture2D _playerLightsBackground;
+        private Texture2D _aiLightsBackground;
+
 
 
 
@@ -122,8 +125,11 @@ namespace WrestlerPose
             int test = _graphics.PreferredBackBufferWidth;
             int test2 = _graphics.PreferredBackBufferHeight;
 
-            WrestlerPosition1 = new Vector2(3450, 700);
-            WrestlerPosition2 = new Vector2(4650, 700);
+            int xChange = 770;
+
+
+            WrestlerPosition1 = new Vector2(3450 + xChange, 620);
+            WrestlerPosition2 = new Vector2(4650 + xChange, 620);
             //AIPosition = new Vector2(3250, 300);//this was about in the middle, walkway not centered though
             AIPosition = new Vector2(3310, 400);
 
@@ -160,6 +166,9 @@ namespace WrestlerPose
             _stageBackground = Content.Load<Texture2D>("main_stage_plane_audience");
             _stageBackgroundIntro = Content.Load<Texture2D>("main_stage_plane");
             _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
+            _aiLightsBackground = Content.Load<Texture2D>("ailights");
+            _playerLightsBackground = Content.Load<Texture2D>("playerlights");
+
 
 
 
@@ -192,12 +201,13 @@ namespace WrestlerPose
             }
 
             float displayCircleLayer = 0.0f;
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("bluefeet"), 3), 2.5f, displayCircleLayer));
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("greenfeetthree"), 3), 2.5f, displayCircleLayer));
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("redfeet"), 3), 2.5f, displayCircleLayer));
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("bluefeet"), 3), 2.5f, displayCircleLayer));
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("greenfeetthree"), 3), 2.5f, displayCircleLayer));
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("redfeet"), 3), 2.5f, displayCircleLayer));
+            float displayCircleScale = 3f;
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("bluefeet"), 3), displayCircleScale, displayCircleLayer));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("greenfeetthree"), 3), displayCircleScale, displayCircleLayer));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("redfeet"), 3), displayCircleScale, displayCircleLayer));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("bluefeet"), 3), displayCircleScale, displayCircleLayer));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("greenfeetthree"), 3), displayCircleScale, displayCircleLayer));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("redfeet"), 3), displayCircleScale, displayCircleLayer));
 
             /*
              LowHands,
@@ -243,15 +253,15 @@ namespace WrestlerPose
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("win"), 12));
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("lose"), 12));
 
-            outComePoses.Add(new Pose(outcomeAnimations[0], PoseName.Idle, 2, 0.9f));//scalse is 2 for player, does posename matter here though?
-            outComePoses.Add(new Pose(outcomeAnimations[1], PoseName.Idle, 2, 0.9f));//scalse is 2 for player, does posename matter here though?
-            outComePoses.Add(new Pose(outcomeAnimations[2], PoseName.Idle, 2, 0.9f));//scalse is 2 for player, does posename matter here though?
-            outComePoses.Add(new Pose(outcomeAnimations[3], PoseName.Idle, 2, 0.9f));//scalse is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[0], PoseName.Idle, 2.5f, 0.9f));//scalse is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[1], PoseName.Idle, 2.5f, 0.9f));//scalse is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[2], PoseName.Idle, 2.5f, 0.9f));//scalse is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[3], PoseName.Idle, 2.5f, 0.9f));//scalse is 2 for player, does posename matter here though?
 
             for (int i = 0; i < numAnimations; i++)
             {
                 int poseInt = i;
-                float scale = 2f;
+                float scale = 2.5f;
                 //should make this a non-arbitrary number later
                 if (i > 5)
                 {
@@ -644,14 +654,14 @@ namespace WrestlerPose
             player1.GetPose().GetSprite().Update(gameTime, player1.GetPosition());
             player2.GetPose().GetSprite().Update(gameTime, player2.GetPosition());
 
-
+            int changeXDisplay = 75;
             for (int i = 0; i < 3; i++)
             {
-                displayCircles[i].Update(gameTime, new Vector2(750, 1000));
+                displayCircles[i].Update(gameTime, new Vector2(750 + changeXDisplay, 1000));
             }
             for (int i = 3; i < 6; i++)
             {
-                displayCircles[i].Update(gameTime, new Vector2(1950, 1000));
+                displayCircles[i].Update(gameTime, new Vector2(1950 + changeXDisplay, 1000));
             }
 
             if (aiTurn)
@@ -757,7 +767,7 @@ namespace WrestlerPose
                         Color.White,
                         0f,
                         new Vector2(_stageBackground.Width / 2, _stageBackground.Height / 2),
-                        new Vector2(3.25f, 2.4f),
+                        new Vector2(2.4f, 2.4f),
                         SpriteEffects.None,
                         0f
                         );
@@ -771,7 +781,7 @@ namespace WrestlerPose
                    Color.White,
                    0f,
                    new Vector2(_stageBackgroundIntro.Width / 2, _stageBackgroundIntro.Height / 2),
-                   new Vector2(3.25f, 2.4f),
+                   new Vector2(2.4f, 2.4f),
                    SpriteEffects.None,
                    0f
                    );
@@ -823,8 +833,8 @@ namespace WrestlerPose
             _spriteBatch.DrawString(_playerTwoMatchScore, "Player 2 Match Score:  " + player2.matchScore, new Vector2(1500, 100), Color.DarkRed);
             _spriteBatch.DrawString(_playerOneRoundScore, "Player 1 Round Score:  " + player1.roundScore, new Vector2(200, 150), Color.LightSalmon);
             _spriteBatch.DrawString(_playerTwoRoundScore, "Player 2 Round Score:  " + player2.roundScore, new Vector2(1500, 150), Color.LightSalmon);
-            _spriteBatch.DrawString(_playerOneScore, "Pose Score:  " + player1.GetScore(), new Vector2(260, 290), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
-            _spriteBatch.DrawString(_playerTwoScore, "Pose Score:  " + player2.GetScore(), new Vector2(1450, 290), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+            _spriteBatch.DrawString(_playerOneScore, "Pose Score:  " + player1.GetScore(), new Vector2(260, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+            _spriteBatch.DrawString(_playerTwoScore, "Pose Score:  " + player2.GetScore(), new Vector2(1450, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
             _spriteBatch.DrawString(_match, "Match: " + matchNumber, new Vector2(100, 50), Color.Red);
             _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
             //_spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(840, 35), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
@@ -858,7 +868,7 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne],
-                    new Vector2(220 + i * 130, 400),
+                    new Vector2(220 + i * 130, 300),
                     null,
                     Color.White,
                     0f,
@@ -879,7 +889,7 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo],
-                    new Vector2(1400 + i * 130, 400),
+                    new Vector2(1400 + i * 130, 300),
                     null,
                     Color.White,
 
@@ -901,10 +911,49 @@ namespace WrestlerPose
                   Color.White * blackScreenOpacity,
                   0f,
                   new Vector2(_blackScreenBackground.Width / 2, _blackScreenBackground.Height / 2),
-                  new Vector2(3.25f, 2.4f),
+                  new Vector2(1f, 1f),
                   SpriteEffects.None,
                   1f
                   );
+
+
+            float lightsScale = 1.6f;
+            if (aiTurn)
+            {
+                _spriteBatch.Draw(
+                _aiLightsBackground,
+                new Vector2(960, 540),
+                null,
+                Color.White * 0.9f,
+                0f,
+                new Vector2(_aiLightsBackground.Width / 2, _aiLightsBackground.Height / 2),
+                lightsScale,//new Vector2(1f, 1f),
+                SpriteEffects.None,
+                1f
+                );
+            }
+            else if (playerTurn)
+            {
+                _spriteBatch.Draw(
+                _playerLightsBackground,
+                new Vector2(960, 540),
+                null,
+                Color.White * 0.9f,
+                0f,
+                new Vector2(_playerLightsBackground.Width / 2, _playerLightsBackground.Height / 2),
+                lightsScale,//new Vector2(1f, 1f),
+                SpriteEffects.None,
+                1f
+                );
+            }
+            else if (true /*whatever victory turn is called?*/)
+            {
+                //then split based on whoever won, dunno if that info is available in this scope though
+            }
+            else
+            {
+
+            }
 
 
             _spriteBatch.End();
