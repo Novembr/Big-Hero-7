@@ -109,6 +109,18 @@
 /processorParam:TextureFormat=Color
 /build:blue&point-alt.png
 
+#begin bluefeet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:bluefeet.png
+
 #begin controllerposes.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -164,6 +176,54 @@
 /processorParam:TextureFormat=Color
 /build:green.png
 
+#begin greenfeet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:greenfeet.png
+
+#begin greenfeetonlytwo.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:greenfeetonlytwo.png
+
+#begin greenfeetrepeat.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:greenfeetrepeat.png
+
+#begin greenfeetthree.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:greenfeetthree.png
+
 #begin hercules.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -175,6 +235,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:hercules.jpg
+
+#begin herculesclear.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:herculesclear.png
 
 #begin idle.jpg
 /importer:TextureImporter
@@ -242,6 +314,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:onehandup.jpg
+
+#begin oneupclear.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:oneupclear.png
 
 #begin OverallWinner.spritefont
 /importer:FontDescriptionImporter
@@ -318,6 +402,18 @@
 /processorParam:TextureFormat=Color
 /build:pointing.jpg
 
+#begin pointingclear.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:pointingclear.png
+
 #begin posechart.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -329,6 +425,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:posechart.png
+
+#begin posechart1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:posechart1.png
 
 #begin purple&lean.png
 /importer:TextureImporter
@@ -390,6 +498,18 @@
 /processorParam:TextureFormat=Color
 /build:red.png
 
+#begin redfeet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:redfeet.png
+
 #begin Round.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -439,6 +559,12 @@
 /processorParam:Quality=Best
 /build:Sound/shout5.wav
 
+#begin Sound/shout6.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/shout6.wav
+
 #begin Sound/theme_background.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
@@ -464,6 +590,18 @@
 /processorParam:TextureFormat=Compressed
 /build:Title.spritefont
 
+#begin twodownclear.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:twodownclear.png
+
 #begin twohandsdown.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -487,6 +625,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:twohandsup.jpg
+
+#begin twoupclear.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:twoupclear.png
 
 #begin white.jfif
 /importer:TextureImporter

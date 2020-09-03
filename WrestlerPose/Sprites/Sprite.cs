@@ -18,6 +18,7 @@ namespace WrestlerPose.Sprites
         protected Vector2 _position;
         protected Texture2D _texture;
         protected float _scale;
+        protected float _layer;
 
         public Vector2 Position
         {
@@ -60,16 +61,17 @@ namespace WrestlerPose.Sprites
             }
             else if (_animationManager != null)
             {
-                _animationManager.Draw(spriteBatch, _scale);//it's position is the sprite position
+                _animationManager.Draw(spriteBatch, _scale, _layer);//it's position is the sprite position
             }
             else throw new Exception("This ain't right..!");
         }
 
-        public Sprite(Animation animation, float scale)
+        public Sprite(Animation animation, float scale, float layer)
         {
             _animation = animation;
             _animationManager = new AnimationManager(_animation);
             _scale = scale;
+            _layer = layer;
         }
 
         public Sprite(Texture2D texture)

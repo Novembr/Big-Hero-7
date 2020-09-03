@@ -18,7 +18,7 @@ namespace WrestlerPose.Managers
             _animation = animation;
         }
 
-        public void Draw(SpriteBatch spriteBatch, float scale)
+        public void Draw(SpriteBatch spriteBatch, float scale, float layer)
         {
 
             spriteBatch.Draw(
@@ -34,7 +34,7 @@ namespace WrestlerPose.Managers
                 new Vector2(_animation.Texture.Width / 2, _animation.Texture.Height / 2),
                 scale,//either need to make assets all the same size or pass in a scale parameter for this
                 SpriteEffects.None,
-                0f
+                layer
                 );
         }
 

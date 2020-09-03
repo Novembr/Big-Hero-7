@@ -31,10 +31,10 @@ namespace WrestlerPose
         //    _sprite = new Sprite(singleFrameAnimation);
         //}
 
-        public Pose(Animation animation, PoseName poseName, float scale)
+        public Pose(Animation animation, PoseName poseName, float scale, float layer)
         {
             _poseName = poseName;
-            _sprite = new Sprite(animation, scale);
+            _sprite = new Sprite(animation, scale, layer);
         }
 
         public PoseName GetPoseName() { return _poseName; }

@@ -40,6 +40,7 @@ namespace WrestlerPose
         List<Pose> poses = new List<Pose>(numAnimations);
         List<Pose> outComePoses = new List<Pose>(4);
 
+        bool dontDisplayOutcome = true;
 
 
         //countdown timer
@@ -128,7 +129,7 @@ namespace WrestlerPose
 
             WrestlerPosition1 = new Vector2(3450, 700); // new Vector2(_graphics.PreferredBackBufferWidth / 4, _graphics.PreferredBackBufferHeight / 2);
             WrestlerPosition2 = new Vector2(4650, 700);//new Vector2(_graphics.PreferredBackBufferWidth * 3 / 4, _graphics.PreferredBackBufferHeight / 2);
-            AIPosition = new Vector2(3200, 300); //new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 3);
+            AIPosition = new Vector2(3250, 300); //new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 3);
 
 
             base.Initialize();
@@ -163,7 +164,7 @@ namespace WrestlerPose
             _match = Content.Load<SpriteFont>("Match");
             _overAllWinner = Content.Load<SpriteFont>("OverallWinner");
             _title = Content.Load<SpriteFont>("Title");
-            _allPosesImage = Content.Load<Texture2D>("AllPosesImage");
+            _allPosesImage = Content.Load<Texture2D>("posechart1");
             _stageBackground = Content.Load<Texture2D>("Stage");
 
             //song
@@ -172,7 +173,7 @@ namespace WrestlerPose
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.1f;
             MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
-            soundEffects.Add(Content.Load<SoundEffect>("Sound/shout1"));
+            soundEffects.Add(Content.Load<SoundEffect>("Sound/shout6"));
             soundEffects.Add(Content.Load<SoundEffect>("Sound/shout2"));
             soundEffects.Add(Content.Load<SoundEffect>("Sound/shout3"));
             soundEffects.Add(Content.Load<SoundEffect>("Sound/shout4"));
@@ -182,7 +183,7 @@ namespace WrestlerPose
 
             //bellRing = Content.Load<Song>("Sound/bell_ring");//because sound effect and not song
             //MediaPlayer.Play(bellRing);
-             soundEffects[5].CreateInstance().Play();//do I need to create instance when doing this? if I don't I think taht the same sound will stop itself if called before finishing
+            soundEffects[5].CreateInstance().Play();//do I need to create instance when doing this? if I don't I think taht the same sound will stop itself if called before finishing
 
             // Play that can be manipulated after the fact
             //var instance = soundEffects[0].CreateInstance();
@@ -190,15 +191,24 @@ namespace WrestlerPose
             //instance.Play();
             //end sound
 
-            List<string> stillAnimationImageNameStrings = new List<string>(5) { "twohandsdown", "pointing", "onehandup", "twohandsup", "hercules" };
+            List<string> stillAnimationImageNameStrings = new List<string>(5) { "twodownclear", "pointingclear", "oneupclear", "twoupclear", "herculesclear" };
             for (int i = 0; i < 5; i++)
             {
                 playerOneSelectedPoseSpritesToChooseFrom.Add(Content.Load<Texture2D>(stillAnimationImageNameStrings[i]));
                 playerTwoSelectedPoseSpritesToChooseFrom.Add(Content.Load<Texture2D>(stillAnimationImageNameStrings[i]));
             }
 
-            //DOUBled number of animations because same one can't be in two places it seems and
-            //will need different ones anyway once getting new characters etc...
+            //this appears not to work
+            float displayCircleLayer = 0.0f;
+
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("bluefeet"), 3), 2.5f, displayCircleLayer));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("greenfeetthree"), 3), 2.5f, displayCircleLayer));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("redfeet"), 3), 2.5f, displayCircleLayer));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("bluefeet"), 3), 2.5f, displayCircleLayer));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("greenfeetthree"), 3), 2.5f, displayCircleLayer));
+            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("redfeet"), 3), 2.5f, displayCircleLayer));
+
+
             /*
              LowHands,
             Pointing,
@@ -206,6 +216,9 @@ namespace WrestlerPose
             HighHands,
             Hercules
              */
+
+            //DOUBled number of animations because same one can't be in two places it seems and
+            //will need different ones anyway once getting new characters etc...
             //player one animations:
             animations.Add(new Animation(Content.Load<Texture2D>("idle"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("yellow&crouch"), 12));
@@ -228,22 +241,16 @@ namespace WrestlerPose
             animations.Add(new Animation(Content.Load<Texture2D>("red&botharms-alt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("green&back-alt"), 12));
 
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("white"), 1), 1));
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("green"), 1), 1));
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("red"), 1), 1));
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("white"), 1), 1));
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("green"), 1), 1));
-            displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("red"), 1), 1));
 
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("win"), 12));
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("lose"), 12));
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("win"), 12));
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("lose"), 12));
 
-            outComePoses.Add(new Pose(outcomeAnimations[0], PoseName.Idle, 2));//scalse is 2 for player, does posename matter here though?
-            outComePoses.Add(new Pose(outcomeAnimations[1], PoseName.Idle, 2));//scalse is 2 for player, does posename matter here though?
-            outComePoses.Add(new Pose(outcomeAnimations[2], PoseName.Idle, 2));//scalse is 2 for player, does posename matter here though?
-            outComePoses.Add(new Pose(outcomeAnimations[3], PoseName.Idle, 2));//scalse is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[0], PoseName.Idle, 2, 0.9f));//scalse is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[1], PoseName.Idle, 2, 0.9f));//scalse is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[2], PoseName.Idle, 2, 0.9f));//scalse is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[3], PoseName.Idle, 2, 0.9f));//scalse is 2 for player, does posename matter here though?
 
 
 
@@ -261,7 +268,7 @@ namespace WrestlerPose
                     poseInt = poseInt - 6;
                     scale = 1.5f;
                 }
-                poses.Add(new Pose(animations[i], (PoseName)poseInt, scale));
+                poses.Add(new Pose(animations[i], (PoseName)poseInt, scale, 0.9f));
             }
 
             //make 3 players and set each to it's first animation, idle animation, 
@@ -534,6 +541,7 @@ namespace WrestlerPose
                     //now added second round timer so last player has time to display
                     if (roundTimer > 3000)
                     {
+                        dontDisplayOutcome = true;
 
                         if (player1.GetScore() > player2.GetScore())
                         {
@@ -557,6 +565,7 @@ namespace WrestlerPose
 
                         if (roundTimer > 5000)
                         {
+                            dontDisplayOutcome = false;
                             playerTurn = false;
                             roundTimer = 0;
                             NewRound();
@@ -572,15 +581,17 @@ namespace WrestlerPose
             player2.GetPose().GetSprite().Update(gameTime, player2.GetPosition());
             //displayCircles[1].Update(gameTime,/* player1.GetPosition()*/ /*new Vector2(100, 100)*/ player1.GetPosition());
 
+
             for (int i = 0; i < 3; i++)
             {
-                displayCircles[i].Update(gameTime, /*player1.GetPosition()*/ new Vector2(370, 1000));
+                displayCircles[i].Update(gameTime, /*player1.GetPosition()*/ new Vector2(750, 1000));
             }
             for (int i = 3; i < 6; i++)
             {
-                displayCircles[i].Update(gameTime, /*player2.GetPosition()*/ new Vector2(1600, 1000));
+                displayCircles[i].Update(gameTime, /*player2.GetPosition()*/ new Vector2(1950, 1000));
             }
-
+            
+            
             //switch (player1.displayCircle)
             //{
             //    case DisplayCircle.Tied:
@@ -614,6 +625,8 @@ namespace WrestlerPose
 
             if (aiTurn)
             {
+
+                dontDisplayOutcome = true;
                 //need numAiPosesThisRound to increase with AI
                 //perhaps add property to player that is an AI only property of something like numPoses
                 //so that each ai can have a different number of poses
@@ -667,11 +680,12 @@ namespace WrestlerPose
                 if (numPosesDisplayedAI >= currentAI.GetPosePattern().Count)
                 {
                     roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                    if (roundTimer > 3000)
+                    if (roundTimer > 3000)//rather than 3000 eventually this should be the animation time
                     {
                         currentAI.SetPose(poses[12]);
                         aiTurn = false;
-                        playerTurn = true; 
+                        playerTurn = true;
+                        dontDisplayOutcome = false;
                         roundTimer = 0;
                         //currentAI.SetPose(poses[12]);//doing this means I think that you miss the last one? yes you will because will be overwritten before displaying
                     }
@@ -788,7 +802,7 @@ namespace WrestlerPose
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(SpriteSortMode.FrontToBack, null);
 
             _spriteBatch.Draw(
                     _stageBackground,
@@ -813,40 +827,42 @@ namespace WrestlerPose
             //
             //}
 
-            switch (player1.displayCircle)
+            if (!dontDisplayOutcome)
             {
-                case DisplayCircle.Tied:
-                    displayCircles[0].Draw(_spriteBatch);
-                    break;
-                case DisplayCircle.Won:
-                    displayCircles[1].Draw(_spriteBatch);
-                    break;
-                case DisplayCircle.Lost:
-                    displayCircles[2].Draw(_spriteBatch);
-                    break;
-                default:
-                    break;
-            }
+                switch (player1.displayCircle)
+                {
+                    case DisplayCircle.Tied:
+                        displayCircles[0].Draw(_spriteBatch);
+                        break;
+                    case DisplayCircle.Won:
+                        displayCircles[1].Draw(_spriteBatch);
+                        break;
+                    case DisplayCircle.Lost:
+                        displayCircles[2].Draw(_spriteBatch);
+                        break;
+                    default:
+                        break;
+                }
 
-            switch (player2.displayCircle)
-            {
-                case DisplayCircle.Tied:
-                    displayCircles[3].Draw(_spriteBatch);
-                    break;
-                case DisplayCircle.Won:
-                    displayCircles[4].Draw(_spriteBatch);
-                    break;
-                case DisplayCircle.Lost:
-                    displayCircles[5].Draw(_spriteBatch);
-                    break;
-                default:
-                    break;
+                switch (player2.displayCircle)
+                {
+                    case DisplayCircle.Tied:
+                        displayCircles[3].Draw(_spriteBatch);
+                        break;
+                    case DisplayCircle.Won:
+                        displayCircles[4].Draw(_spriteBatch);
+                        break;
+                    case DisplayCircle.Lost:
+                        displayCircles[5].Draw(_spriteBatch);
+                        break;
+                    default:
+                        break;
+                }
             }
-
 
             _spriteBatch.DrawString(_countDownPlayerOneMove, counter.ToString(), new Vector2(200, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
             _spriteBatch.DrawString(_countDownPlayerTwoMove, counter2.ToString(), new Vector2(1500, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-            _spriteBatch.DrawString(_countDownAI, counterAI.ToString(), new Vector2(890, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+            _spriteBatch.DrawString(_countDownAI, counterAI.ToString(), new Vector2(930, 1), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
 
 
 
@@ -857,28 +873,31 @@ namespace WrestlerPose
             //_spriteBatch.DrawString(_playerTwoOutcome, "Last Round Outcome: " + player2.GetCurrentOutcome(), new Vector2(1500, 200), Color.Red);
             _spriteBatch.DrawString(_playerOneMatchScore, "Player 1 Match Score:  " + player1.matchScore, new Vector2(200, 100), Color.DarkRed);
             _spriteBatch.DrawString(_playerTwoMatchScore, "Player 2 Match Score:  " + player2.matchScore, new Vector2(1500, 100), Color.DarkRed);
-            _spriteBatch.DrawString(_playerOneRoundScore, "Player 1 Round Score:  " + player1.roundScore, new Vector2(200, 150), Color.Red);
-            _spriteBatch.DrawString(_playerTwoRoundScore, "Player 2 Round Score:  " + player2.roundScore, new Vector2(1500, 150), Color.Red);
-            _spriteBatch.DrawString(_playerOneScore, "Player 1 Score:  " + player1.GetScore(), new Vector2(200, 200), Color.Pink);
-            _spriteBatch.DrawString(_playerTwoScore, "Player 2 Score:  " + player2.GetScore(), new Vector2(1500, 200), Color.Pink);
+            _spriteBatch.DrawString(_playerOneRoundScore, "Player 1 Round Score:  " + player1.roundScore, new Vector2(200, 150), Color.LightSalmon);
+            _spriteBatch.DrawString(_playerTwoRoundScore, "Player 2 Round Score:  " + player2.roundScore, new Vector2(1500, 150), Color.LightSalmon);
+
+            _spriteBatch.DrawString(_playerOneScore, "Pose Score:  " + player1.GetScore(), new Vector2(260, 290), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+            _spriteBatch.DrawString(_playerTwoScore, "Pose Score:  " + player2.GetScore(), new Vector2(1450, 290), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+
             _spriteBatch.DrawString(_match, "Match: " + matchNumber, new Vector2(100, 50), Color.Red);
             _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
 
             //so below is a test scaled up text, but it is of course distorted and pixellated, so there 
-            _spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(800, 100), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+            _spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(840, 35), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
 
-            _spriteBatch.Draw(
-                    _allPosesImage,
-                    new Vector2(950, 800),
-                    null,
-                    Color.White,
-                    0f,
-                    new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
-                    0.5f,
-                    SpriteEffects.None,
-                    0f
-                    );
-
+            //stop drawing this for now, maybe later integrate it into the environment in an aesthetic way
+          _spriteBatch.Draw(
+                  _allPosesImage,
+                  new Vector2(950, 800),
+                  null,
+                  Color.White,
+                  0f,
+                  new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
+                  0.7f,
+                  SpriteEffects.None,
+                  0f
+                  );
+          
 
             //would be whitespace at first
             if (!String.IsNullOrWhiteSpace(overallWinnerString))
@@ -904,13 +923,13 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne],
-                    new Vector2(200 + i * 100, 400),
+                    new Vector2(220 + i * 130, 400),
                     null,
                     Color.White,
 
                     0f,
                     new Vector2(playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Height / 2),
-                    0.1f,
+                    0.9f,
                     SpriteEffects.None,
                     0f
 
@@ -930,13 +949,13 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo],
-                    new Vector2(1400 + i * 100, 400),
+                    new Vector2(1400 + i * 130, 400),
                     null,
                     Color.White,
 
                     0f,
                     new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Height / 2),
-                    0.1f,
+                    0.9f,
                     SpriteEffects.None,
                     0f
 
@@ -1093,6 +1112,7 @@ namespace WrestlerPose
             {
 
             }
+            
 
 
             if (matchNumber > 3)
@@ -1119,7 +1139,8 @@ namespace WrestlerPose
             //back to null once someone has initiated a new game of 3 rounds I guess by selecting a non idle pose again?
             //counterStart = (4 - matchNumber) * 5;
             //counter = counterStart;
-
+            player1.roundScore = 0;
+            player2.roundScore = 0;
             //SCORES? 
             // player1.SetScore(0);//se these scores to 0 here between matches? or will scores add up across matches? if they add up across
             //matches then don't set them to zero here, if instead they only determine match winner then set them to zero here and increment
