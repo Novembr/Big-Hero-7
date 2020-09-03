@@ -10,8 +10,6 @@ using WrestlerPose.Sprites;
 
 namespace WrestlerPose
 {
-
-
     public class Game1 : Game
     {
         Vector2 WrestlerPosition1;
@@ -26,7 +24,7 @@ namespace WrestlerPose
 
         List<SoundEffect> soundEffects;
         List<Player> AIPlayerList;// = new List<Player>(3);
-        const int numAnimations = 18;
+        const int numAnimations = 24;
 
         List<Animation> animations = new List<Animation>(numAnimations);
         List<Animation> outcomeAnimations = new List<Animation>(4);
@@ -114,7 +112,9 @@ namespace WrestlerPose
 
             WrestlerPosition1 = new Vector2(3450, 700);
             WrestlerPosition2 = new Vector2(4650, 700);
-            AIPosition = new Vector2(3250, 300);
+            //AIPosition = new Vector2(3250, 300);//this was about in the middle, walkway not centered though
+            AIPosition = new Vector2(3310, 400);
+
 
             base.Initialize();
         }
@@ -145,7 +145,7 @@ namespace WrestlerPose
             _overAllWinner = Content.Load<SpriteFont>("OverallWinner");
             _title = Content.Load<SpriteFont>("Title");
             _allPosesImage = Content.Load<Texture2D>("posechart1");
-            _stageBackground = Content.Load<Texture2D>("Stage");
+            _stageBackground = Content.Load<Texture2D>("main_stage_plane");
 
             song = Content.Load<Song>("Sound/theme_background");
             MediaPlayer.Play(song);
@@ -207,13 +207,20 @@ namespace WrestlerPose
             animations.Add(new Animation(Content.Load<Texture2D>("blue&point"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("red&botharms"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("green&back"), 12));
-            //player 3 animations
+            //AI 1 animations
             animations.Add(new Animation(Content.Load<Texture2D>("idlealt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("yellow&couch-alt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("purple&lean-alt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("blue&point-alt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("red&botharms-alt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("green&back-alt"), 12));
+            //AI 2 animations
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-idle"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-yeller"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-purple"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-blue"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-red"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-green"), 12));
 
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("win"), 12));
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("lose"), 12));
@@ -239,6 +246,11 @@ namespace WrestlerPose
                     poseInt = poseInt - 6;
                     scale = 1.5f;
                 }
+                if (i > 17)
+                {
+                    poseInt = poseInt - 6;
+                    scale = 1.5f;
+                }
                 poses.Add(new Pose(animations[i], (PoseName)poseInt, scale, 0.9f));
             }
 
@@ -248,9 +260,10 @@ namespace WrestlerPose
             //the new pose list with poses below doesn't really matter because they are later randomized based on the in list after it
             AIPlayerList = new List<Player>
             {
+                //the 3rd parameter is the idle parameter for that ai, we now have 2, and idle for alt and bear are 12 and 18 respectively
                 new Player("firstAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[14], poses[14] }, new List<int>{ 13, 14, 15}),
-                new Player("secondAI", AIPosition, poses[12], new List<Pose>(4) { poses[14], poses[16], poses[15], poses[14] }, new List<int>{ 13, 14, 15, 17}),
-                new Player("thirdAI", AIPosition, poses[12], new List<Pose>(5) { poses[17], poses[16], poses[17], poses[15], poses[13] }, new List<int>{ 13, 14, 15, 16, 17}),
+                new Player("secondAI", AIPosition, poses[18], new List<Pose>(4) { poses[19], poses[19], poses[19], poses[19] }, new List<int>{ 19, 20, 21, 22}),
+                new Player("thirdAI", AIPosition, poses[18], new List<Pose>(5) { poses[19], poses[19], poses[19], poses[19], poses[19] }, new List<int>{ 19, 22, 23, 21, 20}),
             };
 
             currentAI = AIPlayerList[0];
@@ -583,7 +596,10 @@ namespace WrestlerPose
                     roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                     if (roundTimer > 3000)
                     {
-                        currentAI.SetPose(poses[12]);
+                        //should probably not do this upIndexCurrentAIIdlePoseIndex bit and instead have some kind of currentai.setidlepose method that can more reliable find this
+                        //and is done in one place
+                        int upIndexCurrentAIIdlePoseIndex = (matchNumber - 1) * 6 + 12;
+                        currentAI.SetPose(poses[upIndexCurrentAIIdlePoseIndex]);
                         aiTurn = false;
                         playerTurn = true;
                         dontDisplayOutcome = false;
@@ -685,16 +701,16 @@ namespace WrestlerPose
             _spriteBatch.DrawString(_playerTwoScore, "Pose Score:  " + player2.GetScore(), new Vector2(1450, 290), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
             _spriteBatch.DrawString(_match, "Match: " + matchNumber, new Vector2(100, 50), Color.Red);
             _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
-            _spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(840, 35), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+            //_spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(840, 35), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
 
             _spriteBatch.Draw(
                     _allPosesImage,
-                    new Vector2(950, 800),
+                    new Vector2(950, 900),
                     null,
                     Color.White,
                     0f,
                     new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
-                    0.7f,
+                    0.5f,
                     SpriteEffects.None,
                     0f
                     );
@@ -819,7 +835,8 @@ namespace WrestlerPose
             player1.SetPosePattern(new List<Pose>());
             player2.SetPose(poses[6]);
             player2.SetPosePattern(new List<Pose>());
-            currentAI.SetPose(poses[12]);
+            int upIndexCurrentAIIdlePoseIndex = (matchNumber - 1) * 6 + 12;
+            currentAI.SetPose(poses[upIndexCurrentAIIdlePoseIndex]);//was 12
 
             player1.displayCircle = DisplayCircle.Tied;
             player2.displayCircle = DisplayCircle.Tied;
@@ -864,11 +881,11 @@ namespace WrestlerPose
             }
             else
             {
+                matchNumber++;
                 currentAI = AIPlayerList[matchNumber - 1];//.SetPose(poses[12]);//is this a ref or value?
                 player1.SetPosePattern(new List<Pose>(currentAI.GetPosePattern().Count));
                 player2.SetPosePattern(new List<Pose>(currentAI.GetPosePattern().Count));
                 roundNumber = 1;
-                matchNumber++;
                 player1.roundScore = 0;
                 player2.roundScore = 0;
             }
