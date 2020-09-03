@@ -95,9 +95,14 @@ namespace WrestlerPose
         private SpriteFont _title;
         private Texture2D _allPosesImage;
         private Texture2D _stageBackground;
+        private Texture2D _stageBackgroundIntro;
+        private Texture2D _blackScreenBackground;
+
+
 
         private List<Texture2D> playerOneSelectedPoseSpritesToChooseFrom = new List<Texture2D>(5);//assumes the most will be 5 
         private List<Texture2D> playerTwoSelectedPoseSpritesToChooseFrom = new List<Texture2D>(5);//assumes the most will be 5
+        private float blackScreenOpacity;
 
         public Game1()
         {
@@ -122,7 +127,7 @@ namespace WrestlerPose
             //AIPosition = new Vector2(3250, 300);//this was about in the middle, walkway not centered though
             AIPosition = new Vector2(3310, 400);
 
-
+            blackScreenOpacity = 0f;
             base.Initialize();
         }
 
@@ -153,6 +158,10 @@ namespace WrestlerPose
             _title = Content.Load<SpriteFont>("Title");
             _allPosesImage = Content.Load<Texture2D>("posechart1");
             _stageBackground = Content.Load<Texture2D>("main_stage_plane_audience");
+            _stageBackgroundIntro = Content.Load<Texture2D>("main_stage_plane");
+            _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
+
+
 
             song = Content.Load<Song>("Sound/theme_background");
             MediaPlayer.Play(song);
@@ -375,7 +384,7 @@ namespace WrestlerPose
                 dontDisplayOutcome = false;//might need to get reset to true after? see what it is initially
 
 
-               
+
 
 
                 roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -417,8 +426,16 @@ namespace WrestlerPose
                                 player2.SetPose(outComePoses[2]);
                                 dontDisplayOutcome = true;
 
+
+                                blackScreenOpacity = (roundTimer - 7000) / 2000;
+                                blackScreenOpacity = MathF.Min(blackScreenOpacity, 1f);
+
+
+                                // blackScreenOpacity += ((roundTimer - 7000)/10000);//
+                                //  blackScreenOpacity = MathF.Min(blackScreenOpacity, 1f);
+
                                 if (roundTimer > 10000)
-                                { 
+                                {
                                     currentAI.SetPose(poses[12]);
                                     player1.SetPose(poses[0]);
                                     player2.SetPose(poses[6]);
@@ -639,12 +656,26 @@ namespace WrestlerPose
 
             if (aiTurn)
             {
+
+
                 dontDisplayOutcome = true;
 
                 if (numPosesDisplayedAI < currentAI.GetPosePattern().Count)
                 {
-
                     currentTimeAI += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    //below only relevant on first ai turn
+                    if (blackScreenOpacity > 0)
+                    {
+                        roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                        blackScreenOpacity = 1 - (roundTimer / 3000);
+                        blackScreenOpacity = MathF.Max(blackScreenOpacity, 0f);
+                    }
+                    else
+                    {
+                        roundTimer = 0;
+                    }
+
                     if (currentTimeAI >= countDurationAI)
                     {
                         counterAI--;
@@ -717,17 +748,36 @@ namespace WrestlerPose
 
             _spriteBatch.Begin(SpriteSortMode.FrontToBack, null);
 
-            _spriteBatch.Draw(
-                    _stageBackground,
-                    new Vector2(960, 540),
-                    null,
-                    Color.White,
-                    0f,
-                    new Vector2(_stageBackground.Width / 2, _stageBackground.Height / 2),
-                    new Vector2(3.25f, 2.4f),
-                    SpriteEffects.None,
-                    0f
-                    );
+            if (!introTurn)
+            {
+                _spriteBatch.Draw(
+                        _stageBackground,
+                        new Vector2(960, 540),
+                        null,
+                        Color.White,
+                        0f,
+                        new Vector2(_stageBackground.Width / 2, _stageBackground.Height / 2),
+                        new Vector2(3.25f, 2.4f),
+                        SpriteEffects.None,
+                        0f
+                        );
+            }
+            else
+            {
+                _spriteBatch.Draw(
+                   _stageBackgroundIntro,
+                   new Vector2(960, 540),
+                   null,
+                   Color.White,
+                   0f,
+                   new Vector2(_stageBackgroundIntro.Width / 2, _stageBackgroundIntro.Height / 2),
+                   new Vector2(3.25f, 2.4f),
+                   SpriteEffects.None,
+                   0f
+                   );
+            }
+
+
 
             player1.GetPose().GetSprite().Draw(_spriteBatch);
             player2.GetPose().GetSprite().Draw(_spriteBatch);
@@ -841,6 +891,21 @@ namespace WrestlerPose
 
                     );
             }
+
+
+            //blackscreenbackground, opacity change over time
+            _spriteBatch.Draw(
+                  _blackScreenBackground,
+                  new Vector2(960, 540),
+                  null,
+                  Color.White * blackScreenOpacity,
+                  0f,
+                  new Vector2(_blackScreenBackground.Width / 2, _blackScreenBackground.Height / 2),
+                  new Vector2(3.25f, 2.4f),
+                  SpriteEffects.None,
+                  1f
+                  );
+
 
             _spriteBatch.End();
 
