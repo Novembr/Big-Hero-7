@@ -35,6 +35,7 @@ namespace WrestlerPose
         bool dontDisplayOutcome = true;
         bool playerOneFinishedFirst = true;
 
+
         //countdown timer
         //i got this counter timer basic setup from online somewhere but changed it to count down and not up
         //here https://stackoverflow.com/questions/13394892/how-to-create-a-timer-counter-in-c-sharp-xna
@@ -63,11 +64,17 @@ namespace WrestlerPose
 
         //private int numAiPosesThisRound = 3;
         bool playerTurn = false;
-        bool aiTurn = true;//game not starting because of this?
+        bool aiTurn = false;//game not starting because of this? **need to set to true after intro turn
+        bool introTurn = true;
         int numPosesDisplayedAI = 0;
         bool thisRoundTallied = false;
         bool player1CanInput = true;
         bool player2CanInput = true;
+
+        bool introPlayer1AudioHasPlayed = false;
+        bool introPlayer2AudioHasPlayed = false;
+        bool introAIAudioHasPlayed = false;
+
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -145,7 +152,7 @@ namespace WrestlerPose
             _overAllWinner = Content.Load<SpriteFont>("OverallWinner");
             _title = Content.Load<SpriteFont>("Title");
             _allPosesImage = Content.Load<Texture2D>("posechart1");
-            _stageBackground = Content.Load<Texture2D>("main_stage_plane");
+            _stageBackground = Content.Load<Texture2D>("main_stage_plane_audience");
 
             song = Content.Load<Song>("Sound/theme_background");
             MediaPlayer.Play(song);
@@ -360,6 +367,75 @@ namespace WrestlerPose
 
             var inputState = Keyboard.GetState();
 
+            if (introTurn)
+            {
+                //input:
+                player1CanInput = false;
+                player2CanInput = false;
+                dontDisplayOutcome = false;//might need to get reset to true after? see what it is initially
+
+
+               
+
+
+                roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (roundTimer > 2000)
+                {
+                    //could make it false initially and then not have to do it here
+                    //also add in the changing player lights here
+                    if (!introAIAudioHasPlayed)
+                    {
+                        currentAI.SetPose(poses[13]);
+                        soundEffects[1].CreateInstance().Play();
+                        introAIAudioHasPlayed = true;
+                    }
+
+                    if (roundTimer > 4000)
+                    {
+                        if (!introPlayer1AudioHasPlayed)
+                        {
+                            player1.SetPose(poses[2]);
+                            soundEffects[2].CreateInstance().Play();
+                            introPlayer1AudioHasPlayed = true;
+                            player1.displayCircle = DisplayCircle.Lost;
+                        }
+
+                        if (roundTimer > 4500)
+                        {
+
+                            if (!introPlayer2AudioHasPlayed)
+                            {
+                                player2.SetPose(poses[9]);
+                                soundEffects[3].CreateInstance().Play();
+                                introPlayer2AudioHasPlayed = true;
+                                player2.displayCircle = DisplayCircle.Won;
+                            }
+
+                            if (roundTimer > 7000)
+                            {
+                                player1.SetPose(outComePoses[1]);
+                                player2.SetPose(outComePoses[2]);
+                                dontDisplayOutcome = true;
+
+                                if (roundTimer > 10000)
+                                { 
+                                    currentAI.SetPose(poses[12]);
+                                    player1.SetPose(poses[0]);
+                                    player2.SetPose(poses[6]);
+                                    player1.displayCircle = DisplayCircle.Tied;
+                                    player2.displayCircle = DisplayCircle.Tied;
+                                    //and now start the game
+                                    aiTurn = true;
+                                    playerTurn = false;
+                                    roundTimer = 0;
+                                    introTurn = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             //below is kind of awkward and not very safe, just a bunch of conditionals with hard coded indexes that incidentally correspond to poses
             //along with hard coded input, is it worth it to do some input refactoring, so the keyboard input state is not directly exposed
             //here but instead there's some layer of abstraction that handles input more elegantly? may not be worth doing for prototype
@@ -497,7 +573,7 @@ namespace WrestlerPose
                 {
                     playerOneFinishedFirst = true;
                 }
-                else if((player2.GetPosePattern().Count >= currentAI.GetPosePattern().Count) && (player1.GetPosePattern().Count < currentAI.GetPosePattern().Count))
+                else if ((player2.GetPosePattern().Count >= currentAI.GetPosePattern().Count) && (player1.GetPosePattern().Count < currentAI.GetPosePattern().Count))
                 {
                     playerOneFinishedFirst = false;
                 }
@@ -564,7 +640,7 @@ namespace WrestlerPose
             if (aiTurn)
             {
                 dontDisplayOutcome = true;
-              
+
                 if (numPosesDisplayedAI < currentAI.GetPosePattern().Count)
                 {
 
