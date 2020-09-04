@@ -682,13 +682,21 @@ namespace WrestlerPose
             base.Update(gameTime);
         }
 
-        private bool PlayerPoseSelection(int poseToSet, int poseForPosePattern, int soundEffect, Player player)
+        private bool PlayerPoseSelection(int poseToSet, int poseForPosePattern, int soundEffect, Player player/*, ref int playerInputCounter*/)
         {
             player.SetPose(poses[poseToSet]);
             player.AddToPosePattern(poses[poseForPosePattern]);
             ComparePosesAndSetScores(player.GetPosePattern().Count - 1, player, currentAI);
             soundEffects[soundEffect].CreateInstance().Play();
-            counter = counterStart;
+
+            if (player == player1)
+            {
+                counter = counterStart;
+            }
+            else
+            {
+                counter2 = counterStart2;
+            }
 
             return false;
         }
@@ -893,7 +901,7 @@ namespace WrestlerPose
             else if (dontDisplayOutcome)
             {
                 Player winner = WinningPlayer();
-                if(winner == player1)
+                if (winner == player1)
                 {
                     DisplayLights(_playerOneLightsBackground, lightsOpacity, lightsScale);
                 }
