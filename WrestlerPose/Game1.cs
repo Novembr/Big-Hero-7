@@ -173,10 +173,6 @@ namespace WrestlerPose
             _playerOneLightsBackground = Content.Load<Texture2D>("green");
             _playerTwoLightsBackground = Content.Load<Texture2D>("greenfeetonlytwo");
 
-
-
-
-
             song = Content.Load<Song>("Sound/theme_background");
             MediaPlayer.Play(song);
             MediaPlayer.IsRepeating = true;
@@ -190,7 +186,7 @@ namespace WrestlerPose
             soundEffects.Add(Content.Load<SoundEffect>("Sound/boxing_bell"));
             SoundEffect.MasterVolume = 0.5f;
 
-            soundEffects[5].CreateInstance().Play();//do I need to create instance when doing this? if I don't I think taht the same sound will stop itself if called before finishing
+            //soundEffects[5].CreateInstance().Play();//do I need to create instance when doing this? if I don't I think taht the same sound will stop itself if called before finishing
 
             // Play that can be manipulated after the fact
             //var instance = soundEffects[0].CreateInstance();
@@ -461,6 +457,7 @@ namespace WrestlerPose
                                     playerTurn = false;
                                     roundTimer = 0;
                                     introTurn = false;
+                                    soundEffects[5].CreateInstance().Play();
                                 }
                             }
                         }
@@ -490,53 +487,24 @@ namespace WrestlerPose
                 {
                     if (inputState.IsKeyDown(Keys.A) || ((playerOneLeftStick == StickDirection.Down) && (playerOneRightStick == StickDirection.Down)))
                     {
-                        player1.SetPose(poses[1]);
-                        player1.AddToPosePattern(poses[1]);
-                        ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
-                        soundEffects[0].CreateInstance().Play();
-                        player1CanInput = false;
-                        counter = counterStart;
-
+                        player1CanInput = PlayerPoseSelection(1, 1, 0, player1);
                     }
                     else if (inputState.IsKeyDown(Keys.S) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Up)))
                     {
-                        player1.SetPose(poses[4]);//*** two hands up
-                        player1.AddToPosePattern(poses[4]);
-                        ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
-                        soundEffects[3].CreateInstance().Play();
-                        player1CanInput = false;
-                        counter = counterStart;
+                        player1CanInput = PlayerPoseSelection(4, 4, 3, player1);
 
                     }
                     else if (inputState.IsKeyDown(Keys.D) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Down)))
                     {
-                        player1.SetPose(poses[3]);
-                        player1.AddToPosePattern(poses[3]);
-                        ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
-                        soundEffects[2].CreateInstance().Play();
-                        player1CanInput = false;
-                        counter = counterStart;
-
+                        player1CanInput = PlayerPoseSelection(3, 3, 2, player1);
                     }
                     else if (inputState.IsKeyDown(Keys.F) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Right)))
                     {
-                        player1.SetPose(poses[2]); //***pointing
-                        player1.AddToPosePattern(poses[2]);
-                        ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
-                        soundEffects[1].CreateInstance().Play();
-                        player1CanInput = false;
-                        counter = counterStart;
-
+                        player1CanInput = PlayerPoseSelection(2, 2, 1, player1);
                     }
                     else if (inputState.IsKeyDown(Keys.G) || ((playerOneLeftStick == StickDirection.Left) && (playerOneRightStick == StickDirection.Right)))
                     {
-                        player1.SetPose(poses[5]);
-                        player1.AddToPosePattern(poses[5]);
-                        ComparePosesAndSetScores(player1.GetPosePattern().Count - 1, player1, currentAI);
-                        soundEffects[4].CreateInstance().Play();
-                        player1CanInput = false;
-                        counter = counterStart;
-
+                        player1CanInput = PlayerPoseSelection(5, 5, 4, player1);
                     }
                 }
 
@@ -556,48 +524,23 @@ namespace WrestlerPose
                 {
                     if (inputState.IsKeyDown(Keys.NumPad1) || ((playerTwoLeftStick == StickDirection.Down) && (playerTwoRightStick == StickDirection.Down)))
                     {
-                        player2.SetPose(poses[7]);
-                        player2.AddToPosePattern(poses[7]);
-                        ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
-                        soundEffects[0].CreateInstance().Play();
-                        player2CanInput = false;
-                        counter2 = counterStart2;
+                        player2CanInput = PlayerPoseSelection(7, 7, 0, player2);
                     }
                     else if (inputState.IsKeyDown(Keys.NumPad2) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Up)))
                     {
-                        player2.SetPose(poses[10]);//**two hands up
-                        player2.AddToPosePattern(poses[10]);
-                        ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
-                        soundEffects[3].CreateInstance().Play();
-                        player2CanInput = false;
-                        counter2 = counterStart2;
+                        player2CanInput = PlayerPoseSelection(10, 10, 3, player2);
                     }
                     else if (inputState.IsKeyDown(Keys.NumPad3) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Down)))
                     {
-                        player2.SetPose(poses[9]);
-                        player2.AddToPosePattern(poses[9]);
-                        ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
-                        soundEffects[2].CreateInstance().Play();
-                        player2CanInput = false;
-                        counter2 = counterStart2;
+                        player2CanInput = PlayerPoseSelection(9, 9, 2, player2);
                     }
                     else if (inputState.IsKeyDown(Keys.NumPad4) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Right)))
                     {
-                        player2.SetPose(poses[8]);//**pointing
-                        player2.AddToPosePattern(poses[8]);
-                        ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
-                        soundEffects[1].CreateInstance().Play();//if I want these sounds to consistent with the ai sounds then I should swap the index here and with two hands up maybe
-                        player2CanInput = false;
-                        counter2 = counterStart2;
+                        player2CanInput = PlayerPoseSelection(8, 8, 1, player2);
                     }
                     else if (inputState.IsKeyDown(Keys.NumPad5) || ((playerTwoLeftStick == StickDirection.Left) && (playerTwoRightStick == StickDirection.Right)))
                     {
-                        player2.SetPose(poses[11]);
-                        player2.AddToPosePattern(poses[11]);
-                        ComparePosesAndSetScores(player2.GetPosePattern().Count - 1, player2, currentAI);
-                        soundEffects[4].CreateInstance().Play();
-                        player2CanInput = false;
-                        counter2 = counterStart2;
+                        player2CanInput = PlayerPoseSelection(11, 11, 4, player2);
                     }
                 }
 
@@ -720,7 +663,11 @@ namespace WrestlerPose
                     {
                         //should probably not do this upIndexCurrentAIIdlePoseIndex bit and instead have some kind of currentai.setidlepose method that can more reliable find this
                         //and is done in one place
-                        int upIndexCurrentAIIdlePoseIndex = (matchNumber - 1) * 6 + 12;
+                        int upIndexCurrentAIIdlePoseIndex = (matchNumber - 1) * 6 + 12;//changed to +6 instead of +12 at end, i think so has own and not next idle?
+                        //nope, that didn't work, so above needs some kind of exception if it's the last matchnumber? for matchnumbers:
+                        // 1: 12 //first ai idle
+                        // 2: 18 //second ai idle
+                        // 3: 24 //this causes out of index because right now through 23, but that's because no third ai right now, no third ai idle
                         currentAI.SetPose(poses[upIndexCurrentAIIdlePoseIndex]);//just goes out of inex range when at end of 3rd match
                         aiTurn = false;
                         playerTurn = true;
@@ -733,6 +680,17 @@ namespace WrestlerPose
             currentAI.GetPose().GetSprite().Update(gameTime, currentAI.GetPosition());
 
             base.Update(gameTime);
+        }
+
+        private bool PlayerPoseSelection(int poseToSet, int poseForPosePattern, int soundEffect, Player player)
+        {
+            player.SetPose(poses[poseToSet]);
+            player.AddToPosePattern(poses[poseForPosePattern]);
+            ComparePosesAndSetScores(player.GetPosePattern().Count - 1, player, currentAI);
+            soundEffects[soundEffect].CreateInstance().Play();
+            counter = counterStart;
+
+            return false;
         }
 
         void ComparePosesAndSetScores(int posePatternIndex, Player player, Player currentAI)
@@ -927,42 +885,17 @@ namespace WrestlerPose
             if (aiTurn)
             {
                 DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale);
-
-                //_spriteBatch.Draw(
-                //_aiLightsBackground,
-                //new Vector2(960, 540),
-                //null,
-                //Color.White * lightsOpacity,
-                //0f,
-                //new Vector2(_aiLightsBackground.Width / 2, _aiLightsBackground.Height / 2),
-                //lightsScale,//new Vector2(1f, 1f),
-                //SpriteEffects.None,
-                //1f
-                //);
             }
             else if (playerTurn && !dontDisplayOutcome)
             {
                 DisplayLights(_playerLightsBackground, lightsOpacity, lightsScale);
-
-                //_spriteBatch.Draw(
-                //_playerLightsBackground,
-                //new Vector2(960, 540),
-                //null,
-                //Color.White * lightsOpacity,
-                //0f,
-                //new Vector2(_playerLightsBackground.Width / 2, _playerLightsBackground.Height / 2),
-                //lightsScale,//new Vector2(1f, 1f),
-                //SpriteEffects.None,
-                //1f
-                //);
             }
-            else if (dontDisplayOutcome /*whatever victory turn is called?*/)
+            else if (dontDisplayOutcome)
             {
-                Player winner = WinningPlayer();//is this returning a reference?
+                Player winner = WinningPlayer();
                 if(winner == player1)
                 {
                     DisplayLights(_playerOneLightsBackground, lightsOpacity, lightsScale);
-
                 }
                 else
                 {
