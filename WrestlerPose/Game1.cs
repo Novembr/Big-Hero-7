@@ -98,6 +98,8 @@ namespace WrestlerPose
         private Texture2D _stageBackgroundIntro;
         private Texture2D _blackScreenBackground;
         private Texture2D _playerLightsBackground;
+        private Texture2D _playerOneLightsBackground;
+        private Texture2D _playerTwoLightsBackground;
         private Texture2D _aiLightsBackground;
 
 
@@ -168,6 +170,9 @@ namespace WrestlerPose
             _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
             _aiLightsBackground = Content.Load<Texture2D>("ailights");
             _playerLightsBackground = Content.Load<Texture2D>("playerlights");
+            _playerOneLightsBackground = Content.Load<Texture2D>("green");
+            _playerTwoLightsBackground = Content.Load<Texture2D>("greenfeetonlytwo");
+
 
 
 
@@ -716,7 +721,7 @@ namespace WrestlerPose
                         //should probably not do this upIndexCurrentAIIdlePoseIndex bit and instead have some kind of currentai.setidlepose method that can more reliable find this
                         //and is done in one place
                         int upIndexCurrentAIIdlePoseIndex = (matchNumber - 1) * 6 + 12;
-                        currentAI.SetPose(poses[upIndexCurrentAIIdlePoseIndex]);
+                        currentAI.SetPose(poses[upIndexCurrentAIIdlePoseIndex]);//just goes out of inex range when at end of 3rd match
                         aiTurn = false;
                         playerTurn = true;
                         dontDisplayOutcome = false;
@@ -918,37 +923,51 @@ namespace WrestlerPose
 
 
             float lightsScale = 1.6f;
+            float lightsOpacity = .7f;
             if (aiTurn)
             {
-                _spriteBatch.Draw(
-                _aiLightsBackground,
-                new Vector2(960, 540),
-                null,
-                Color.White * 0.9f,
-                0f,
-                new Vector2(_aiLightsBackground.Width / 2, _aiLightsBackground.Height / 2),
-                lightsScale,//new Vector2(1f, 1f),
-                SpriteEffects.None,
-                1f
-                );
+                DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale);
+
+                //_spriteBatch.Draw(
+                //_aiLightsBackground,
+                //new Vector2(960, 540),
+                //null,
+                //Color.White * lightsOpacity,
+                //0f,
+                //new Vector2(_aiLightsBackground.Width / 2, _aiLightsBackground.Height / 2),
+                //lightsScale,//new Vector2(1f, 1f),
+                //SpriteEffects.None,
+                //1f
+                //);
             }
-            else if (playerTurn)
+            else if (playerTurn && !dontDisplayOutcome)
             {
-                _spriteBatch.Draw(
-                _playerLightsBackground,
-                new Vector2(960, 540),
-                null,
-                Color.White * 0.9f,
-                0f,
-                new Vector2(_playerLightsBackground.Width / 2, _playerLightsBackground.Height / 2),
-                lightsScale,//new Vector2(1f, 1f),
-                SpriteEffects.None,
-                1f
-                );
+                DisplayLights(_playerLightsBackground, lightsOpacity, lightsScale);
+
+                //_spriteBatch.Draw(
+                //_playerLightsBackground,
+                //new Vector2(960, 540),
+                //null,
+                //Color.White * lightsOpacity,
+                //0f,
+                //new Vector2(_playerLightsBackground.Width / 2, _playerLightsBackground.Height / 2),
+                //lightsScale,//new Vector2(1f, 1f),
+                //SpriteEffects.None,
+                //1f
+                //);
             }
-            else if (true /*whatever victory turn is called?*/)
+            else if (dontDisplayOutcome /*whatever victory turn is called?*/)
             {
-                //then split based on whoever won, dunno if that info is available in this scope though
+                Player winner = WinningPlayer();//is this returning a reference?
+                if(winner == player1)
+                {
+                    DisplayLights(_playerOneLightsBackground, lightsOpacity, lightsScale);
+
+                }
+                else
+                {
+                    DisplayLights(_playerTwoLightsBackground, lightsOpacity, lightsScale);
+                }
             }
             else
             {
@@ -959,6 +978,21 @@ namespace WrestlerPose
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void DisplayLights(Texture2D texture, float opacity, float scale)
+        {
+            _spriteBatch.Draw(
+                texture,
+                new Vector2(960, 540),
+                null,
+                Color.White * opacity,
+                0f,
+                new Vector2(texture.Width / 2, texture.Height / 2),
+                scale,
+                SpriteEffects.None,
+                1f
+                );
         }
 
         public Player ComparePoses(Player player, Player AI, int poseIndex)
@@ -996,27 +1030,31 @@ namespace WrestlerPose
             }
         }
 
-        private void NewRound()
+        private Player WinningPlayer()
         {
+            Player winner = player2;
+
             if (player1.GetScore() > player2.GetScore())
             {
-                player1.roundScore++;
+                winner = player1;
             }
-            else if (player2.GetScore() > player1.GetScore())
-            {
-                player2.roundScore++;
-            }
-            else
+            else if (player1.GetScore() == player2.GetScore())
             {
                 if (playerOneFinishedFirst)
                 {
-                    player1.roundScore++;
-                }
-                else
-                {
-                    player2.roundScore++;
+                    winner = player1;
                 }
             }
+
+            return winner;
+        }
+
+        private void NewRound()
+        {
+
+            //break this out into it's own method because used in a few places
+            Player winner = WinningPlayer();
+            winner.roundScore++;
 
             player1.SetScore(0);
             player2.SetScore(0);
