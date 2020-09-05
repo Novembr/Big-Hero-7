@@ -35,6 +35,16 @@ namespace WrestlerPose
         List<Animation> outcomeAnimations = new List<Animation>(4);
         List<Sprite> displayCircles = new List<Sprite>(6);
         List<Pose> poses = new List<Pose>(numAnimations);
+
+        List<Pose> defaultPoses = new List<Pose>(8);
+        List<Pose> altPoses = new List<Pose>(8);
+        List<Pose> bearPoses = new List<Pose>(8);
+        List<Pose> raPoses = new List<Pose>(8);
+        List<Pose> luchadorPoses = new List<Pose>(8);
+
+     
+
+
         List<Pose> outComePoses = new List<Pose>(4);
 
         bool dontDisplayOutcome = true;
@@ -296,6 +306,35 @@ namespace WrestlerPose
             outComePoses.Add(new Pose(outcomeAnimations[1], PoseName.Idle, 2.5f, 0.9f));//scalse is 2 for player, does posename matter here though?
             outComePoses.Add(new Pose(outcomeAnimations[2], PoseName.Idle, 2.5f, 0.9f));//scalse is 2 for player, does posename matter here though?
             outComePoses.Add(new Pose(outcomeAnimations[3], PoseName.Idle, 2.5f, 0.9f));//scalse is 2 for player, does posename matter here though?
+
+            List<List<Pose>> allPoseList = new List<List<Pose>>();
+            allPoseList.Add(defaultPoses);
+            allPoseList.Add(altPoses);
+            allPoseList.Add(bearPoses);
+            allPoseList.Add(raPoses);
+            allPoseList.Add(luchadorPoses);
+
+            for (int i = 0; i < allPoseList.Count; i++)
+            {
+                float scale = 2.5f;
+                //change scale to 0.9f if AI
+                //won't know that until player makes selection though
+                //so need to have selection screen, as making selection swap out idle character 
+                //need like some idles animations list that has different instances of just the idles so player can see them
+                //and then when that is selected you go in here
+                for (int j = 0; j < 6; j++)
+                {
+                    //8 poses, idle, 5 competition poses, win and loss
+                    //issue is that those last two are not accounted for by the compare poses algorithm
+                    //or by a lot of other stuff
+                    //they are just on their own in outcome poses
+                    //so perhaps each character option just has its own outcome poses, just to mkae this simpler
+                    //in which case we are only going through 6 here
+                    allPoseList[i].Add(new Pose(animations[j], (PoseName)j, scale, 0.9f));
+                }
+            }
+
+
 
             for (int i = 0; i < numAnimations; i++)
             {
