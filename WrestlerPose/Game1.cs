@@ -21,9 +21,13 @@ namespace WrestlerPose
         Player currentAI;
 
         Song song;
+        Song audienceBackgroundSong;
+
 
         List<SoundEffect> soundEffects;
         List<SoundEffect> crowdSounds;
+        List<SoundEffect> AIIntroSounds;
+
         List<Player> AIPlayerList;// = new List<Player>(3);
         const int numAnimations = 30;
 
@@ -71,6 +75,7 @@ namespace WrestlerPose
         bool thisRoundTallied = false;
         bool player1CanInput = true;
         bool player2CanInput = true;
+        float songVolume = .3f;
 
         bool introPlayer1AudioHasPlayed = false;
         bool introPlayer2AudioHasPlayed = false;
@@ -117,6 +122,7 @@ namespace WrestlerPose
             IsMouseVisible = true;
             soundEffects = new List<SoundEffect>();
             crowdSounds = new List<SoundEffect>();
+            AIIntroSounds = new List<SoundEffect>();
         }
 
         protected override void Initialize()
@@ -143,7 +149,7 @@ namespace WrestlerPose
 
         void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
         {
-            MediaPlayer.Play(song);
+            MediaPlayer.Play(audienceBackgroundSong);//if finish now autoplay background crowd because will be during gameplay
         }
 
         protected override void LoadContent()
@@ -176,9 +182,11 @@ namespace WrestlerPose
             _playerTwoLightsBackground = Content.Load<Texture2D>("playertwoonlylights");
 
             song = Content.Load<Song>("Sound/theme_background");
+            audienceBackgroundSong = Content.Load<Song>("crowdSong1MP");
+
             MediaPlayer.Play(song);
             MediaPlayer.IsRepeating = true;
-            MediaPlayer.Volume = 0.1f;
+            MediaPlayer.Volume = songVolume;
             MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
             soundEffects.Add(Content.Load<SoundEffect>("Sound/shout6"));
             soundEffects.Add(Content.Load<SoundEffect>("Sound/shout2"));
@@ -189,11 +197,21 @@ namespace WrestlerPose
 
             crowdSounds.Add(Content.Load<SoundEffect>("boo"));
             crowdSounds.Add(Content.Load<SoundEffect>("cheer"));
+            crowdSounds.Add(Content.Load<SoundEffect>("murmurWav"));
+
+            AIIntroSounds.Add(Content.Load<SoundEffect>("warriorcryaiintro"));
+            AIIntroSounds.Add(Content.Load<SoundEffect>("bearaiintro"));
+            AIIntroSounds.Add(Content.Load<SoundEffect>("egyptianaiintroCut"));
+
+
 
             SoundEffectInstance booInstancePlayerOne = crowdSounds[0].CreateInstance();
             SoundEffectInstance cheerInstancePlayerOne = crowdSounds[1].CreateInstance();
+            SoundEffectInstance murmurInstancePlayerOne = crowdSounds[2].CreateInstance();
+
             SoundEffectInstance booInstancePlayerTwo = crowdSounds[0].CreateInstance();
             SoundEffectInstance cheerInstancePlayerTwo = crowdSounds[1].CreateInstance();
+            SoundEffectInstance murmurInstancePlayerTwo = crowdSounds[2].CreateInstance();
 
 
 
@@ -306,16 +324,16 @@ namespace WrestlerPose
                 poses.Add(new Pose(animations[i], (PoseName)poseInt, scale, 0.9f));
             }
 
-            player1 = new Player("Player One", WrestlerPosition1, poses[0], new List<Pose>(), booInstancePlayerOne, cheerInstancePlayerOne);
-            player2 = new Player("Player Two", WrestlerPosition2, poses[6], new List<Pose>(), booInstancePlayerTwo, cheerInstancePlayerTwo);
+            player1 = new Player("Player One", WrestlerPosition1, poses[0], new List<Pose>(), booInstancePlayerOne, cheerInstancePlayerOne, murmurInstancePlayerOne);
+            player2 = new Player("Player Two", WrestlerPosition2, poses[6], new List<Pose>(), booInstancePlayerTwo, cheerInstancePlayerTwo, murmurInstancePlayerTwo);
 
             //the new pose list with poses below doesn't really matter because they are later randomized based on the in list after it
             AIPlayerList = new List<Player>
             {
                 //the 3rd parameter is the idle parameter for that ai, we now have 2, and idle for alt and bear are 12 and 18 respectively
-                new Player("firstAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[13], poses[13] }, new List<int>{ 13, 14, 15}),
-                new Player("secondAI", AIPosition, poses[18], new List<Pose>(4) { poses[19], poses[19], poses[19], poses[19] }, new List<int>{ 19, 20, 21, 22}),
-                new Player("thirdAI", AIPosition, poses[24], new List<Pose>(5) { poses[25], poses[25], poses[25], poses[25], poses[25] }, new List<int>{ 25, 26, 27, 28, 29}),
+                new Player("firstAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[13], poses[13] }, new List<int>{ 13, 14, 15}, AIIntroSounds[0]),
+                new Player("secondAI", AIPosition, poses[18], new List<Pose>(4) { poses[19], poses[19], poses[19], poses[19] }, new List<int>{ 19, 20, 21, 22}, AIIntroSounds[1]),
+                new Player("thirdAI", AIPosition, poses[24], new List<Pose>(5) { poses[25], poses[25], poses[25], poses[25], poses[25] }, new List<int>{ 25, 26, 27, 28, 29}, AIIntroSounds[2]),
             };
 
             currentAI = AIPlayerList[0];
@@ -465,15 +483,21 @@ namespace WrestlerPose
                                 dontDisplayOutcome = true;
 
 
-                                blackScreenOpacity = (roundTimer - 7000) / 2000;
+                                blackScreenOpacity = (roundTimer - 7000) / 3000;
                                 blackScreenOpacity = MathF.Min(blackScreenOpacity, 1f);
 
+                                float newVolume = 1 - ((roundTimer - 7000) / 3000);//going down to 0 from 1
+                                newVolume *= songVolume;//set to that proportion of original sound
+
+                                MediaPlayer.Volume = MathF.Max(newVolume, 0f);//go down to no lower than 0
 
                                 // blackScreenOpacity += ((roundTimer - 7000)/10000);//
                                 //  blackScreenOpacity = MathF.Min(blackScreenOpacity, 1f);
 
                                 if (roundTimer > 10000)
                                 {
+                                    MediaPlayer.Play(audienceBackgroundSong);
+                                    //MediaPlayer.Volume = .2f;//dunno if this is right volume or if it will sound good coming in all at once, may want to fade up to it
                                     currentAI.SetPose(poses[12]);
                                     player1.SetPose(poses[0]);
                                     player2.SetPose(poses[6]);
@@ -489,6 +513,7 @@ namespace WrestlerPose
                                     {
                                         AIPlayerList[i].IncreaseXPosition(-40);
                                     }
+                                    
 
                                     soundEffects[5].CreateInstance().Play();
                                 }
@@ -663,12 +688,24 @@ namespace WrestlerPose
                     if (blackScreenOpacity > 0)
                     {
                         roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
                         blackScreenOpacity = 1 - (roundTimer / 3000);
                         blackScreenOpacity = MathF.Max(blackScreenOpacity, 0f);
+
+                        //instead do this decrease song volum during initial fade out and incraese crowd volume during fade in
+                        float newVolume = roundTimer / 3000;
+                        MediaPlayer.Volume = MathF.Min(newVolume, 0.4f);//whatever audience volume should be
+                        
+                        if(blackScreenOpacity <= 0)
+                        {
+                            //MediaPlayer.Play(audienceBackgroundSong);//so should only play once i hope
+                            //MediaPlayer.Volume = .2f;//dunno if this is right volume or if it will sound good coming in all at once, may want to fade up to it
+                        }
                     }
                     else
                     {
                         roundTimer = 0;
+                       
                     }
 
                     if (currentTimeAI >= countDurationAI)
@@ -761,6 +798,8 @@ namespace WrestlerPose
             else
             {
                 player.displayCircle = DisplayCircle.Tied;
+                player.MurmurInstance.Stop();
+                player.MurmurInstance.Play();
             }
         }
 
@@ -1095,6 +1134,7 @@ namespace WrestlerPose
             player2.SetPosePattern(new List<Pose>());
             int upIndexCurrentAIIdlePoseIndex = (matchNumber - 1) * 6 + 12;
             currentAI.SetPose(poses[upIndexCurrentAIIdlePoseIndex]);//was 12
+            
 
             player1.displayCircle = DisplayCircle.Tied;
             player2.displayCircle = DisplayCircle.Tied;
@@ -1142,6 +1182,7 @@ namespace WrestlerPose
             else
             {
                 currentAI = AIPlayerList[matchNumber - 1];//.SetPose(poses[12]);//is this a ref or value?
+                currentAI._AIIntroSound.CreateInstance().Play();
                 player1.SetPosePattern(new List<Pose>(currentAI.GetPosePattern().Count));
                 player2.SetPosePattern(new List<Pose>(currentAI.GetPosePattern().Count));
                 roundNumber = 1;

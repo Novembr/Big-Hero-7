@@ -12,6 +12,7 @@
   <ItemGroup>
     <None Remove="Content\boo.wav" />
     <None Remove="Content\cheer.wav" />
+    <None Remove="Content\crowdSong2MP.mp3" />
     <None Remove="Content\idle.jpg" />
     <None Remove="Content\Sound\audience1.wav" />
     <None Remove="Content\Sound\boxing_bell.wav" />
@@ -27,6 +28,7 @@
   <ItemGroup>
     <Content Include="Content\boo.wav" />
     <Content Include="Content\cheer.wav" />
+    <Content Include="Content\crowdSong2MP.mp3" />
     <Content Include="Content\Sound\audience1.wav" />
     <Content Include="Content\Sound\boxing_bell.wav" />
     <Content Include="Content\Sound\shout1.wav" />

@@ -289,6 +289,12 @@
 /processorParam:TextureFormat=Color
 /build:astronaught.jfif
 
+#begin bearaiintro.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:bearaiintro.wav
+
 #begin blackscreen.jfif
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -367,6 +373,30 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Countdown.spritefont
+
+#begin crowdSong1MP.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:crowdSong1MP.mp3
+
+#begin crowdSong2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:crowdSong2.wav
+
+#begin crowdSong2MP.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:crowdSong2MP.mp3
+
+#begin egyptianaiintroCut.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:egyptianaiintroCut.wav
 
 #begin green&back.png
 /importer:TextureImporter
@@ -554,6 +584,18 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Match.spritefont
+
+#begin murmur.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:murmur.mp3
+
+#begin murmurWav.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:murmurWav.wav
 
 #begin onehandup.jpg
 /importer:TextureImporter
@@ -925,6 +967,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:twoupclear.png
+
+#begin warriorcryaiintro.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:warriorcryaiintro.wav
 
 #begin white.jfif
 /importer:TextureImporter

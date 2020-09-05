@@ -42,6 +42,7 @@ namespace WrestlerPose
         public List<int> _poseValuesForThisAI { get; set; }//this should be no _ in front because public
 
         public DisplayCircle displayCircle { get; set; }
+        public SoundEffect _AIIntroSound { get; set; }
 
         private SoundEffectInstance _cheerInstance;
 
@@ -50,6 +51,15 @@ namespace WrestlerPose
             get { return _cheerInstance; }
             set { _cheerInstance = value; }
         }
+
+        private SoundEffectInstance _murmurInstance;
+
+        public SoundEffectInstance MurmurInstance
+        {
+            get { return _murmurInstance; }
+            set { _murmurInstance = value; }
+        }
+
 
         private SoundEffectInstance _booInstance;
 
@@ -81,7 +91,7 @@ namespace WrestlerPose
             _currentOutcome = "Pending";
         }
 
-        public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern, SoundEffectInstance booInstance, SoundEffectInstance cheerInstance)
+        public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern, SoundEffectInstance booInstance, SoundEffectInstance cheerInstance, SoundEffectInstance murmurInstance)
         {
             _name = name;
             _score = 0;
@@ -91,9 +101,10 @@ namespace WrestlerPose
             _currentOutcome = "Pending";//doesn't need an outcome I guess but it can just go unused
             _booInstance = booInstance;
             _cheerInstance = cheerInstance;
+            _murmurInstance = murmurInstance;
         }
 
-        public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern, List<int> poseValuesForThisAi)
+        public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern, List<int> poseValuesForThisAi, SoundEffect aIIntroSound)
         {
             _name = name;
             _score = 0;
@@ -103,6 +114,7 @@ namespace WrestlerPose
             _currentOutcome = "Pending";//doesn't need an outcome I guess but it can just go unused
             _poseValuesForThisAI = poseValuesForThisAi;
             //_aiPatternSize = patternSize;
+            _AIIntroSound = aIIntroSound;
         }
 
         public void SetPose(Pose pose) { _currentPose = pose; }
