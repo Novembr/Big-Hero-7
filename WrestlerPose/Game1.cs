@@ -24,7 +24,7 @@ namespace WrestlerPose
 
         List<SoundEffect> soundEffects;
         List<Player> AIPlayerList;// = new List<Player>(3);
-        const int numAnimations = 24;
+        const int numAnimations = 30;
 
         List<Animation> animations = new List<Animation>(numAnimations);
         List<Animation> outcomeAnimations = new List<Animation>(4);
@@ -248,6 +248,13 @@ namespace WrestlerPose
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-blue"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-red"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-green"), 12));
+            //AI 3 animations
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/ra-idle"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/ra-yellow"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/ra-purple"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/ra-blue"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/ra-red"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/ra-green"), 12));
 
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("win"), 12));
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("lose"), 12));
@@ -278,6 +285,11 @@ namespace WrestlerPose
                     poseInt = poseInt - 6;
                     scale = 1.5f;
                 }
+                if (i > 23)
+                {
+                    poseInt = poseInt - 6;
+                    scale = 1.5f;
+                }
                 poses.Add(new Pose(animations[i], (PoseName)poseInt, scale, 0.9f));
             }
 
@@ -288,9 +300,9 @@ namespace WrestlerPose
             AIPlayerList = new List<Player>
             {
                 //the 3rd parameter is the idle parameter for that ai, we now have 2, and idle for alt and bear are 12 and 18 respectively
-                new Player("firstAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[14], poses[14] }, new List<int>{ 13, 14, 15}),
+                new Player("firstAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[13], poses[13] }, new List<int>{ 13, 14, 15}),
                 new Player("secondAI", AIPosition, poses[18], new List<Pose>(4) { poses[19], poses[19], poses[19], poses[19] }, new List<int>{ 19, 20, 21, 22}),
-                new Player("thirdAI", AIPosition, poses[18], new List<Pose>(5) { poses[19], poses[19], poses[19], poses[19], poses[19] }, new List<int>{ 19, 22, 23, 21, 20}),
+                new Player("thirdAI", AIPosition, poses[24], new List<Pose>(5) { poses[25], poses[25], poses[25], poses[25], poses[25] }, new List<int>{ 25, 26, 27, 28, 29}),
             };
 
             currentAI = AIPlayerList[0];
@@ -834,6 +846,9 @@ namespace WrestlerPose
             //    _spriteBatch.DrawString(_overAllWinner, "Overall Winner: " + overallWinnerString, new Vector2(850, 150), Color.Fuchsia, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
             //}
 
+            int picSpacing = 110;
+            int deltaLeftForPosePatternDisplayByMatch = (matchNumber - 1) * 55;
+
             for (int i = 0; i < 5; i++)
             {
                 if (i >= player1.GetPosePattern().Count)
@@ -845,7 +860,7 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne],
-                    new Vector2(220 + i * 130, 300),
+                    new Vector2(300 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
                     null,
                     Color.White,
                     0f,
@@ -866,7 +881,7 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo],
-                    new Vector2(1400 + i * 130, 300),
+                    new Vector2(1385 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
                     null,
                     Color.White,
 
@@ -878,6 +893,43 @@ namespace WrestlerPose
 
                     );
             }
+
+            ///test section delte later
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    deltaLeftForPosePatternDisplayByMatch = (3 - 1) * 55;
+            //
+            //    _spriteBatch.Draw(
+            //        playerOneSelectedPoseSpritesToChooseFrom[0],
+            //        new Vector2(300 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
+            //        null,
+            //        Color.White,
+            //        0f,
+            //        new Vector2(playerOneSelectedPoseSpritesToChooseFrom[0].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[0].Height / 2),
+            //        0.9f,
+            //        SpriteEffects.None,
+            //        0f
+            //        );
+            //}
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    deltaLeftForPosePatternDisplayByMatch = (3 - 1) * 55;
+            //
+            //    _spriteBatch.Draw(
+            //        playerTwoSelectedPoseSpritesToChooseFrom[0],
+            //        new Vector2(1385 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
+            //        null,
+            //        Color.White,
+            //
+            //        0f,
+            //        new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[0].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[0].Height / 2),
+            //        0.9f,
+            //        SpriteEffects.None,
+            //        0f
+            //
+            //        );
+            //}
+            ///test section delete later
 
 
             //blackscreenbackground, opacity change over time
@@ -906,15 +958,23 @@ namespace WrestlerPose
             }
             else if (dontDisplayOutcome)
             {
-                Player winner = WinningPlayer();
-                if (winner == player1)
-                {
-                    DisplayLights(_playerOneLightsBackground, lightsOpacity, lightsScale);
-                }
-                else
+                if (introTurn)
                 {
                     DisplayLights(_playerTwoLightsBackground, lightsOpacity, lightsScale);
                 }
+                else
+                {
+                    Player winner = WinningPlayer();
+                    if (winner == player1)
+                    {
+                        DisplayLights(_playerOneLightsBackground, lightsOpacity, lightsScale);
+                    }
+                    else
+                    {
+                        DisplayLights(_playerTwoLightsBackground, lightsOpacity, lightsScale);
+                    }
+                }
+
             }
             else
             {
@@ -1050,13 +1110,14 @@ namespace WrestlerPose
 
             }
 
+            matchNumber++;
+
             if (matchNumber > 3)
             {
                 ResetGame();
             }
             else
             {
-                matchNumber++;
                 currentAI = AIPlayerList[matchNumber - 1];//.SetPose(poses[12]);//is this a ref or value?
                 player1.SetPosePattern(new List<Pose>(currentAI.GetPosePattern().Count));
                 player2.SetPosePattern(new List<Pose>(currentAI.GetPosePattern().Count));
