@@ -497,6 +497,18 @@
 /processorParam:TextureFormat=Compressed
 /build:PlayerOneMatchScore.spritefont
 
+#begin playeroneonlylights.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:playeroneonlylights.png
+
 #begin PlayerOneOutcome.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -524,6 +536,18 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:PlayerTwoMatchScore.spritefont
+
+#begin playertwoonlylights.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:playertwoonlylights.png
 
 #begin PlayerTwoOutcome.spritefont
 /importer:FontDescriptionImporter

@@ -170,8 +170,8 @@ namespace WrestlerPose
             _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
             _aiLightsBackground = Content.Load<Texture2D>("ailights");
             _playerLightsBackground = Content.Load<Texture2D>("playerlights");
-            _playerOneLightsBackground = Content.Load<Texture2D>("green");
-            _playerTwoLightsBackground = Content.Load<Texture2D>("greenfeetonlytwo");
+            _playerOneLightsBackground = Content.Load<Texture2D>("playeroneonlylights");
+            _playerTwoLightsBackground = Content.Load<Texture2D>("playertwoonlylights");
 
             song = Content.Load<Song>("Sound/theme_background");
             MediaPlayer.Play(song);
