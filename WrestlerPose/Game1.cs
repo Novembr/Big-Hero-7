@@ -620,7 +620,7 @@ namespace WrestlerPose
             player1.GetPose().GetSprite().Update(gameTime, player1.GetPosition());
             player2.GetPose().GetSprite().Update(gameTime, player2.GetPosition());
 
-            int changeXDisplay = 75;
+            int changeXDisplay = 80;
             for (int i = 0; i < 3; i++)
             {
                 displayCircles[i].Update(gameTime, new Vector2(800 + changeXDisplay, 1000));
