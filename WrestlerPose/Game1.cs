@@ -198,22 +198,22 @@ namespace WrestlerPose
             crowdSounds.Add(Content.Load<SoundEffect>("boo"));
             crowdSounds.Add(Content.Load<SoundEffect>("cheer"));
             crowdSounds.Add(Content.Load<SoundEffect>("murmurWav"));
+            crowdSounds.Add(Content.Load<SoundEffect>("boo_1"));
+            crowdSounds.Add(Content.Load<SoundEffect>("cheer_1"));
+            crowdSounds.Add(Content.Load<SoundEffect>("boo_2"));
+            crowdSounds.Add(Content.Load<SoundEffect>("cheer_2"));
 
             AIIntroSounds.Add(Content.Load<SoundEffect>("warriorcryaiintro"));
             AIIntroSounds.Add(Content.Load<SoundEffect>("bearaiintro"));
             AIIntroSounds.Add(Content.Load<SoundEffect>("egyptianaiintroCut"));
 
-
-
-            SoundEffectInstance booInstancePlayerOne = crowdSounds[0].CreateInstance();
-            SoundEffectInstance cheerInstancePlayerOne = crowdSounds[1].CreateInstance();
+            SoundEffectInstance booInstancePlayerOne = crowdSounds[3].CreateInstance();
+            SoundEffectInstance cheerInstancePlayerOne = crowdSounds[4].CreateInstance();
             SoundEffectInstance murmurInstancePlayerOne = crowdSounds[2].CreateInstance();
 
             SoundEffectInstance booInstancePlayerTwo = crowdSounds[0].CreateInstance();
             SoundEffectInstance cheerInstancePlayerTwo = crowdSounds[1].CreateInstance();
             SoundEffectInstance murmurInstancePlayerTwo = crowdSounds[2].CreateInstance();
-
-
 
             SoundEffect.MasterVolume = 0.5f;
 
@@ -698,6 +698,7 @@ namespace WrestlerPose
                         
                         if(blackScreenOpacity <= 0)
                         {
+                            //currentAI._AIIntroSound.CreateInstance().Play();//plays during his intro moves and doesn't seem necessary for first one
                             //MediaPlayer.Play(audienceBackgroundSong);//so should only play once i hope
                             //MediaPlayer.Volume = .2f;//dunno if this is right volume or if it will sound good coming in all at once, may want to fade up to it
                         }
@@ -877,30 +878,33 @@ namespace WrestlerPose
                 }
             }
 
-            _spriteBatch.DrawString(_countDownPlayerOneMove, counter.ToString(), new Vector2(200, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-            _spriteBatch.DrawString(_countDownPlayerTwoMove, counter2.ToString(), new Vector2(1500, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-            _spriteBatch.DrawString(_countDownAI, counterAI.ToString(), new Vector2(930, 1), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-            _spriteBatch.DrawString(_playerOneMatchScore, "Player 1 Match Score:  " + player1.matchScore, new Vector2(200, 100), Color.DarkRed);
-            _spriteBatch.DrawString(_playerTwoMatchScore, "Player 2 Match Score:  " + player2.matchScore, new Vector2(1500, 100), Color.DarkRed);
-            _spriteBatch.DrawString(_playerOneRoundScore, "Player 1 Round Score:  " + player1.roundScore, new Vector2(200, 150), Color.LightSalmon);
-            _spriteBatch.DrawString(_playerTwoRoundScore, "Player 2 Round Score:  " + player2.roundScore, new Vector2(1500, 150), Color.LightSalmon);
-            _spriteBatch.DrawString(_playerOneScore, "Pose Score:  " + player1.GetScore(), new Vector2(260, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
-            _spriteBatch.DrawString(_playerTwoScore, "Pose Score:  " + player2.GetScore(), new Vector2(1450, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
-            _spriteBatch.DrawString(_match, "Match: " + matchNumber, new Vector2(100, 50), Color.Red);
-            _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
-            //_spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(840, 35), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+            if (!introTurn)
+            {
+                _spriteBatch.DrawString(_countDownPlayerOneMove, counter.ToString(), new Vector2(200, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+                _spriteBatch.DrawString(_countDownPlayerTwoMove, counter2.ToString(), new Vector2(1500, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+                _spriteBatch.DrawString(_countDownAI, counterAI.ToString(), new Vector2(930, 1), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+                _spriteBatch.DrawString(_playerOneMatchScore, "Player 1 Match Score:  " + player1.matchScore, new Vector2(200, 100), Color.DarkRed);
+                _spriteBatch.DrawString(_playerTwoMatchScore, "Player 2 Match Score:  " + player2.matchScore, new Vector2(1500, 100), Color.DarkRed);
+                _spriteBatch.DrawString(_playerOneRoundScore, "Player 1 Round Score:  " + player1.roundScore, new Vector2(200, 150), Color.LightSalmon);
+                _spriteBatch.DrawString(_playerTwoRoundScore, "Player 2 Round Score:  " + player2.roundScore, new Vector2(1500, 150), Color.LightSalmon);
+                _spriteBatch.DrawString(_playerOneScore, "Pose Score:  " + player1.GetScore(), new Vector2(260, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+                _spriteBatch.DrawString(_playerTwoScore, "Pose Score:  " + player2.GetScore(), new Vector2(1450, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+                _spriteBatch.DrawString(_match, "Match: " + matchNumber, new Vector2(100, 50), Color.Red);
+                _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
+                //_spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(840, 35), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
 
-            _spriteBatch.Draw(
-                    _allPosesImage,
-                    new Vector2(950, 900),
-                    null,
-                    Color.White,
-                    0f,
-                    new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
-                    0.5f,
-                    SpriteEffects.None,
-                    0f
-                    );
+                _spriteBatch.Draw(
+                        _allPosesImage,
+                        new Vector2(950, 900),
+                        null,
+                        Color.White,
+                        0f,
+                        new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
+                        0.5f,
+                        SpriteEffects.None,
+                        0f
+                        );
+            }
 
 
             //if (!String.IsNullOrWhiteSpace(overallWinnerString))

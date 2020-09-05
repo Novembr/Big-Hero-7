@@ -349,11 +349,35 @@
 /processorParam:Quality=Best
 /build:boo.wav
 
+#begin boo_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:boo_1.wav
+
+#begin boo_2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:boo_2.wav
+
 #begin cheer.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:cheer.wav
+
+#begin cheer_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:cheer_1.wav
+
+#begin cheer_2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:cheer_2.wav
 
 #begin controllerposes.png
 /importer:TextureImporter
