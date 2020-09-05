@@ -443,6 +443,7 @@ namespace WrestlerPose
                             soundEffects[2].CreateInstance().Play();
                             introPlayer1AudioHasPlayed = true;
                             player1.displayCircle = DisplayCircle.Lost;
+                            //player1.BooInstance.Play();//don't play these in intro because no audience
                         }
 
                         if (roundTimer > 4500)
@@ -454,6 +455,7 @@ namespace WrestlerPose
                                 soundEffects[3].CreateInstance().Play();
                                 introPlayer2AudioHasPlayed = true;
                                 player2.displayCircle = DisplayCircle.Won;
+                                //player2.CheerInstance.Play();
                             }
 
                             if (roundTimer > 7000)
@@ -745,12 +747,14 @@ namespace WrestlerPose
                 {
                     player.SetScore(player.GetScore() + 1);
                     player.displayCircle = DisplayCircle.Won;
+                    player.CheerInstance.Stop();
                     player.CheerInstance.Play();
                 }
                 else
                 {
                     player.SetScore(player.GetScore() - 1);
                     player.displayCircle = DisplayCircle.Lost;
+                    player.BooInstance.Stop();
                     player.BooInstance.Play();
                 }
             }
