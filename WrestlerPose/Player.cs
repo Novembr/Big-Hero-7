@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -34,13 +35,31 @@ namespace WrestlerPose
         StickDirection _leftStickDirection;
         StickDirection _rightStickDirection;
         private List<Pose> _currentPosePattern;
+        
         //private int _aiPatternSize;
         public int roundScore { get; set; }
         public int matchScore { get; set; }
         public List<int> _poseValuesForThisAI { get; set; }//this should be no _ in front because public
 
         public DisplayCircle displayCircle { get; set; }
-        //DisplayCircle _displayCircle = DisplayCircle.Tied;//ok to initialize here? because on initialization should always be tied so doesn't need to be in constructor
+
+        private SoundEffectInstance _cheerInstance;
+
+        public SoundEffectInstance CheerInstance
+        {
+            get { return _cheerInstance; }
+            set { _cheerInstance = value; }
+        }
+
+        private SoundEffectInstance _booInstance;
+
+        public SoundEffectInstance BooInstance
+        {
+            get { return _booInstance; }
+            set { _booInstance = value; }
+        }
+
+
 
 
         public Player(string name, Vector2 wrestlerPosition, Pose currentPose)
@@ -62,7 +81,7 @@ namespace WrestlerPose
             _currentOutcome = "Pending";
         }
 
-        public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern)
+        public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern, SoundEffectInstance booInstance, SoundEffectInstance cheerInstance)
         {
             _name = name;
             _score = 0;
@@ -70,6 +89,8 @@ namespace WrestlerPose
             _currentPosePattern = currentPosePattern;
             _wrestlerPosition = wrestlerPosition;
             _currentOutcome = "Pending";//doesn't need an outcome I guess but it can just go unused
+            _booInstance = booInstance;
+            _cheerInstance = cheerInstance;
         }
 
         public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern, List<int> poseValuesForThisAi)

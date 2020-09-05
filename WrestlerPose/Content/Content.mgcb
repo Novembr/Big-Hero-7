@@ -337,6 +337,18 @@
 /processorParam:TextureFormat=Color
 /build:bluefeet.png
 
+#begin boo.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:boo.wav
+
+#begin cheer.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:cheer.wav
+
 #begin controllerposes.png
 /importer:TextureImporter
 /processor:TextureProcessor

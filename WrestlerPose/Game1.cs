@@ -23,6 +23,7 @@ namespace WrestlerPose
         Song song;
 
         List<SoundEffect> soundEffects;
+        List<SoundEffect> crowdSounds;
         List<Player> AIPlayerList;// = new List<Player>(3);
         const int numAnimations = 30;
 
@@ -115,6 +116,7 @@ namespace WrestlerPose
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             soundEffects = new List<SoundEffect>();
+            crowdSounds = new List<SoundEffect>();
         }
 
         protected override void Initialize()
@@ -184,6 +186,17 @@ namespace WrestlerPose
             soundEffects.Add(Content.Load<SoundEffect>("Sound/shout4"));
             soundEffects.Add(Content.Load<SoundEffect>("Sound/shout5"));
             soundEffects.Add(Content.Load<SoundEffect>("Sound/boxing_bell"));
+
+            crowdSounds.Add(Content.Load<SoundEffect>("boo"));
+            crowdSounds.Add(Content.Load<SoundEffect>("cheer"));
+
+            SoundEffectInstance booInstancePlayerOne = crowdSounds[0].CreateInstance();
+            SoundEffectInstance cheerInstancePlayerOne = crowdSounds[1].CreateInstance();
+            SoundEffectInstance booInstancePlayerTwo = crowdSounds[0].CreateInstance();
+            SoundEffectInstance cheerInstancePlayerTwo = crowdSounds[1].CreateInstance();
+
+
+
             SoundEffect.MasterVolume = 0.5f;
 
             //soundEffects[5].CreateInstance().Play();//do I need to create instance when doing this? if I don't I think taht the same sound will stop itself if called before finishing
@@ -293,8 +306,8 @@ namespace WrestlerPose
                 poses.Add(new Pose(animations[i], (PoseName)poseInt, scale, 0.9f));
             }
 
-            player1 = new Player("Player One", WrestlerPosition1, poses[0], new List<Pose>());
-            player2 = new Player("Player Two", WrestlerPosition2, poses[6], new List<Pose>());
+            player1 = new Player("Player One", WrestlerPosition1, poses[0], new List<Pose>(), booInstancePlayerOne, cheerInstancePlayerOne);
+            player2 = new Player("Player Two", WrestlerPosition2, poses[6], new List<Pose>(), booInstancePlayerTwo, cheerInstancePlayerTwo);
 
             //the new pose list with poses below doesn't really matter because they are later randomized based on the in list after it
             AIPlayerList = new List<Player>
@@ -499,6 +512,8 @@ namespace WrestlerPose
                     //counter = counterStart;
                     counter = 0;
                     player1CanInput = true;
+                    //player1.BooInstance.Stop();
+                    //player1.CheerInstance.Stop();
                 }
 
                 if (player1.GetPosePattern().Count < currentAI.GetPosePattern().Count && player1CanInput)
@@ -536,6 +551,8 @@ namespace WrestlerPose
                 {
                     counter2 = 0;
                     player2CanInput = true;
+                    //player2.BooInstance.Stop();
+                    //player2.CheerInstance.Stop();
                 }
 
                 if (player2.GetPosePattern().Count < currentAI.GetPosePattern().Count && player2CanInput)
@@ -728,11 +745,13 @@ namespace WrestlerPose
                 {
                     player.SetScore(player.GetScore() + 1);
                     player.displayCircle = DisplayCircle.Won;
+                    player.CheerInstance.Play();
                 }
                 else
                 {
                     player.SetScore(player.GetScore() - 1);
                     player.displayCircle = DisplayCircle.Lost;
+                    player.BooInstance.Play();
                 }
             }
             else
