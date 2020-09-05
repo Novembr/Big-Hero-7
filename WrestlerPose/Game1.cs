@@ -67,7 +67,8 @@ namespace WrestlerPose
         float currentTime2 = 0f;
 
         //ai round timer counter:
-        int counterAI = 3;//this should be set to the time for the first animation of the first ai to run, or to run multiple times i guess
+        int counterAI = 5;//this should be set to the time for the first animation of the first ai to run, or to run multiple times i guess, well no because this is the count
+        //and it's the counter * countduration that matters, so above was only true if countduration was 1
         int counterStartAI = 10;
         float countDurationAI = .6f;
         float currentTimeAI = 0f;
@@ -117,7 +118,10 @@ namespace WrestlerPose
         private Texture2D _playerOneLightsBackground;
         private Texture2D _playerTwoLightsBackground;
         private Texture2D _aiLightsBackground;
+        private Texture2D _ringGirlLightsBackground;
 
+
+        private List<Texture2D> ringGirlImages;
 
 
 
@@ -133,6 +137,7 @@ namespace WrestlerPose
             soundEffects = new List<SoundEffect>();
             crowdSounds = new List<SoundEffect>();
             AIIntroSounds = new List<SoundEffect>();
+            ringGirlImages = new List<Texture2D>();
         }
 
         protected override void Initialize()
@@ -187,9 +192,15 @@ namespace WrestlerPose
             _stageBackgroundIntro = Content.Load<Texture2D>("main_stage_plane");
             _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
             _aiLightsBackground = Content.Load<Texture2D>("ailights");
+            _ringGirlLightsBackground = Content.Load<Texture2D>("ringgirllight");
+
             _playerLightsBackground = Content.Load<Texture2D>("playerlights");
             _playerOneLightsBackground = Content.Load<Texture2D>("playeroneonlylights");
             _playerTwoLightsBackground = Content.Load<Texture2D>("playertwoonlylights");
+
+            ringGirlImages.Add(Content.Load<Texture2D>("ringgirl1"));
+            ringGirlImages.Add(Content.Load<Texture2D>("ringgirl2"));
+            ringGirlImages.Add(Content.Load<Texture2D>("ringgirl3"));
 
             song = Content.Load<Song>("Sound/theme_background");
             audienceBackgroundSong = Content.Load<Song>("crowdSong1MP");
@@ -212,6 +223,7 @@ namespace WrestlerPose
             crowdSounds.Add(Content.Load<SoundEffect>("cheer_1"));
             crowdSounds.Add(Content.Load<SoundEffect>("boo_2"));
             crowdSounds.Add(Content.Load<SoundEffect>("cheer_2"));
+            crowdSounds.Add(Content.Load<SoundEffect>("murmur2"));
 
             AIIntroSounds.Add(Content.Load<SoundEffect>("warriorcryaiintro"));
             AIIntroSounds.Add(Content.Load<SoundEffect>("bearaiintro"));
@@ -223,7 +235,7 @@ namespace WrestlerPose
 
             SoundEffectInstance booInstancePlayerTwo = crowdSounds[0].CreateInstance();
             SoundEffectInstance cheerInstancePlayerTwo = crowdSounds[1].CreateInstance();
-            SoundEffectInstance murmurInstancePlayerTwo = crowdSounds[2].CreateInstance();
+            SoundEffectInstance murmurInstancePlayerTwo = crowdSounds[7].CreateInstance();
 
             SoundEffect.MasterVolume = 0.5f;
 
@@ -522,10 +534,10 @@ namespace WrestlerPose
                                 dontDisplayOutcome = true;
 
 
-                                blackScreenOpacity = (roundTimer - 7000) / 3000;
+                                blackScreenOpacity = (roundTimer - 7000) / 2000;
                                 blackScreenOpacity = MathF.Min(blackScreenOpacity, 1f);
 
-                                float newVolume = 1 - ((roundTimer - 7000) / 3000);//going down to 0 from 1
+                                float newVolume = 1 - ((roundTimer - 7000) / 2000);//going down to 0 from 1
                                 newVolume *= songVolume;//set to that proportion of original sound
 
                                 MediaPlayer.Volume = MathF.Max(newVolume, 0f);//go down to no lower than 0
@@ -553,6 +565,7 @@ namespace WrestlerPose
                                         AIPlayerList[i].IncreaseXPosition(-40);
                                     }
                                     
+                                    //place first ring girl here
 
                                     soundEffects[5].CreateInstance().Play();
                                 }
@@ -764,7 +777,7 @@ namespace WrestlerPose
                         //then wait for the amount of time it takes to play the animation, which is gonna be framespeed * frame count
                         float animationTime = currentAI.GetPosePattern()[numPosesDisplayedAI].GetSprite().GetAnimationTime();
                         int roundedUp = (int)Math.Ceiling(animationTime);
-                        counterAI = roundedUp * 2;//set it to play that animation twice basically? well rounded upa nd doubled would be more than twice, maybe many times more
+                        counterAI = 3;//roundedUp * 2;//set it to play that animation twice basically? well rounded upa nd doubled would be more than twice, maybe many times more
                         numPosesDisplayedAI++;
                     }
 
@@ -773,7 +786,7 @@ namespace WrestlerPose
                 if (numPosesDisplayedAI >= currentAI.GetPosePattern().Count)
                 {
                     roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                    if (roundTimer > 3000)
+                    if (roundTimer > 2000)
                     {
                         //should probably not do this upIndexCurrentAIIdlePoseIndex bit and instead have some kind of currentai.setidlepose method that can more reliable find this
                         //and is done in one place
@@ -932,18 +945,41 @@ namespace WrestlerPose
                 _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
                 //_spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(840, 35), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
 
-                _spriteBatch.Draw(
-                        _allPosesImage,
-                        new Vector2(950, 900),
-                        null,
-                        Color.White,
-                        0f,
-                        new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
-                        0.5f,
-                        SpriteEffects.None,
-                        0f
-                        );
+              
             }
+
+            int upIndexCurrentAIIdlePoseIndexForRingGirl = (matchNumber - 1) * 6 + 12;
+
+            if (aiTurn && (roundNumber == 1) && (currentAI.GetPose() == poses[upIndexCurrentAIIdlePoseIndexForRingGirl]))//and round number 0 and current ai pose is idle?
+            {
+                _spriteBatch.Draw(
+                      ringGirlImages[matchNumber - 1],
+                      new Vector2(950, 680),
+                      null,
+                      Color.White,
+                      0f,
+                      new Vector2(ringGirlImages[matchNumber - 1].Width / 2, ringGirlImages[matchNumber - 1].Height / 2),
+                      2.2f,
+                      SpriteEffects.None,
+                      0.99f
+                      );
+            }
+            else if (!introTurn)
+            {
+                _spriteBatch.Draw(
+                      _allPosesImage,
+                      new Vector2(950, 850),
+                      null,
+                      Color.White,
+                      0f,
+                      new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
+                      0.75f,
+                      SpriteEffects.None,
+                      0f
+                      );
+            }
+
+           
 
 
             //if (!String.IsNullOrWhiteSpace(overallWinnerString))
@@ -1055,7 +1091,15 @@ namespace WrestlerPose
             float lightsOpacity = .7f;
             if (aiTurn)
             {
-                DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale);
+                if(aiTurn && (roundNumber == 1) && (currentAI.GetPose() == poses[upIndexCurrentAIIdlePoseIndexForRingGirl]))
+                {
+                    DisplayLights(_ringGirlLightsBackground, lightsOpacity, lightsScale);
+                }
+                else
+                {
+                    DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale);
+                }
+
             }
             else if (playerTurn && !dontDisplayOutcome)
             {
@@ -1217,6 +1261,7 @@ namespace WrestlerPose
             }
 
             matchNumber++;
+            counterAI = 5;//so counts down from 5 between matches to give time for ring girl
 
             if (matchNumber > 3)
             {
