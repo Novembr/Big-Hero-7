@@ -115,6 +115,11 @@ namespace WrestlerPose
             return _currentPosePattern;
         }
 
+        public void IncreaseXPosition(int x)
+        {
+            _wrestlerPosition = new Vector2(_wrestlerPosition.X + x, _wrestlerPosition.Y);
+        }
+
 
         public int GetScore() 
         {

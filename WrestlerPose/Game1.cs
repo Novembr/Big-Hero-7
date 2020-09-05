@@ -130,8 +130,8 @@ namespace WrestlerPose
             int xChange = 770;
 
 
-            WrestlerPosition1 = new Vector2(3450 + xChange, 620);
-            WrestlerPosition2 = new Vector2(4650 + xChange, 620);
+            WrestlerPosition1 = new Vector2(3500 + xChange, 620);
+            WrestlerPosition2 = new Vector2(4550 + xChange, 620);
             //AIPosition = new Vector2(3250, 300);//this was about in the middle, walkway not centered though
             AIPosition = new Vector2(3310, 400);
 
@@ -457,6 +457,12 @@ namespace WrestlerPose
                                     playerTurn = false;
                                     roundTimer = 0;
                                     introTurn = false;
+
+                                    for (int i = 0; i < AIPlayerList.Count; i++)
+                                    {
+                                        AIPlayerList[i].IncreaseXPosition(-40);
+                                    }
+
                                     soundEffects[5].CreateInstance().Play();
                                 }
                             }
@@ -605,11 +611,11 @@ namespace WrestlerPose
             int changeXDisplay = 75;
             for (int i = 0; i < 3; i++)
             {
-                displayCircles[i].Update(gameTime, new Vector2(750 + changeXDisplay, 1000));
+                displayCircles[i].Update(gameTime, new Vector2(800 + changeXDisplay, 1000));
             }
             for (int i = 3; i < 6; i++)
             {
-                displayCircles[i].Update(gameTime, new Vector2(1950 + changeXDisplay, 1000));
+                displayCircles[i].Update(gameTime, new Vector2(1850 + changeXDisplay, 1000));
             }
 
             if (aiTurn)
