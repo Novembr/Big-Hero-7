@@ -33,7 +33,10 @@ namespace WrestlerPose
 
         List<Animation> animations = new List<Animation>(numAnimations);
         List<Animation> outcomeAnimations = new List<Animation>(4);
+        List<Animation> crowdcomeAnimations = new List<Animation>(2);
         List<Sprite> displayCircles = new List<Sprite>(6);
+        List<Sprite> crowdSprites = new List<Sprite>(2);
+
         List<Pose> poses = new List<Pose>(numAnimations);
 
         List<Pose> defaultPoses = new List<Pose>(8);
@@ -263,6 +266,12 @@ namespace WrestlerPose
             displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("greenfeetthree"), 3), displayCircleScale, displayCircleLayer));
             displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("redfeet"), 3), displayCircleScale, displayCircleLayer));
 
+
+            //crowdanimations
+            float crowdScale = 2.4f;
+            float crowdLayer = .5f;
+            crowdSprites.Add(new Sprite(new Animation(Content.Load<Texture2D>("stageleft"), 3), crowdScale, crowdLayer));
+            crowdSprites.Add(new Sprite (new Animation(Content.Load<Texture2D>("stageright"), 3), crowdScale, crowdLayer));
             /*
              LowHands,
             Pointing,
@@ -313,6 +322,8 @@ namespace WrestlerPose
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("lose"), 12));
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("win"), 12));
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("lose"), 12));
+
+          
 
             outComePoses.Add(new Pose(outcomeAnimations[0], PoseName.Idle, 2.5f, 0.9f));//scalse is 2 for player, does posename matter here though?
             outComePoses.Add(new Pose(outcomeAnimations[1], PoseName.Idle, 2.5f, 0.9f));//scalse is 2 for player, does posename matter here though?
@@ -681,11 +692,15 @@ namespace WrestlerPose
                         {
                             player1.SetPose(outComePoses[0]);
                             player2.SetPose(outComePoses[3]);
+                            player1.CrowdMoving = true;
+                            player2.CrowdMoving = false;
                         }
                         else if (player2.GetScore() > player1.GetScore())
                         {
                             player1.SetPose(outComePoses[1]);
                             player2.SetPose(outComePoses[2]);
+                            player1.CrowdMoving = false;
+                            player2.CrowdMoving = true;
                         }
                         else
                         {
@@ -693,11 +708,15 @@ namespace WrestlerPose
                             {
                                 player1.SetPose(outComePoses[0]);
                                 player2.SetPose(outComePoses[3]);
+                                player1.CrowdMoving = false;
+                                player2.CrowdMoving = true;
                             }
                             else
                             {
                                 player1.SetPose(outComePoses[1]);
                                 player2.SetPose(outComePoses[2]);
+                                player1.CrowdMoving = false;
+                                player2.CrowdMoving = true;
                             }
                         }
 
@@ -725,6 +744,12 @@ namespace WrestlerPose
             {
                 displayCircles[i].Update(gameTime, new Vector2(1850 + changeXDisplay, 1000));
             }
+
+            //crowdanimations update
+            crowdSprites[0].Update(gameTime, new Vector2(1060, 525));
+            crowdSprites[1].Update(gameTime, new Vector2(2420, 525));
+
+
 
             if (aiTurn)
             {
@@ -831,6 +856,10 @@ namespace WrestlerPose
         void ComparePosesAndSetScores(int posePatternIndex, Player player, Player currentAI)
         {
             Player winnerBetweenPlayerTwoAndAI = ComparePoses(player, currentAI, posePatternIndex);
+
+            player.CrowdMoving = false;
+
+
             if (winnerBetweenPlayerTwoAndAI != null)
             {
                 if (winnerBetweenPlayerTwoAndAI == player)
@@ -839,6 +868,7 @@ namespace WrestlerPose
                     player.displayCircle = DisplayCircle.Won;
                     player.CheerInstance.Stop();
                     player.CheerInstance.Play();
+                    player.CrowdMoving = true;
                 }
                 else
                 {
@@ -846,6 +876,7 @@ namespace WrestlerPose
                     player.displayCircle = DisplayCircle.Lost;
                     player.BooInstance.Stop();
                     player.BooInstance.Play();
+                    player.CrowdMoving = true;
                 }
             }
             else
@@ -853,6 +884,7 @@ namespace WrestlerPose
                 player.displayCircle = DisplayCircle.Tied;
                 player.MurmurInstance.Stop();
                 player.MurmurInstance.Play();
+                player.CrowdMoving = false;
             }
         }
 
@@ -929,6 +961,21 @@ namespace WrestlerPose
                         break;
                 }
             }
+
+            //crowdanimations
+
+            //now only display this i guess when? when do the cheering sounds go off?
+            if (player1.CrowdMoving)
+            {
+                crowdSprites[0].Draw(_spriteBatch);
+            }
+            if (player2.CrowdMoving)
+            { 
+                crowdSprites[1].Draw(_spriteBatch);
+            }
+
+
+
 
             if (!introTurn)
             {
@@ -1214,6 +1261,8 @@ namespace WrestlerPose
 
             player1.SetScore(0);
             player2.SetScore(0);
+            player1.CrowdMoving = false;
+            player2.CrowdMoving = false;
 
             player1.SetPose(poses[0]);
             player1.SetPosePattern(new List<Pose>());

@@ -43,6 +43,7 @@ namespace WrestlerPose
 
         public DisplayCircle displayCircle { get; set; }
         public SoundEffect _AIIntroSound { get; set; }
+        public bool CrowdMoving { get; set; }
 
         private SoundEffectInstance _cheerInstance;
 
@@ -102,6 +103,7 @@ namespace WrestlerPose
             _booInstance = booInstance;
             _cheerInstance = cheerInstance;
             _murmurInstance = murmurInstance;
+            CrowdMoving = false;//can i do this?
         }
 
         public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern, List<int> poseValuesForThisAi, SoundEffect aIIntroSound)
