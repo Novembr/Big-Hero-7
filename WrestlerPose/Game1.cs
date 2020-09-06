@@ -39,13 +39,13 @@ namespace WrestlerPose
 
         List<Pose> poses = new List<Pose>(numAnimations);
 
-        List<Pose> defaultPoses = new List<Pose>(8);
-        List<Pose> altPoses = new List<Pose>(8);
-        List<Pose> bearPoses = new List<Pose>(8);
-        List<Pose> raPoses = new List<Pose>(8);
-        List<Pose> luchadorPoses = new List<Pose>(8);
+        //List<Pose> defaultPoses = new List<Pose>(8);
+        //List<Pose> altPoses = new List<Pose>(8);
+        //List<Pose> bearPoses = new List<Pose>(8);
+        //List<Pose> raPoses = new List<Pose>(8);
+        //List<Pose> luchadorPoses = new List<Pose>(8);
 
-     
+
 
 
         List<Pose> outComePoses = new List<Pose>(4);
@@ -91,6 +91,7 @@ namespace WrestlerPose
         bool player2CanInput = true;
         float songVolume = .3f;
         private bool updatedScoreBoard = false;
+        bool displayMatchScore = false;
 
         bool introPlayer1AudioHasPlayed = false;
         bool introPlayer2AudioHasPlayed = false;
@@ -134,7 +135,17 @@ namespace WrestlerPose
         private Texture2D _XOnScoreBoard;
         private Texture2D _blankOnScoreBoard;
 
+        private Texture2D zero;
+        private Texture2D one;
+        private Texture2D two;
+        private Texture2D three;
+        private Texture2D dash;
+
+
+
         List<Texture2D> RoundOutcomeTexturesForJumboTron;
+        List<Texture2D> MatchOutComeTextures;
+
 
 
 
@@ -157,6 +168,7 @@ namespace WrestlerPose
             AIIntroSounds = new List<SoundEffect>();
             ringGirlImages = new List<Texture2D>();
             RoundOutcomeTexturesForJumboTron = new List<Texture2D>();
+            MatchOutComeTextures = new List<Texture2D>();
         }
 
         protected override void Initialize()
@@ -223,9 +235,22 @@ namespace WrestlerPose
             _checkOnScoreBoard = Content.Load<Texture2D>("check");
             _XOnScoreBoard = Content.Load<Texture2D>("X");
 
+            zero = Content.Load<Texture2D>("0");
+            one = Content.Load<Texture2D>("1");
+            two = Content.Load<Texture2D>("2");
+            three = Content.Load<Texture2D>("3");
+            dash = Content.Load<Texture2D>("-");
+
             RoundOutcomeTexturesForJumboTron.Add(_blankOnScoreBoard);
             RoundOutcomeTexturesForJumboTron.Add(_checkOnScoreBoard);
             RoundOutcomeTexturesForJumboTron.Add(_XOnScoreBoard);
+
+            MatchOutComeTextures.Add(zero);
+            MatchOutComeTextures.Add(one);
+            MatchOutComeTextures.Add(two);
+            MatchOutComeTextures.Add(three);
+            MatchOutComeTextures.Add(dash);
+
 
 
             _playerLightsBackground = Content.Load<Texture2D>("playerlights");
@@ -288,7 +313,7 @@ namespace WrestlerPose
                 playerTwoSelectedPoseSpritesToChooseFrom.Add(Content.Load<Texture2D>(stillAnimationImageNameStrings[i]));
             }
 
-            float displayCircleLayer = 0.0f;
+            float displayCircleLayer = 0.8f;
             float displayCircleScale = 3f;
             displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("bluefeet"), 3), displayCircleScale, displayCircleLayer));
             displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("greenfeetthree"), 3), displayCircleScale, displayCircleLayer));
@@ -302,7 +327,7 @@ namespace WrestlerPose
             float crowdScale = 2.4f;
             float crowdLayer = .5f;
             crowdSprites.Add(new Sprite(new Animation(Content.Load<Texture2D>("stageleft"), 3), crowdScale, crowdLayer));
-            crowdSprites.Add(new Sprite (new Animation(Content.Load<Texture2D>("stageright"), 3), crowdScale, crowdLayer));
+            crowdSprites.Add(new Sprite(new Animation(Content.Load<Texture2D>("stageright"), 3), crowdScale, crowdLayer));
             /*
              LowHands,
             Pointing,
@@ -321,27 +346,34 @@ namespace WrestlerPose
             animations.Add(new Animation(Content.Load<Texture2D>("red&botharms"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("green&back"), 12));
             //player 2 animations
-            animations.Add(new Animation(Content.Load<Texture2D>("idle"), 12));
-            animations.Add(new Animation(Content.Load<Texture2D>("yellow&crouch"), 12));
-            animations.Add(new Animation(Content.Load<Texture2D>("purple&lean"), 12));
-            animations.Add(new Animation(Content.Load<Texture2D>("blue&point"), 12));
-            animations.Add(new Animation(Content.Load<Texture2D>("red&botharms"), 12));
-            animations.Add(new Animation(Content.Load<Texture2D>("green&back"), 12));
-            //AI 1 animations
             animations.Add(new Animation(Content.Load<Texture2D>("idlealt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("yellow&couch-alt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("purple&lean-alt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("blue&point-alt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("red&botharms-alt"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("green&back-alt"), 12));
+            //NOT USED ANimations
+            //animations.Add(new Animation(Content.Load<Texture2D>("idle"), 12));
+            //animations.Add(new Animation(Content.Load<Texture2D>("yellow&crouch"), 12));
+            //animations.Add(new Animation(Content.Load<Texture2D>("purple&lean"), 12));
+            //animations.Add(new Animation(Content.Load<Texture2D>("blue&point"), 12));
+            //animations.Add(new Animation(Content.Load<Texture2D>("red&botharms"), 12));
+            //animations.Add(new Animation(Content.Load<Texture2D>("green&back"), 12));
             //AI 2 animations
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/luchador-idle"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/luchador-yellow"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/luchador-purple"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/luchador-blue"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/luchador-red"), 12));
+            animations.Add(new Animation(Content.Load<Texture2D>("Animations/luchador-green"), 12));
+            //AI 3 animations
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-idle"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-yeller"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-purple"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-blue"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-red"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/bear-green"), 12));
-            //AI 3 animations
+            //AI 4 animations
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/ra-idle"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/ra-yellow"), 12));
             animations.Add(new Animation(Content.Load<Texture2D>("Animations/ra-purple"), 12));
@@ -351,42 +383,42 @@ namespace WrestlerPose
 
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("win"), 12));
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("lose"), 12));
-            outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("win"), 12));
-            outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("lose"), 12));
+            outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("winalt"), 12));
+            outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("losealt"), 12));
 
-          
+
 
             outComePoses.Add(new Pose(outcomeAnimations[0], PoseName.Idle, 2.5f, 0.9f));//scale is 2 for player, does posename matter here though?
             outComePoses.Add(new Pose(outcomeAnimations[1], PoseName.Idle, 2.5f, 0.9f));//scale is 2 for player, does posename matter here though?
             outComePoses.Add(new Pose(outcomeAnimations[2], PoseName.Idle, 2.5f, 0.9f));//scale is 2 for player, does posename matter here though?
             outComePoses.Add(new Pose(outcomeAnimations[3], PoseName.Idle, 2.5f, 0.9f));//scale is 2 for player, does posename matter here though?
 
-            List<List<Pose>> allPoseList = new List<List<Pose>>();
-            allPoseList.Add(defaultPoses);
-            allPoseList.Add(altPoses);
-            allPoseList.Add(bearPoses);
-            allPoseList.Add(raPoses);
-            allPoseList.Add(luchadorPoses);
+            //List<List<Pose>> allPoseList = new List<List<Pose>>();
+            //allPoseList.Add(defaultPoses);
+            //allPoseList.Add(altPoses);
+            //allPoseList.Add(bearPoses);
+            //allPoseList.Add(raPoses);
+            //allPoseList.Add(luchadorPoses);
 
-            for (int i = 0; i < allPoseList.Count; i++)
-            {
-                float scale = 2.5f;
-                //change scale to 0.9f if AI
-                //won't know that until player makes selection though
-                //so need to have selection screen, as making selection swap out idle character 
-                //need like some idles animations list that has different instances of just the idles so player can see them
-                //and then when that is selected you go in here
-                for (int j = 0; j < 6; j++)
-                {
-                    //8 poses, idle, 5 competition poses, win and loss
-                    //issue is that those last two are not accounted for by the compare poses algorithm
-                    //or by a lot of other stuff
-                    //they are just on their own in outcome poses
-                    //so perhaps each character option just has its own outcome poses, just to mkae this simpler
-                    //in which case we are only going through 6 here
-                    allPoseList[i].Add(new Pose(animations[j], (PoseName)j, scale, 0.9f));
-                }
-            }
+            //for (int i = 0; i < allPoseList.Count; i++)
+            //{
+            //    float scale = 2.5f;
+            //    //change scale to 0.9f if AI
+            //    //won't know that until player makes selection though
+            //    //so need to have selection screen, as making selection swap out idle character 
+            //    //need like some idles animations list that has different instances of just the idles so player can see them
+            //    //and then when that is selected you go in here
+            //    for (int j = 0; j < 6; j++)
+            //    {
+            //        //8 poses, idle, 5 competition poses, win and loss
+            //        //issue is that those last two are not accounted for by the compare poses algorithm
+            //        //or by a lot of other stuff
+            //        //they are just on their own in outcome poses
+            //        //so perhaps each character option just has its own outcome poses, just to mkae this simpler
+            //        //in which case we are only going through 6 here
+            //        allPoseList[i].Add(new Pose(animations[j], (PoseName)j, scale, 0.9f));
+            //    }
+            //}
 
 
 
@@ -402,7 +434,7 @@ namespace WrestlerPose
                 if (i > 11)
                 {
                     poseInt = poseInt - 6;
-                    scale = 1.5f;
+                    scale = 1.5f;//so both identical players and alt are up through here
                 }
                 if (i > 17)
                 {
@@ -414,6 +446,7 @@ namespace WrestlerPose
                     poseInt = poseInt - 6;
                     scale = 1.5f;
                 }
+
                 poses.Add(new Pose(animations[i], (PoseName)poseInt, scale, 0.9f));
             }
 
@@ -424,9 +457,10 @@ namespace WrestlerPose
             AIPlayerList = new List<Player>
             {
                 //the 3rd parameter is the idle parameter for that ai, we now have 2, and idle for alt and bear are 12 and 18 respectively
-                new Player("firstAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[13], poses[13] }, new List<int>{ 13, 14, 15}, AIIntroSounds[0]),
-                new Player("secondAI", AIPosition, poses[18], new List<Pose>(4) { poses[19], poses[19], poses[19], poses[19] }, new List<int>{ 19, 20, 21, 22}, AIIntroSounds[1]),
-                new Player("thirdAI", AIPosition, poses[24], new List<Pose>(5) { poses[25], poses[25], poses[25], poses[25], poses[25] }, new List<int>{ 25, 26, 27, 28, 29}, AIIntroSounds[2]),
+                new Player("luchadorAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[13], poses[13] }, new List<int>{ 13, 14, 15}, AIIntroSounds[0]),
+                new Player("bearAI", AIPosition, poses[18], new List<Pose>(3) { poses[19], poses[19], poses[19] }, new List<int>{ 19, 20, 21, 22}, AIIntroSounds[1]),
+                new Player("raAI", AIPosition, poses[24], new List<Pose>(4) { poses[25], poses[25], poses[25], poses[25] }, new List<int>{ 25, 26, 27, 28, 29}, AIIntroSounds[2]),
+                //new Player("raAI", AIPosition, poses[30], new List<Pose>(5) { poses[31], poses[31], poses[31], poses[31], poses[31] }, new List<int>{ 31, 32, 33, 34, 35}, AIIntroSounds[2]),
             };
 
             currentAI = AIPlayerList[0];
@@ -606,7 +640,7 @@ namespace WrestlerPose
                                     {
                                         AIPlayerList[i].IncreaseXPosition(-40);
                                     }
-                                    
+
                                     //place first ring girl here
 
                                     soundEffects[5].CreateInstance().Play();
@@ -779,15 +813,36 @@ namespace WrestlerPose
                             }
                         }
 
-                        
-
+                        int lastRoundTimer = 5000;
+                        if (roundNumber > 2)//so third round i think here...because roundnumber is increased in newround()
+                        {
+                            lastRoundTimer = 8000;
+                        }
 
                         if (roundTimer > 5000)
                         {
-                            dontDisplayOutcome = false;
-                            playerTurn = false;
-                            roundTimer = 0;
-                            NewRound();
+                            //so will go straight to new round unless it's the last round of the match in which case you get 3 seconds in here
+                            if (lastRoundTimer == 8000)
+                            {
+                                //so now in here I can change the poses back to idle, stop displaying the feet circles, and do both players lights earlier than normal
+                                dontDisplayOutcome = false;
+                                //these 4 are repeated in new round but should be ok?
+                                //they will be called over and over for these 2 seconds but that shouldn't matter
+                                player1.displayCircle = DisplayCircle.Tied;
+                                player2.displayCircle = DisplayCircle.Tied;
+                                player1.SetPose(poses[0]);
+                                player2.SetPose(poses[6]);
+                                displayMatchScore = true;
+                            }
+
+                            if (roundTimer > lastRoundTimer)
+                            {
+                                dontDisplayOutcome = false;
+                                displayMatchScore = false;
+                                playerTurn = false;
+                                roundTimer = 0;
+                                NewRound();
+                            }
                         }
                     }
                 }
@@ -832,8 +887,8 @@ namespace WrestlerPose
                         //instead do this decrease song volum during initial fade out and incraese crowd volume during fade in
                         float newVolume = roundTimer / 3000;
                         MediaPlayer.Volume = MathF.Min(newVolume, 0.4f);//whatever audience volume should be
-                        
-                        if(blackScreenOpacity <= 0)
+
+                        if (blackScreenOpacity <= 0)
                         {
                             //currentAI._AIIntroSound.CreateInstance().Play();//plays during his intro moves and doesn't seem necessary for first one
                             //MediaPlayer.Play(audienceBackgroundSong);//so should only play once i hope
@@ -843,7 +898,7 @@ namespace WrestlerPose
                     else
                     {
                         roundTimer = 0;
-                       
+
                     }
 
                     if (currentTimeAI >= countDurationAI)
@@ -929,7 +984,7 @@ namespace WrestlerPose
                     player.CheerInstance.Play();
                     player.CrowdMoving = true;
                     player.PlayerWinningForCrowd = true;
-                    
+
                 }
                 else
                 {
@@ -977,18 +1032,68 @@ namespace WrestlerPose
                 }
             }
 
-           //for (int i = 0; i < 3; i++)
-           //{
-           //    Texture2D outcomeDisplay = RoundOutcomeTexturesForJumboTron[0];
-           //    DrawRoundScores(outcomeDisplay, 740, 65 + i * 130);
-           //}
-           //
-           //for (int i = 0; i < 3; i++)
-           //{
-           //    Texture2D outcomeDisplay = RoundOutcomeTexturesForJumboTron[0];
-           //    DrawRoundScores(outcomeDisplay, 1286, 65 + i * 130);
-           //}
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    Texture2D outcomeDisplay = RoundOutcomeTexturesForJumboTron[0];
+            //    DrawRoundScores(outcomeDisplay, 740, 65 + i * 130);
+            //}
+            //
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    Texture2D outcomeDisplay = RoundOutcomeTexturesForJumboTron[0];
+            //    DrawRoundScores(outcomeDisplay, 1286, 65 + i * 130);
+            //}
 
+            if (displayMatchScore)
+            {
+
+                for (int i = 0; i < 3; i++)
+                {
+                    int localPlayer1RoundScore = player1.roundScore;
+                    int localPlayer2RoundScore = player2.roundScore;
+                    Player winner = WinningPlayer();//this should get the pose score for last round before it's reset, then add to approprpiate above one
+                    if (winner == player1)
+                    {
+                        localPlayer1RoundScore++;
+                    }
+                    else
+                    {
+                        localPlayer2RoundScore++;
+                    }
+
+                    int localPlayer1MatchScore = player1.matchScore;
+                    int localPlayer2MatchScore = player2.matchScore;
+
+                    if (localPlayer1RoundScore > localPlayer2RoundScore)
+                    {
+                        localPlayer1MatchScore++;
+                    }
+                    else if (localPlayer1RoundScore < localPlayer2RoundScore)
+                    {
+                        localPlayer2MatchScore++;
+                    }
+
+                    Texture2D MatchOutcomeTexture;
+                    if (i == 1)
+                    {
+                        MatchOutcomeTexture = MatchOutComeTextures[4];//this is the dash
+                    }
+                    else if (i == 0)
+                    {
+                        //player 1 matches score
+                        //****this will be called though before the match scores are in
+                        MatchOutcomeTexture = MatchOutComeTextures[localPlayer1MatchScore];
+                    }
+                    else
+                    {
+                        //player 2 matches score
+                        MatchOutcomeTexture = MatchOutComeTextures[localPlayer2MatchScore];
+
+                    }
+                    DrawMatchScores(MatchOutcomeTexture, 850 + i * 100, 650);
+                }
+
+            }
 
             if (!introTurn)
             {
@@ -1005,7 +1110,7 @@ namespace WrestlerPose
                         );
 
 
-               
+
             }
             else
             {
@@ -1067,14 +1172,12 @@ namespace WrestlerPose
                 for (int i = 0; i < 3; i++)
                 {
                     Texture2D outcomeDisplay = RoundOutcomeTexturesForJumboTron[player1.RoundOutcomes[i]];
-                    //DrawRoundScores(outcomeDisplay, 730, 110 + i * 100);
                     DrawRoundScores(outcomeDisplay, 740, 65 + i * 130);
                 }
 
                 for (int i = 0; i < 3; i++)
                 {
                     Texture2D outcomeDisplay = RoundOutcomeTexturesForJumboTron[player2.RoundOutcomes[i]];
-                    //DrawRoundScores(outcomeDisplay, 1300, 110 + i * 100);
                     DrawRoundScores(outcomeDisplay, 1286, 65 + i * 130);
                 }
             }
@@ -1119,7 +1222,7 @@ namespace WrestlerPose
                 }
             }
             if (player2.CrowdMoving)
-            { 
+            {
                 crowdSprites[1].Draw(_spriteBatch);
 
                 if (player2.PlayerWinningForCrowd)
@@ -1170,7 +1273,7 @@ namespace WrestlerPose
                 _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
                 //_spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(840, 35), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
 
-              
+
             }
 
             int upIndexCurrentAIIdlePoseIndexForRingGirl = (matchNumber - 1) * 6 + 12;
@@ -1189,7 +1292,7 @@ namespace WrestlerPose
                       0.91f
                       );
             }
-            else if (!introTurn)
+            else if (!introTurn && !displayMatchScore)
             {
                 _spriteBatch.Draw(
                       _allPosesImage,
@@ -1204,7 +1307,7 @@ namespace WrestlerPose
                       );
             }
 
-           
+
 
 
             //if (!String.IsNullOrWhiteSpace(overallWinnerString))
@@ -1261,40 +1364,40 @@ namespace WrestlerPose
             }
 
             ///test section delte later
-           //for (int i = 0; i < 3; i++)
-           //{
-           //    deltaLeftForPosePatternDisplayByMatch = (1 - 1) * 55;
-           //
-           //    _spriteBatch.Draw(
-           //        playerOneSelectedPoseSpritesToChooseFrom[0],
-           //        new Vector2(100, 530 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
-           //        null,
-           //        Color.White,
-           //        0f,
-           //        new Vector2(playerOneSelectedPoseSpritesToChooseFrom[0].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[0].Height / 2),
-           //        0.9f,
-           //        SpriteEffects.None,
-           //        0f
-           //        );
-           //}
-           //for (int i = 0; i < 4; i++)
-           //{
-           //    deltaLeftForPosePatternDisplayByMatch = (2 - 1) * 55;
-           //
-           //    _spriteBatch.Draw(
-           //        playerTwoSelectedPoseSpritesToChooseFrom[0],
-           //        new Vector2(1770, 530 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
-           //        null,
-           //        Color.White,
-           //
-           //        0f,
-           //        new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[0].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[0].Height / 2),
-           //        0.9f,
-           //        SpriteEffects.None,
-           //        0f
-           //
-           //        );
-           //}
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    deltaLeftForPosePatternDisplayByMatch = (1 - 1) * 55;
+            //
+            //    _spriteBatch.Draw(
+            //        playerOneSelectedPoseSpritesToChooseFrom[0],
+            //        new Vector2(100, 530 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+            //        null,
+            //        Color.White,
+            //        0f,
+            //        new Vector2(playerOneSelectedPoseSpritesToChooseFrom[0].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[0].Height / 2),
+            //        0.9f,
+            //        SpriteEffects.None,
+            //        0f
+            //        );
+            //}
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    deltaLeftForPosePatternDisplayByMatch = (2 - 1) * 55;
+            //
+            //    _spriteBatch.Draw(
+            //        playerTwoSelectedPoseSpritesToChooseFrom[0],
+            //        new Vector2(1770, 530 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+            //        null,
+            //        Color.White,
+            //
+            //        0f,
+            //        new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[0].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[0].Height / 2),
+            //        0.9f,
+            //        SpriteEffects.None,
+            //        0f
+            //
+            //        );
+            //}
             ///test section delete later
 
 
@@ -1316,7 +1419,7 @@ namespace WrestlerPose
             float lightsOpacity = .7f;
             if (aiTurn)
             {
-                if(aiTurn && (roundNumber == 1) && (currentAI.GetPose() == poses[upIndexCurrentAIIdlePoseIndexForRingGirl]))
+                if (aiTurn && (roundNumber == 1) && (currentAI.GetPose() == poses[upIndexCurrentAIIdlePoseIndexForRingGirl]))
                 {
                     DisplayLights(_ringGirlLightsBackground, lightsOpacity, lightsScale);
                 }
@@ -1359,6 +1462,21 @@ namespace WrestlerPose
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void DrawMatchScores(Texture2D matchOutcomeTexture, int x, int y)
+        {
+            _spriteBatch.Draw(
+               matchOutcomeTexture,
+               new Vector2(x, y),
+               null,
+               Color.Yellow,
+               0f,
+               new Vector2(matchOutcomeTexture.Width / 2, matchOutcomeTexture.Height / 2),
+               1.7f,//needs adjusting, SCALE
+               SpriteEffects.None,
+               1.0f//not sure about this value
+               );
         }
 
         private void DrawRoundScores(Texture2D texture, int x, int y)
@@ -1455,7 +1573,7 @@ namespace WrestlerPose
             //winner.RoundOutcomes[roundNumber - 1] = 1;
             //Player loser = winner == player1 ? player2 : player1;
             //loser.RoundOutcomes[roundNumber - 1] = 2;
-           
+
 
             player1.SetScore(0);
             player2.SetScore(0);
@@ -1466,9 +1584,9 @@ namespace WrestlerPose
             player1.SetPosePattern(new List<Pose>());
             player2.SetPose(poses[6]);
             player2.SetPosePattern(new List<Pose>());
-            int upIndexCurrentAIIdlePoseIndex = (matchNumber - 1) * 6 + 12;
+            int upIndexCurrentAIIdlePoseIndex = (matchNumber - 1) * 6 + 12;//this might be wrong now
             currentAI.SetPose(poses[upIndexCurrentAIIdlePoseIndex]);//was 12
-            
+
 
             player1.displayCircle = DisplayCircle.Tied;
             player2.displayCircle = DisplayCircle.Tied;
@@ -1510,7 +1628,7 @@ namespace WrestlerPose
 
             for (int i = 0; i < 3; i++)
             {
-                player1.RoundOutcomes[i] = 0; 
+                player1.RoundOutcomes[i] = 0;
                 player2.RoundOutcomes[i] = 0;
             }
 
