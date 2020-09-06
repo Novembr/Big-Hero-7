@@ -44,6 +44,8 @@ namespace WrestlerPose
         public DisplayCircle displayCircle { get; set; }
         public SoundEffect _AIIntroSound { get; set; }
         public bool CrowdMoving { get; set; }
+        public bool PlayerWinningForCrowd { get; set; }
+        public List<int> RoundOutcomes { get; set; }//0 = not yet determined, 1 = win and 2 = lose
 
         private SoundEffectInstance _cheerInstance;
 
@@ -104,6 +106,7 @@ namespace WrestlerPose
             _cheerInstance = cheerInstance;
             _murmurInstance = murmurInstance;
             CrowdMoving = false;//can i do this?
+            RoundOutcomes = new List<int>(); RoundOutcomes.Add(0); RoundOutcomes.Add(0); RoundOutcomes.Add(0);//for max 3 rounds
         }
 
         public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern, List<int> poseValuesForThisAi, SoundEffect aIIntroSound)

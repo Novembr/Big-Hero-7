@@ -54,7 +54,7 @@ namespace WrestlerPose.Sprites
                     new Vector2(_texture.Width / 2, _texture.Height / 2),
                     0.3f,
                     SpriteEffects.None,
-                    0f
+                    .93f
 
                     );
 

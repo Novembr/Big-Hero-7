@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin 0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:0.png
+
 #begin ailights.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -307,6 +319,18 @@
 /processorParam:TextureFormat=Color
 /build:blackscreen.jfif
 
+#begin blankscore.JPG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:blankscore.JPG
+
 #begin blue&point.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -360,6 +384,18 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:boo_2.wav
+
+#begin check.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:check.png
 
 #begin cheer.wav
 /importer:WavImporter
@@ -949,6 +985,30 @@
 /processorParam:TextureFormat=Compressed
 /build:Round.spritefont
 
+#begin scoreboard.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:scoreboard.png
+
+#begin scoreboardSingle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:scoreboardSingle.png
+
 #begin Sound/audience1.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -1279,6 +1339,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:WrestlerIdle.jpg
+
+#begin X.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:X.png
 
 #begin yellow&couch-alt.png
 /importer:TextureImporter
