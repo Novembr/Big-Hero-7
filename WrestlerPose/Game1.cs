@@ -932,9 +932,9 @@ namespace WrestlerPose
 
             if (!introTurn)
             {
-                _spriteBatch.DrawString(_countDownPlayerOneMove, counter.ToString(), new Vector2(200, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-                _spriteBatch.DrawString(_countDownPlayerTwoMove, counter2.ToString(), new Vector2(1500, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-                _spriteBatch.DrawString(_countDownAI, counterAI.ToString(), new Vector2(930, 1), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+                //_spriteBatch.DrawString(_countDownPlayerOneMove, counter.ToString(), new Vector2(200, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+                //_spriteBatch.DrawString(_countDownPlayerTwoMove, counter2.ToString(), new Vector2(1500, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+                //_spriteBatch.DrawString(_countDownAI, counterAI.ToString(), new Vector2(930, 1), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
                 _spriteBatch.DrawString(_playerOneMatchScore, "Player 1 Match Score:  " + player1.matchScore, new Vector2(200, 100), Color.DarkRed);
                 _spriteBatch.DrawString(_playerTwoMatchScore, "Player 2 Match Score:  " + player2.matchScore, new Vector2(1500, 100), Color.DarkRed);
                 _spriteBatch.DrawString(_playerOneRoundScore, "Player 1 Round Score:  " + player1.roundScore, new Vector2(200, 150), Color.LightSalmon);
@@ -961,7 +961,7 @@ namespace WrestlerPose
                       new Vector2(ringGirlImages[matchNumber - 1].Width / 2, ringGirlImages[matchNumber - 1].Height / 2),
                       2.2f,
                       SpriteEffects.None,
-                      0.99f
+                      0.91f
                       );
             }
             else if (!introTurn)
@@ -987,7 +987,7 @@ namespace WrestlerPose
             //    _spriteBatch.DrawString(_overAllWinner, "Overall Winner: " + overallWinnerString, new Vector2(850, 150), Color.Fuchsia, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
             //}
 
-            int picSpacing = 110;
+            int picSpacing = 140;
             int deltaLeftForPosePatternDisplayByMatch = (matchNumber - 1) * 55;
 
             for (int i = 0; i < 5; i++)
@@ -1001,14 +1001,14 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne],
-                    new Vector2(300 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
+                    new Vector2(100, 540 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                     null,
                     Color.White,
                     0f,
                     new Vector2(playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Height / 2),
                     0.9f,
                     SpriteEffects.None,
-                    0f
+                    1f
                     );
             }
 
@@ -1022,7 +1022,7 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo],
-                    new Vector2(1385 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
+                    new Vector2(1770, 540 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                     null,
                     Color.White,
 
@@ -1030,46 +1030,46 @@ namespace WrestlerPose
                     new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Height / 2),
                     0.9f,
                     SpriteEffects.None,
-                    0f
+                    1f
 
                     );
             }
 
             ///test section delte later
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    deltaLeftForPosePatternDisplayByMatch = (3 - 1) * 55;
-            //
-            //    _spriteBatch.Draw(
-            //        playerOneSelectedPoseSpritesToChooseFrom[0],
-            //        new Vector2(300 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
-            //        null,
-            //        Color.White,
-            //        0f,
-            //        new Vector2(playerOneSelectedPoseSpritesToChooseFrom[0].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[0].Height / 2),
-            //        0.9f,
-            //        SpriteEffects.None,
-            //        0f
-            //        );
-            //}
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    deltaLeftForPosePatternDisplayByMatch = (3 - 1) * 55;
-            //
-            //    _spriteBatch.Draw(
-            //        playerTwoSelectedPoseSpritesToChooseFrom[0],
-            //        new Vector2(1385 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
-            //        null,
-            //        Color.White,
-            //
-            //        0f,
-            //        new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[0].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[0].Height / 2),
-            //        0.9f,
-            //        SpriteEffects.None,
-            //        0f
-            //
-            //        );
-            //}
+           //for (int i = 0; i < 3; i++)
+           //{
+           //    deltaLeftForPosePatternDisplayByMatch = (1 - 1) * 55;
+           //
+           //    _spriteBatch.Draw(
+           //        playerOneSelectedPoseSpritesToChooseFrom[0],
+           //        new Vector2(100, 530 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+           //        null,
+           //        Color.White,
+           //        0f,
+           //        new Vector2(playerOneSelectedPoseSpritesToChooseFrom[0].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[0].Height / 2),
+           //        0.9f,
+           //        SpriteEffects.None,
+           //        0f
+           //        );
+           //}
+           //for (int i = 0; i < 4; i++)
+           //{
+           //    deltaLeftForPosePatternDisplayByMatch = (2 - 1) * 55;
+           //
+           //    _spriteBatch.Draw(
+           //        playerTwoSelectedPoseSpritesToChooseFrom[0],
+           //        new Vector2(1770, 530 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+           //        null,
+           //        Color.White,
+           //
+           //        0f,
+           //        new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[0].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[0].Height / 2),
+           //        0.9f,
+           //        SpriteEffects.None,
+           //        0f
+           //
+           //        );
+           //}
             ///test section delete later
 
 
@@ -1147,7 +1147,7 @@ namespace WrestlerPose
                 new Vector2(texture.Width / 2, texture.Height / 2),
                 scale,
                 SpriteEffects.None,
-                1f
+                0.95f
                 );
         }
 
