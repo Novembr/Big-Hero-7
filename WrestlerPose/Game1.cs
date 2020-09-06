@@ -36,6 +36,7 @@ namespace WrestlerPose
         List<Animation> crowdcomeAnimations = new List<Animation>(2);
         List<Sprite> displayCircles = new List<Sprite>(6);
         List<Sprite> crowdSprites = new List<Sprite>(2);
+        List<Sprite> confettiSprites = new List<Sprite>(2);
 
         List<Pose> poses = new List<Pose>(numAnimations);
 
@@ -335,6 +336,10 @@ namespace WrestlerPose
             HighHands,
             Hercules
              */
+            //Sprite confetti1 = 
+            confettiSprites.Add(new Sprite(new Animation(Content.Load<Texture2D>("confettispritesheet"), 3), 1.6f, 0.98f));
+            confettiSprites.Add(new Sprite(new Animation(Content.Load<Texture2D>("confettispritesheet2"), 3), 1.6f, 0.98f));
+
 
             //DOUBled number of animations because same one can't be in two places it seems and
             //will need different ones anyway once getting new characters etc...
@@ -864,6 +869,8 @@ namespace WrestlerPose
             crowdSprites[0].Update(gameTime, new Vector2(1060, 525));
             crowdSprites[1].Update(gameTime, new Vector2(2420, 525));
 
+            confettiSprites[0].Update(gameTime, new Vector2(1000, 440));
+            confettiSprites[1].Update(gameTime, new Vector2(2050, 440));
 
 
             if (aiTurn)
@@ -1046,9 +1053,14 @@ namespace WrestlerPose
 
             if (displayMatchScore)
             {
+                int localPlayer1MatchScore = 0;
+                int localPlayer2MatchScore = 0;
 
                 for (int i = 0; i < 3; i++)
                 {
+                    //this section basically copies a lot of tghe functionality from NewsRound() and ResetMatch() but it needs to be done here
+                    //again to display the right en match socre values before the match actually ends, I could refactor to avoid this but it wouldbe 
+                    //too much of a buggy pain this late 
                     int localPlayer1RoundScore = player1.roundScore;
                     int localPlayer2RoundScore = player2.roundScore;
                     Player winner = WinningPlayer();//this should get the pose score for last round before it's reset, then add to approprpiate above one
@@ -1061,8 +1073,8 @@ namespace WrestlerPose
                         localPlayer2RoundScore++;
                     }
 
-                    int localPlayer1MatchScore = player1.matchScore;
-                    int localPlayer2MatchScore = player2.matchScore;
+                    localPlayer1MatchScore = player1.matchScore;
+                    localPlayer2MatchScore = player2.matchScore;
 
                     if (localPlayer1RoundScore > localPlayer2RoundScore)
                     {
@@ -1093,6 +1105,14 @@ namespace WrestlerPose
                     DrawMatchScores(MatchOutcomeTexture, 850 + i * 100, 650);
                 }
 
+                if (localPlayer2MatchScore < localPlayer1MatchScore)
+                {
+                    confettiSprites[0].Draw(_spriteBatch);
+                }
+                else
+                {
+                    confettiSprites[1].Draw(_spriteBatch);
+                }
             }
 
             if (!introTurn)
@@ -1108,9 +1128,6 @@ namespace WrestlerPose
                         SpriteEffects.None,
                         0f
                         );
-
-
-
             }
             else
             {
@@ -1184,8 +1201,8 @@ namespace WrestlerPose
 
             //crowdanimations
 
-
-
+            //confettiSprites[0].Draw(_spriteBatch);
+            //confettiSprites[1].Draw(_spriteBatch);
 
             //now only display this i guess when? when do the cheering sounds go off?
             if (player1.CrowdMoving)
@@ -1263,14 +1280,14 @@ namespace WrestlerPose
                 //_spriteBatch.DrawString(_countDownPlayerOneMove, counter.ToString(), new Vector2(200, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
                 //_spriteBatch.DrawString(_countDownPlayerTwoMove, counter2.ToString(), new Vector2(1500, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
                 //_spriteBatch.DrawString(_countDownAI, counterAI.ToString(), new Vector2(930, 1), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-                _spriteBatch.DrawString(_playerOneMatchScore, "Player 1 Match Score:  " + player1.matchScore, new Vector2(200, 100), Color.DarkRed);
-                _spriteBatch.DrawString(_playerTwoMatchScore, "Player 2 Match Score:  " + player2.matchScore, new Vector2(1500, 100), Color.DarkRed);
-                _spriteBatch.DrawString(_playerOneRoundScore, "Player 1 Round Score:  " + player1.roundScore, new Vector2(200, 150), Color.LightSalmon);
-                _spriteBatch.DrawString(_playerTwoRoundScore, "Player 2 Round Score:  " + player2.roundScore, new Vector2(1500, 150), Color.LightSalmon);
-                _spriteBatch.DrawString(_playerOneScore, "Pose Score:  " + player1.GetScore(), new Vector2(260, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
-                _spriteBatch.DrawString(_playerTwoScore, "Pose Score:  " + player2.GetScore(), new Vector2(1450, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
-                _spriteBatch.DrawString(_match, "Match: " + matchNumber, new Vector2(100, 50), Color.Red);
-                _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
+                //_spriteBatch.DrawString(_playerOneMatchScore, "Player 1 Match Score:  " + player1.matchScore, new Vector2(200, 100), Color.DarkRed);
+                //_spriteBatch.DrawString(_playerTwoMatchScore, "Player 2 Match Score:  " + player2.matchScore, new Vector2(1500, 100), Color.DarkRed);
+                //_spriteBatch.DrawString(_playerOneRoundScore, "Player 1 Round Score:  " + player1.roundScore, new Vector2(200, 150), Color.LightSalmon);
+                //_spriteBatch.DrawString(_playerTwoRoundScore, "Player 2 Round Score:  " + player2.roundScore, new Vector2(1500, 150), Color.LightSalmon);
+                //_spriteBatch.DrawString(_playerOneScore, "Pose Score:  " + player1.GetScore(), new Vector2(260, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+                //_spriteBatch.DrawString(_playerTwoScore, "Pose Score:  " + player2.GetScore(), new Vector2(1450, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+                //_spriteBatch.DrawString(_match, "Match: " + matchNumber, new Vector2(100, 50), Color.Red);
+                //_spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
                 //_spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(840, 35), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
 
 
