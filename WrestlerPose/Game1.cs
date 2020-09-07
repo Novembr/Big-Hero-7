@@ -23,7 +23,6 @@ namespace WrestlerPose
         Song song;
         Song audienceBackgroundSong;
 
-
         List<SoundEffect> soundEffects;
         List<SoundEffect> crowdSounds;
         List<SoundEffect> AIIntroSounds;
@@ -42,13 +41,11 @@ namespace WrestlerPose
         List<Pose> raPoses = new List<Pose>(8);
         List<Pose> luchadorPoses = new List<Pose>(8);
 
-     
-
-
         List<Pose> outComePoses = new List<Pose>(4);
 
         bool dontDisplayOutcome = true;
         bool playerOneFinishedFirst = true;
+        bool gamestart = false;
 
 
         //countdown timer
@@ -119,14 +116,16 @@ namespace WrestlerPose
         private Texture2D _playerTwoLightsBackground;
         private Texture2D _aiLightsBackground;
         private Texture2D _ringGirlLightsBackground;
+        private Texture2D _mainmenu;
 
 
         private List<Texture2D> ringGirlImages;
 
-
-
         private List<Texture2D> playerOneSelectedPoseSpritesToChooseFrom = new List<Texture2D>(5);//assumes the most will be 5 
         private List<Texture2D> playerTwoSelectedPoseSpritesToChooseFrom = new List<Texture2D>(5);//assumes the most will be 5
+
+        private List<Component> menuComponents;
+
         private float blackScreenOpacity;
 
         public Game1()
@@ -204,6 +203,32 @@ namespace WrestlerPose
 
             song = Content.Load<Song>("Sound/theme_background");
             audienceBackgroundSong = Content.Load<Song>("crowdSong1MP");
+
+            var menuBackground = new Image(Content.Load<Texture2D>("bighero72"), Color.White)
+            {
+                Rectangle = new Rectangle(0, 0, 1920, 1080),
+            };
+
+            var playButton = new Button(Content.Load<Texture2D>("Button1"), Content.Load<Texture2D>("Button2"))
+            {
+                Position = new Vector2(800, 400),
+            };
+            playButton.Click += PlayButton_Click;
+
+            var quitButton = new Button(Content.Load<Texture2D>("Button1"), Content.Load<Texture2D>("Button2"))
+            {
+                Position = new Vector2(800, 700),
+            };
+            quitButton.Click += QuitButton_Click;
+
+            menuComponents = new List<Component>()
+            {
+                menuBackground,
+                playButton,
+                quitButton,
+            };
+
+
 
             MediaPlayer.Play(song);
             MediaPlayer.IsRepeating = true;
@@ -396,414 +421,419 @@ namespace WrestlerPose
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            StickDirection playerOneLeftStick = StickDirection.None;
-            StickDirection playerOneRightStick = StickDirection.None;
-            StickDirection playerTwoLeftStick = StickDirection.None;
-            StickDirection playerTwoRightStick = StickDirection.None;
-
-            //setting up player inputs, shouldn't need to change with addition of AI because can just dictate those in code witout gamepad input
-            for (int i = 0; i < 2; i++)
+            if (!gamestart)
+                foreach (var button in menuComponents)
+                    button.Update(gameTime);
+            else
             {
-                PlayerIndex playerIndex = (PlayerIndex)i;
-                GamePadCapabilities capabilities = GamePad.GetCapabilities(playerIndex);
+                StickDirection playerOneLeftStick = StickDirection.None;
+                StickDirection playerOneRightStick = StickDirection.None;
+                StickDirection playerTwoLeftStick = StickDirection.None;
+                StickDirection playerTwoRightStick = StickDirection.None;
 
-                if (capabilities.IsConnected)
+                //setting up player inputs, shouldn't need to change with addition of AI because can just dictate those in code witout gamepad input
+                for (int i = 0; i < 2; i++)
                 {
-                    GamePadState state = GamePad.GetState(playerIndex);
-                    Player player = player1;
+                    PlayerIndex playerIndex = (PlayerIndex)i;
+                    GamePadCapabilities capabilities = GamePad.GetCapabilities(playerIndex);
 
-                    if (i == 1)
+                    if (capabilities.IsConnected)
                     {
-                        player = player2;
-                    }
+                        GamePadState state = GamePad.GetState(playerIndex);
+                        Player player = player1;
 
-                    if (capabilities.HasLeftXThumbStick && capabilities.HasLeftYThumbStick)
-                    {
-                        if (state.ThumbSticks.Left.X < -0.5f)
+                        if (i == 1)
                         {
-                            player.SetLeftStickDirection(StickDirection.Left);
+                            player = player2;
                         }
-                        else if (state.ThumbSticks.Left.X > 0.5f)
+
+                        if (capabilities.HasLeftXThumbStick && capabilities.HasLeftYThumbStick)
                         {
-                            player.SetLeftStickDirection(StickDirection.Right);
+                            if (state.ThumbSticks.Left.X < -0.5f)
+                            {
+                                player.SetLeftStickDirection(StickDirection.Left);
+                            }
+                            else if (state.ThumbSticks.Left.X > 0.5f)
+                            {
+                                player.SetLeftStickDirection(StickDirection.Right);
+                            }
+                            else if (state.ThumbSticks.Left.Y < -0.5f)
+                            {
+                                player.SetLeftStickDirection(StickDirection.Down);
+                            }
+                            else if (state.ThumbSticks.Left.Y > 0.5f)
+                            {
+                                player.SetLeftStickDirection(StickDirection.Up);
+                            }
+                            else
+                            {
+                                player.SetLeftStickDirection(StickDirection.None);
+                            }
                         }
-                        else if (state.ThumbSticks.Left.Y < -0.5f)
+
+                        if (capabilities.HasRightXThumbStick && capabilities.HasRightYThumbStick)
                         {
-                            player.SetLeftStickDirection(StickDirection.Down);
+                            if (state.ThumbSticks.Right.X < -0.5f)
+                            {
+                                player.SetRightStickDirection(StickDirection.Left);
+                            }
+                            else if (state.ThumbSticks.Right.X > 0.5f)
+                            {
+                                player.SetRightStickDirection(StickDirection.Right);
+                            }
+                            else if (state.ThumbSticks.Right.Y < -0.5f)
+                            {
+                                player.SetRightStickDirection(StickDirection.Down);
+                            }
+                            else if (state.ThumbSticks.Right.Y > 0.5f)
+                            {
+                                player.SetRightStickDirection(StickDirection.Up);
+                            }
+                            else
+                            {
+                                player.SetLeftStickDirection(StickDirection.None);
+                            }
                         }
-                        else if (state.ThumbSticks.Left.Y > 0.5f)
+
+                        if (i == 0)
                         {
-                            player.SetLeftStickDirection(StickDirection.Up);
+                            playerOneLeftStick = player.GetLeftStickDirection();
+                            playerOneRightStick = player.GetRightStickDirection();
                         }
                         else
                         {
-                            player.SetLeftStickDirection(StickDirection.None);
+                            playerTwoLeftStick = player.GetLeftStickDirection();
+                            playerTwoRightStick = player.GetRightStickDirection();
                         }
                     }
 
-                    if (capabilities.HasRightXThumbStick && capabilities.HasRightYThumbStick)
-                    {
-                        if (state.ThumbSticks.Right.X < -0.5f)
-                        {
-                            player.SetRightStickDirection(StickDirection.Left);
-                        }
-                        else if (state.ThumbSticks.Right.X > 0.5f)
-                        {
-                            player.SetRightStickDirection(StickDirection.Right);
-                        }
-                        else if (state.ThumbSticks.Right.Y < -0.5f)
-                        {
-                            player.SetRightStickDirection(StickDirection.Down);
-                        }
-                        else if (state.ThumbSticks.Right.Y > 0.5f)
-                        {
-                            player.SetRightStickDirection(StickDirection.Up);
-                        }
-                        else
-                        {
-                            player.SetLeftStickDirection(StickDirection.None);
-                        }
-                    }
-
-                    if (i == 0)
-                    {
-                        playerOneLeftStick = player.GetLeftStickDirection();
-                        playerOneRightStick = player.GetRightStickDirection();
-                    }
-                    else
-                    {
-                        playerTwoLeftStick = player.GetLeftStickDirection();
-                        playerTwoRightStick = player.GetRightStickDirection();
-                    }
                 }
 
-            }
+                var inputState = Keyboard.GetState();
 
-            var inputState = Keyboard.GetState();
-
-            if (introTurn)
-            {
-                //input:
-                player1CanInput = false;
-                player2CanInput = false;
-                dontDisplayOutcome = false;//might need to get reset to true after? see what it is initially
-
-
-
-
-
-                roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                if (roundTimer > 2000)
+                if (introTurn)
                 {
-                    //could make it false initially and then not have to do it here
-                    //also add in the changing player lights here
-                    if (!introAIAudioHasPlayed)
-                    {
-                        currentAI.SetPose(poses[13]);
-                        soundEffects[1].CreateInstance().Play();
-                        introAIAudioHasPlayed = true;
-                    }
+                    //input:
+                    player1CanInput = false;
+                    player2CanInput = false;
+                    dontDisplayOutcome = false;//might need to get reset to true after? see what it is initially
 
-                    if (roundTimer > 4000)
+
+
+
+
+                    roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    if (roundTimer > 2000)
                     {
-                        if (!introPlayer1AudioHasPlayed)
+                        //could make it false initially and then not have to do it here
+                        //also add in the changing player lights here
+                        if (!introAIAudioHasPlayed)
                         {
-                            player1.SetPose(poses[2]);
-                            soundEffects[2].CreateInstance().Play();
-                            introPlayer1AudioHasPlayed = true;
-                            player1.displayCircle = DisplayCircle.Lost;
-                            //player1.BooInstance.Play();//don't play these in intro because no audience
+                            currentAI.SetPose(poses[13]);
+                            soundEffects[1].CreateInstance().Play();
+                            introAIAudioHasPlayed = true;
                         }
 
-                        if (roundTimer > 4500)
+                        if (roundTimer > 4000)
                         {
-
-                            if (!introPlayer2AudioHasPlayed)
+                            if (!introPlayer1AudioHasPlayed)
                             {
-                                player2.SetPose(poses[9]);
-                                soundEffects[3].CreateInstance().Play();
-                                introPlayer2AudioHasPlayed = true;
-                                player2.displayCircle = DisplayCircle.Won;
-                                //player2.CheerInstance.Play();
+                                player1.SetPose(poses[2]);
+                                soundEffects[2].CreateInstance().Play();
+                                introPlayer1AudioHasPlayed = true;
+                                player1.displayCircle = DisplayCircle.Lost;
+                                //player1.BooInstance.Play();//don't play these in intro because no audience
                             }
 
-                            if (roundTimer > 7000)
+                            if (roundTimer > 4500)
                             {
-                                player1.SetPose(outComePoses[1]);
-                                player2.SetPose(outComePoses[2]);
-                                dontDisplayOutcome = true;
 
-
-                                blackScreenOpacity = (roundTimer - 7000) / 2000;
-                                blackScreenOpacity = MathF.Min(blackScreenOpacity, 1f);
-
-                                float newVolume = 1 - ((roundTimer - 7000) / 2000);//going down to 0 from 1
-                                newVolume *= songVolume;//set to that proportion of original sound
-
-                                MediaPlayer.Volume = MathF.Max(newVolume, 0f);//go down to no lower than 0
-
-                                // blackScreenOpacity += ((roundTimer - 7000)/10000);//
-                                //  blackScreenOpacity = MathF.Min(blackScreenOpacity, 1f);
-
-                                if (roundTimer > 10000)
+                                if (!introPlayer2AudioHasPlayed)
                                 {
-                                    MediaPlayer.Play(audienceBackgroundSong);
-                                    //MediaPlayer.Volume = .2f;//dunno if this is right volume or if it will sound good coming in all at once, may want to fade up to it
-                                    currentAI.SetPose(poses[12]);
-                                    player1.SetPose(poses[0]);
-                                    player2.SetPose(poses[6]);
-                                    player1.displayCircle = DisplayCircle.Tied;
-                                    player2.displayCircle = DisplayCircle.Tied;
-                                    //and now start the game
-                                    aiTurn = true;
-                                    playerTurn = false;
-                                    roundTimer = 0;
-                                    introTurn = false;
+                                    player2.SetPose(poses[9]);
+                                    soundEffects[3].CreateInstance().Play();
+                                    introPlayer2AudioHasPlayed = true;
+                                    player2.displayCircle = DisplayCircle.Won;
+                                    //player2.CheerInstance.Play();
+                                }
 
-                                    for (int i = 0; i < AIPlayerList.Count; i++)
+                                if (roundTimer > 7000)
+                                {
+                                    player1.SetPose(outComePoses[1]);
+                                    player2.SetPose(outComePoses[2]);
+                                    dontDisplayOutcome = true;
+
+
+                                    blackScreenOpacity = (roundTimer - 7000) / 2000;
+                                    blackScreenOpacity = MathF.Min(blackScreenOpacity, 1f);
+
+                                    float newVolume = 1 - ((roundTimer - 7000) / 2000);//going down to 0 from 1
+                                    newVolume *= songVolume;//set to that proportion of original sound
+
+                                    MediaPlayer.Volume = MathF.Max(newVolume, 0f);//go down to no lower than 0
+
+                                    // blackScreenOpacity += ((roundTimer - 7000)/10000);//
+                                    //  blackScreenOpacity = MathF.Min(blackScreenOpacity, 1f);
+
+                                    if (roundTimer > 10000)
                                     {
-                                        AIPlayerList[i].IncreaseXPosition(-40);
-                                    }
-                                    
-                                    //place first ring girl here
+                                        MediaPlayer.Play(audienceBackgroundSong);
+                                        //MediaPlayer.Volume = .2f;//dunno if this is right volume or if it will sound good coming in all at once, may want to fade up to it
+                                        currentAI.SetPose(poses[12]);
+                                        player1.SetPose(poses[0]);
+                                        player2.SetPose(poses[6]);
+                                        player1.displayCircle = DisplayCircle.Tied;
+                                        player2.displayCircle = DisplayCircle.Tied;
+                                        //and now start the game
+                                        aiTurn = true;
+                                        playerTurn = false;
+                                        roundTimer = 0;
+                                        introTurn = false;
 
-                                    soundEffects[5].CreateInstance().Play();
+                                        for (int i = 0; i < AIPlayerList.Count; i++)
+                                        {
+                                            AIPlayerList[i].IncreaseXPosition(-40);
+                                        }
+
+                                        //place first ring girl here
+
+                                        soundEffects[5].CreateInstance().Play();
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            //below is kind of awkward and not very safe, just a bunch of conditionals with hard coded indexes that incidentally correspond to poses
-            //along with hard coded input, is it worth it to do some input refactoring, so the keyboard input state is not directly exposed
-            //here but instead there's some layer of abstraction that handles input more elegantly? may not be worth doing for prototype
-            if (playerTurn)
-            {
-                currentTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (currentTime >= countDuration)
+                //below is kind of awkward and not very safe, just a bunch of conditionals with hard coded indexes that incidentally correspond to poses
+                //along with hard coded input, is it worth it to do some input refactoring, so the keyboard input state is not directly exposed
+                //here but instead there's some layer of abstraction that handles input more elegantly? may not be worth doing for prototype
+                if (playerTurn)
                 {
-                    counter--;
-                    currentTime -= countDuration;
-                }
-                if (counter < 0)
-                {
-                    //counter = counterStart;
-                    counter = 0;
-                    player1CanInput = true;
-                    //player1.BooInstance.Stop();
-                    //player1.CheerInstance.Stop();
-                }
+                    currentTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (currentTime >= countDuration)
+                    {
+                        counter--;
+                        currentTime -= countDuration;
+                    }
+                    if (counter < 0)
+                    {
+                        //counter = counterStart;
+                        counter = 0;
+                        player1CanInput = true;
+                        //player1.BooInstance.Stop();
+                        //player1.CheerInstance.Stop();
+                    }
 
-                if (player1.GetPosePattern().Count < currentAI.GetPosePattern().Count && player1CanInput)
-                {
-                    if (inputState.IsKeyDown(Keys.A) || ((playerOneLeftStick == StickDirection.Down) && (playerOneRightStick == StickDirection.Down)))
+                    if (player1.GetPosePattern().Count < currentAI.GetPosePattern().Count && player1CanInput)
                     {
-                        player1CanInput = PlayerPoseSelection(1, 1, 0, player1);
-                    }
-                    else if (inputState.IsKeyDown(Keys.S) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Up)))
-                    {
-                        player1CanInput = PlayerPoseSelection(4, 4, 3, player1);
-
-                    }
-                    else if (inputState.IsKeyDown(Keys.D) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Down)))
-                    {
-                        player1CanInput = PlayerPoseSelection(3, 3, 2, player1);
-                    }
-                    else if (inputState.IsKeyDown(Keys.F) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Right)))
-                    {
-                        player1CanInput = PlayerPoseSelection(2, 2, 1, player1);
-                    }
-                    else if (inputState.IsKeyDown(Keys.G) || ((playerOneLeftStick == StickDirection.Left) && (playerOneRightStick == StickDirection.Right)))
-                    {
-                        player1CanInput = PlayerPoseSelection(5, 5, 4, player1);
-                    }
-                }
-
-                currentTime2 += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (currentTime2 >= countDuration2)
-                {
-                    counter2--;
-                    currentTime2 -= countDuration2;
-                }
-                if (counter2 < 0)
-                {
-                    counter2 = 0;
-                    player2CanInput = true;
-                    //player2.BooInstance.Stop();
-                    //player2.CheerInstance.Stop();
-                }
-
-                if (player2.GetPosePattern().Count < currentAI.GetPosePattern().Count && player2CanInput)
-                {
-                    if (inputState.IsKeyDown(Keys.NumPad1) || ((playerTwoLeftStick == StickDirection.Down) && (playerTwoRightStick == StickDirection.Down)))
-                    {
-                        player2CanInput = PlayerPoseSelection(7, 7, 0, player2);
-                    }
-                    else if (inputState.IsKeyDown(Keys.NumPad2) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Up)))
-                    {
-                        player2CanInput = PlayerPoseSelection(10, 10, 3, player2);
-                    }
-                    else if (inputState.IsKeyDown(Keys.NumPad3) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Down)))
-                    {
-                        player2CanInput = PlayerPoseSelection(9, 9, 2, player2);
-                    }
-                    else if (inputState.IsKeyDown(Keys.NumPad4) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Right)))
-                    {
-                        player2CanInput = PlayerPoseSelection(8, 8, 1, player2);
-                    }
-                    else if (inputState.IsKeyDown(Keys.NumPad5) || ((playerTwoLeftStick == StickDirection.Left) && (playerTwoRightStick == StickDirection.Right)))
-                    {
-                        player2CanInput = PlayerPoseSelection(11, 11, 4, player2);
-                    }
-                }
-
-                if ((player1.GetPosePattern().Count >= currentAI.GetPosePattern().Count) && (player2.GetPosePattern().Count < currentAI.GetPosePattern().Count))
-                {
-                    playerOneFinishedFirst = true;
-                }
-                else if ((player2.GetPosePattern().Count >= currentAI.GetPosePattern().Count) && (player1.GetPosePattern().Count < currentAI.GetPosePattern().Count))
-                {
-                    playerOneFinishedFirst = false;
-                }
-
-
-                if ((player1.GetPosePattern().Count >= currentAI.GetPosePattern().Count) && (player2.GetPosePattern().Count >= currentAI.GetPosePattern().Count))
-                {
-                    roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                    thisRoundTallied = true;
-
-                    if (roundTimer > 3000)
-                    {
-                        dontDisplayOutcome = true;
-
-                        if (player1.GetScore() > player2.GetScore())
+                        if (inputState.IsKeyDown(Keys.A) || ((playerOneLeftStick == StickDirection.Down) && (playerOneRightStick == StickDirection.Down)))
                         {
-                            player1.SetPose(outComePoses[0]);
-                            player2.SetPose(outComePoses[3]);
+                            player1CanInput = PlayerPoseSelection(1, 1, 0, player1);
                         }
-                        else if (player2.GetScore() > player1.GetScore())
+                        else if (inputState.IsKeyDown(Keys.S) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Up)))
                         {
-                            player1.SetPose(outComePoses[1]);
-                            player2.SetPose(outComePoses[2]);
+                            player1CanInput = PlayerPoseSelection(4, 4, 3, player1);
+
                         }
-                        else
+                        else if (inputState.IsKeyDown(Keys.D) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Down)))
                         {
-                            if (playerOneFinishedFirst)
+                            player1CanInput = PlayerPoseSelection(3, 3, 2, player1);
+                        }
+                        else if (inputState.IsKeyDown(Keys.F) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Right)))
+                        {
+                            player1CanInput = PlayerPoseSelection(2, 2, 1, player1);
+                        }
+                        else if (inputState.IsKeyDown(Keys.G) || ((playerOneLeftStick == StickDirection.Left) && (playerOneRightStick == StickDirection.Right)))
+                        {
+                            player1CanInput = PlayerPoseSelection(5, 5, 4, player1);
+                        }
+                    }
+
+                    currentTime2 += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (currentTime2 >= countDuration2)
+                    {
+                        counter2--;
+                        currentTime2 -= countDuration2;
+                    }
+                    if (counter2 < 0)
+                    {
+                        counter2 = 0;
+                        player2CanInput = true;
+                        //player2.BooInstance.Stop();
+                        //player2.CheerInstance.Stop();
+                    }
+
+                    if (player2.GetPosePattern().Count < currentAI.GetPosePattern().Count && player2CanInput)
+                    {
+                        if (inputState.IsKeyDown(Keys.NumPad1) || ((playerTwoLeftStick == StickDirection.Down) && (playerTwoRightStick == StickDirection.Down)))
+                        {
+                            player2CanInput = PlayerPoseSelection(7, 7, 0, player2);
+                        }
+                        else if (inputState.IsKeyDown(Keys.NumPad2) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Up)))
+                        {
+                            player2CanInput = PlayerPoseSelection(10, 10, 3, player2);
+                        }
+                        else if (inputState.IsKeyDown(Keys.NumPad3) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Down)))
+                        {
+                            player2CanInput = PlayerPoseSelection(9, 9, 2, player2);
+                        }
+                        else if (inputState.IsKeyDown(Keys.NumPad4) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Right)))
+                        {
+                            player2CanInput = PlayerPoseSelection(8, 8, 1, player2);
+                        }
+                        else if (inputState.IsKeyDown(Keys.NumPad5) || ((playerTwoLeftStick == StickDirection.Left) && (playerTwoRightStick == StickDirection.Right)))
+                        {
+                            player2CanInput = PlayerPoseSelection(11, 11, 4, player2);
+                        }
+                    }
+
+                    if ((player1.GetPosePattern().Count >= currentAI.GetPosePattern().Count) && (player2.GetPosePattern().Count < currentAI.GetPosePattern().Count))
+                    {
+                        playerOneFinishedFirst = true;
+                    }
+                    else if ((player2.GetPosePattern().Count >= currentAI.GetPosePattern().Count) && (player1.GetPosePattern().Count < currentAI.GetPosePattern().Count))
+                    {
+                        playerOneFinishedFirst = false;
+                    }
+
+
+                    if ((player1.GetPosePattern().Count >= currentAI.GetPosePattern().Count) && (player2.GetPosePattern().Count >= currentAI.GetPosePattern().Count))
+                    {
+                        roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                        thisRoundTallied = true;
+
+                        if (roundTimer > 3000)
+                        {
+                            dontDisplayOutcome = true;
+
+                            if (player1.GetScore() > player2.GetScore())
                             {
                                 player1.SetPose(outComePoses[0]);
                                 player2.SetPose(outComePoses[3]);
                             }
-                            else
+                            else if (player2.GetScore() > player1.GetScore())
                             {
                                 player1.SetPose(outComePoses[1]);
                                 player2.SetPose(outComePoses[2]);
                             }
-                        }
+                            else
+                            {
+                                if (playerOneFinishedFirst)
+                                {
+                                    player1.SetPose(outComePoses[0]);
+                                    player2.SetPose(outComePoses[3]);
+                                }
+                                else
+                                {
+                                    player1.SetPose(outComePoses[1]);
+                                    player2.SetPose(outComePoses[2]);
+                                }
+                            }
 
 
 
-                        if (roundTimer > 5000)
-                        {
-                            dontDisplayOutcome = false;
-                            playerTurn = false;
-                            roundTimer = 0;
-                            NewRound();
+                            if (roundTimer > 5000)
+                            {
+                                dontDisplayOutcome = false;
+                                playerTurn = false;
+                                roundTimer = 0;
+                                NewRound();
+                            }
                         }
                     }
                 }
-            }
-            player1.GetPose().GetSprite().Update(gameTime, player1.GetPosition());
-            player2.GetPose().GetSprite().Update(gameTime, player2.GetPosition());
+                player1.GetPose().GetSprite().Update(gameTime, player1.GetPosition());
+                player2.GetPose().GetSprite().Update(gameTime, player2.GetPosition());
 
-            int changeXDisplay = 80;
-            for (int i = 0; i < 3; i++)
-            {
-                displayCircles[i].Update(gameTime, new Vector2(800 + changeXDisplay, 1000));
-            }
-            for (int i = 3; i < 6; i++)
-            {
-                displayCircles[i].Update(gameTime, new Vector2(1850 + changeXDisplay, 1000));
-            }
-
-            if (aiTurn)
-            {
-
-
-                dontDisplayOutcome = true;
-
-                if (numPosesDisplayedAI < currentAI.GetPosePattern().Count)
+                int changeXDisplay = 80;
+                for (int i = 0; i < 3; i++)
                 {
-                    currentTimeAI += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    displayCircles[i].Update(gameTime, new Vector2(800 + changeXDisplay, 1000));
+                }
+                for (int i = 3; i < 6; i++)
+                {
+                    displayCircles[i].Update(gameTime, new Vector2(1850 + changeXDisplay, 1000));
+                }
 
-                    //below only relevant on first ai turn
-                    if (blackScreenOpacity > 0)
+                if (aiTurn)
+                {
+
+
+                    dontDisplayOutcome = true;
+
+                    if (numPosesDisplayedAI < currentAI.GetPosePattern().Count)
+                    {
+                        currentTimeAI += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        //below only relevant on first ai turn
+                        if (blackScreenOpacity > 0)
+                        {
+                            roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+                            blackScreenOpacity = 1 - (roundTimer / 3000);
+                            blackScreenOpacity = MathF.Max(blackScreenOpacity, 0f);
+
+                            //instead do this decrease song volum during initial fade out and incraese crowd volume during fade in
+                            float newVolume = roundTimer / 3000;
+                            MediaPlayer.Volume = MathF.Min(newVolume, 0.4f);//whatever audience volume should be
+
+                            if (blackScreenOpacity <= 0)
+                            {
+                                //currentAI._AIIntroSound.CreateInstance().Play();//plays during his intro moves and doesn't seem necessary for first one
+                                //MediaPlayer.Play(audienceBackgroundSong);//so should only play once i hope
+                                //MediaPlayer.Volume = .2f;//dunno if this is right volume or if it will sound good coming in all at once, may want to fade up to it
+                            }
+                        }
+                        else
+                        {
+                            roundTimer = 0;
+
+                        }
+
+                        if (currentTimeAI >= countDurationAI)
+                        {
+                            counterAI--;
+                            currentTimeAI -= countDurationAI;
+                        }
+                        if (counterAI < 0)
+                        {
+                            Random rnd = new Random();
+                            int randomPoseIndexFromThisAisPoseNumberslist = rnd.Next(0, currentAI._poseValuesForThisAI.Count);
+                            int poseValueFromThisAisRandomSelection = currentAI._poseValuesForThisAI[randomPoseIndexFromThisAisPoseNumberslist];
+                            currentAI.SetPose(poses[poseValueFromThisAisRandomSelection]);
+                            currentAI.SetPosePattern(numPosesDisplayedAI, poses[poseValueFromThisAisRandomSelection]);
+                            soundEffects[randomPoseIndexFromThisAisPoseNumberslist].CreateInstance().Play();
+                            //then wait for the amount of time it takes to play the animation, which is gonna be framespeed * frame count
+                            float animationTime = currentAI.GetPosePattern()[numPosesDisplayedAI].GetSprite().GetAnimationTime();
+                            int roundedUp = (int)Math.Ceiling(animationTime);
+                            counterAI = 3;//roundedUp * 2;//set it to play that animation twice basically? well rounded upa nd doubled would be more than twice, maybe many times more
+                            numPosesDisplayedAI++;
+                        }
+
+                    }
+
+                    if (numPosesDisplayedAI >= currentAI.GetPosePattern().Count)
                     {
                         roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-                        blackScreenOpacity = 1 - (roundTimer / 3000);
-                        blackScreenOpacity = MathF.Max(blackScreenOpacity, 0f);
-
-                        //instead do this decrease song volum during initial fade out and incraese crowd volume during fade in
-                        float newVolume = roundTimer / 3000;
-                        MediaPlayer.Volume = MathF.Min(newVolume, 0.4f);//whatever audience volume should be
-                        
-                        if(blackScreenOpacity <= 0)
+                        if (roundTimer > 2000)
                         {
-                            //currentAI._AIIntroSound.CreateInstance().Play();//plays during his intro moves and doesn't seem necessary for first one
-                            //MediaPlayer.Play(audienceBackgroundSong);//so should only play once i hope
-                            //MediaPlayer.Volume = .2f;//dunno if this is right volume or if it will sound good coming in all at once, may want to fade up to it
+                            //should probably not do this upIndexCurrentAIIdlePoseIndex bit and instead have some kind of currentai.setidlepose method that can more reliable find this
+                            //and is done in one place
+                            int upIndexCurrentAIIdlePoseIndex = (matchNumber - 1) * 6 + 12;//changed to +6 instead of +12 at end, i think so has own and not next idle?
+                                                                                           //nope, that didn't work, so above needs some kind of exception if it's the last matchnumber? for matchnumbers:
+                                                                                           // 1: 12 //first ai idle
+                                                                                           // 2: 18 //second ai idle
+                                                                                           // 3: 24 //this causes out of index because right now through 23, but that's because no third ai right now, no third ai idle
+                            currentAI.SetPose(poses[upIndexCurrentAIIdlePoseIndex]);//just goes out of inex range when at end of 3rd match
+                            aiTurn = false;
+                            playerTurn = true;
+                            dontDisplayOutcome = false;
+                            roundTimer = 0;
                         }
-                    }
-                    else
-                    {
-                        roundTimer = 0;
-                       
-                    }
-
-                    if (currentTimeAI >= countDurationAI)
-                    {
-                        counterAI--;
-                        currentTimeAI -= countDurationAI;
-                    }
-                    if (counterAI < 0)
-                    {
-                        Random rnd = new Random();
-                        int randomPoseIndexFromThisAisPoseNumberslist = rnd.Next(0, currentAI._poseValuesForThisAI.Count);
-                        int poseValueFromThisAisRandomSelection = currentAI._poseValuesForThisAI[randomPoseIndexFromThisAisPoseNumberslist];
-                        currentAI.SetPose(poses[poseValueFromThisAisRandomSelection]);
-                        currentAI.SetPosePattern(numPosesDisplayedAI, poses[poseValueFromThisAisRandomSelection]);
-                        soundEffects[randomPoseIndexFromThisAisPoseNumberslist].CreateInstance().Play();
-                        //then wait for the amount of time it takes to play the animation, which is gonna be framespeed * frame count
-                        float animationTime = currentAI.GetPosePattern()[numPosesDisplayedAI].GetSprite().GetAnimationTime();
-                        int roundedUp = (int)Math.Ceiling(animationTime);
-                        counterAI = 3;//roundedUp * 2;//set it to play that animation twice basically? well rounded upa nd doubled would be more than twice, maybe many times more
-                        numPosesDisplayedAI++;
-                    }
-
-                }
-
-                if (numPosesDisplayedAI >= currentAI.GetPosePattern().Count)
-                {
-                    roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                    if (roundTimer > 2000)
-                    {
-                        //should probably not do this upIndexCurrentAIIdlePoseIndex bit and instead have some kind of currentai.setidlepose method that can more reliable find this
-                        //and is done in one place
-                        int upIndexCurrentAIIdlePoseIndex = (matchNumber - 1) * 6 + 12;//changed to +6 instead of +12 at end, i think so has own and not next idle?
-                        //nope, that didn't work, so above needs some kind of exception if it's the last matchnumber? for matchnumbers:
-                        // 1: 12 //first ai idle
-                        // 2: 18 //second ai idle
-                        // 3: 24 //this causes out of index because right now through 23, but that's because no third ai right now, no third ai idle
-                        currentAI.SetPose(poses[upIndexCurrentAIIdlePoseIndex]);//just goes out of inex range when at end of 3rd match
-                        aiTurn = false;
-                        playerTurn = true;
-                        dontDisplayOutcome = false;
-                        roundTimer = 0;
                     }
                 }
             }
-
             currentAI.GetPose().GetSprite().Update(gameTime, currentAI.GetPosition());
 
             base.Update(gameTime);
@@ -862,275 +892,279 @@ namespace WrestlerPose
 
             _spriteBatch.Begin(SpriteSortMode.FrontToBack, null);
 
-            if (!introTurn)
+            if (!gamestart)
+                foreach (var button in menuComponents)
+                    button.Draw(gameTime, _spriteBatch);
+            else
             {
-                _spriteBatch.Draw(
-                        _stageBackground,
-                        new Vector2(960, 540),
+                if (!introTurn)
+                {
+                    _spriteBatch.Draw(
+                            _stageBackground,
+                            new Vector2(960, 540),
+                            null,
+                            Color.White,
+                            0f,
+                            new Vector2(_stageBackground.Width / 2, _stageBackground.Height / 2),
+                            new Vector2(2.4f, 2.4f),
+                            SpriteEffects.None,
+                            0f
+                            );
+                }
+                else
+                {
+                    _spriteBatch.Draw(
+                       _stageBackgroundIntro,
+                       new Vector2(960, 540),
+                       null,
+                       Color.White,
+                       0f,
+                       new Vector2(_stageBackgroundIntro.Width / 2, _stageBackgroundIntro.Height / 2),
+                       new Vector2(2.4f, 2.4f),
+                       SpriteEffects.None,
+                       0f
+                       );
+                }
+
+
+
+                player1.GetPose().GetSprite().Draw(_spriteBatch);
+                player2.GetPose().GetSprite().Draw(_spriteBatch);
+                currentAI.GetPose().GetSprite().Draw(_spriteBatch);
+
+                if (!dontDisplayOutcome)
+                {
+                    switch (player1.displayCircle)
+                    {
+                        case DisplayCircle.Tied:
+                            displayCircles[0].Draw(_spriteBatch);
+                            break;
+                        case DisplayCircle.Won:
+                            displayCircles[1].Draw(_spriteBatch);
+                            break;
+                        case DisplayCircle.Lost:
+                            displayCircles[2].Draw(_spriteBatch);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    switch (player2.displayCircle)
+                    {
+                        case DisplayCircle.Tied:
+                            displayCircles[3].Draw(_spriteBatch);
+                            break;
+                        case DisplayCircle.Won:
+                            displayCircles[4].Draw(_spriteBatch);
+                            break;
+                        case DisplayCircle.Lost:
+                            displayCircles[5].Draw(_spriteBatch);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (!introTurn)
+                {
+                    _spriteBatch.DrawString(_countDownPlayerOneMove, counter.ToString(), new Vector2(200, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+                    _spriteBatch.DrawString(_countDownPlayerTwoMove, counter2.ToString(), new Vector2(1500, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+                    _spriteBatch.DrawString(_countDownAI, counterAI.ToString(), new Vector2(930, 1), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+                    _spriteBatch.DrawString(_playerOneMatchScore, "Player 1 Match Score:  " + player1.matchScore, new Vector2(200, 100), Color.DarkRed);
+                    _spriteBatch.DrawString(_playerTwoMatchScore, "Player 2 Match Score:  " + player2.matchScore, new Vector2(1500, 100), Color.DarkRed);
+                    _spriteBatch.DrawString(_playerOneRoundScore, "Player 1 Round Score:  " + player1.roundScore, new Vector2(200, 150), Color.LightSalmon);
+                    _spriteBatch.DrawString(_playerTwoRoundScore, "Player 2 Round Score:  " + player2.roundScore, new Vector2(1500, 150), Color.LightSalmon);
+                    _spriteBatch.DrawString(_playerOneScore, "Pose Score:  " + player1.GetScore(), new Vector2(260, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+                    _spriteBatch.DrawString(_playerTwoScore, "Pose Score:  " + player2.GetScore(), new Vector2(1450, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+                    _spriteBatch.DrawString(_match, "Match: " + matchNumber, new Vector2(100, 50), Color.Red);
+                    _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
+                    //_spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(840, 35), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
+
+
+                }
+
+                int upIndexCurrentAIIdlePoseIndexForRingGirl = (matchNumber - 1) * 6 + 12;
+
+                if (aiTurn && (roundNumber == 1) && (currentAI.GetPose() == poses[upIndexCurrentAIIdlePoseIndexForRingGirl]))//and round number 0 and current ai pose is idle?
+                {
+                    _spriteBatch.Draw(
+                          ringGirlImages[matchNumber - 1],
+                          new Vector2(950, 680),
+                          null,
+                          Color.White,
+                          0f,
+                          new Vector2(ringGirlImages[matchNumber - 1].Width / 2, ringGirlImages[matchNumber - 1].Height / 2),
+                          2.2f,
+                          SpriteEffects.None,
+                          0.99f
+                          );
+                }
+                else if (!introTurn)
+                {
+                    _spriteBatch.Draw(
+                          _allPosesImage,
+                          new Vector2(950, 850),
+                          null,
+                          Color.White,
+                          0f,
+                          new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
+                          0.75f,
+                          SpriteEffects.None,
+                          0f
+                          );
+                }
+
+
+
+
+                //if (!String.IsNullOrWhiteSpace(overallWinnerString))
+                //{
+                //    _spriteBatch.DrawString(_overAllWinner, "Overall Winner: " + overallWinnerString, new Vector2(850, 150), Color.Fuchsia, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
+                //}
+
+                int picSpacing = 110;
+                int deltaLeftForPosePatternDisplayByMatch = (matchNumber - 1) * 55;
+
+                for (int i = 0; i < 5; i++)
+                {
+                    if (i >= player1.GetPosePattern().Count)
+                    {
+                        continue;
+                    }
+
+                    int poseNumberPlayerOne = (int)player1.GetPosePattern()[i].GetPoseName() - 1;
+
+                    _spriteBatch.Draw(
+                        playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne],
+                        new Vector2(300 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
                         null,
                         Color.White,
                         0f,
-                        new Vector2(_stageBackground.Width / 2, _stageBackground.Height / 2),
-                        new Vector2(2.4f, 2.4f),
+                        new Vector2(playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Height / 2),
+                        0.9f,
                         SpriteEffects.None,
                         0f
                         );
-            }
-            else
-            {
-                _spriteBatch.Draw(
-                   _stageBackgroundIntro,
-                   new Vector2(960, 540),
-                   null,
-                   Color.White,
-                   0f,
-                   new Vector2(_stageBackgroundIntro.Width / 2, _stageBackgroundIntro.Height / 2),
-                   new Vector2(2.4f, 2.4f),
-                   SpriteEffects.None,
-                   0f
-                   );
-            }
-
-
-
-            player1.GetPose().GetSprite().Draw(_spriteBatch);
-            player2.GetPose().GetSprite().Draw(_spriteBatch);
-            currentAI.GetPose().GetSprite().Draw(_spriteBatch);
-
-            if (!dontDisplayOutcome)
-            {
-                switch (player1.displayCircle)
-                {
-                    case DisplayCircle.Tied:
-                        displayCircles[0].Draw(_spriteBatch);
-                        break;
-                    case DisplayCircle.Won:
-                        displayCircles[1].Draw(_spriteBatch);
-                        break;
-                    case DisplayCircle.Lost:
-                        displayCircles[2].Draw(_spriteBatch);
-                        break;
-                    default:
-                        break;
                 }
 
-                switch (player2.displayCircle)
+                for (int i = 0; i < 5; i++)
                 {
-                    case DisplayCircle.Tied:
-                        displayCircles[3].Draw(_spriteBatch);
-                        break;
-                    case DisplayCircle.Won:
-                        displayCircles[4].Draw(_spriteBatch);
-                        break;
-                    case DisplayCircle.Lost:
-                        displayCircles[5].Draw(_spriteBatch);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (!introTurn)
-            {
-                _spriteBatch.DrawString(_countDownPlayerOneMove, counter.ToString(), new Vector2(200, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-                _spriteBatch.DrawString(_countDownPlayerTwoMove, counter2.ToString(), new Vector2(1500, 10), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-                _spriteBatch.DrawString(_countDownAI, counterAI.ToString(), new Vector2(930, 1), Color.Yellow, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-                _spriteBatch.DrawString(_playerOneMatchScore, "Player 1 Match Score:  " + player1.matchScore, new Vector2(200, 100), Color.DarkRed);
-                _spriteBatch.DrawString(_playerTwoMatchScore, "Player 2 Match Score:  " + player2.matchScore, new Vector2(1500, 100), Color.DarkRed);
-                _spriteBatch.DrawString(_playerOneRoundScore, "Player 1 Round Score:  " + player1.roundScore, new Vector2(200, 150), Color.LightSalmon);
-                _spriteBatch.DrawString(_playerTwoRoundScore, "Player 2 Round Score:  " + player2.roundScore, new Vector2(1500, 150), Color.LightSalmon);
-                _spriteBatch.DrawString(_playerOneScore, "Pose Score:  " + player1.GetScore(), new Vector2(260, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
-                _spriteBatch.DrawString(_playerTwoScore, "Pose Score:  " + player2.GetScore(), new Vector2(1450, 200), Color.Yellow, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
-                _spriteBatch.DrawString(_match, "Match: " + matchNumber, new Vector2(100, 50), Color.Red);
-                _spriteBatch.DrawString(_round, "Round: " + roundNumber, new Vector2(100, 100), Color.Orange);
-                //_spriteBatch.DrawString(_title, "Pose'em! ", new Vector2(840, 35), Color.Firebrick, 0, Vector2.Zero, 3, new SpriteEffects(), 1);
-
-              
-            }
-
-            int upIndexCurrentAIIdlePoseIndexForRingGirl = (matchNumber - 1) * 6 + 12;
-
-            if (aiTurn && (roundNumber == 1) && (currentAI.GetPose() == poses[upIndexCurrentAIIdlePoseIndexForRingGirl]))//and round number 0 and current ai pose is idle?
-            {
-                _spriteBatch.Draw(
-                      ringGirlImages[matchNumber - 1],
-                      new Vector2(950, 680),
-                      null,
-                      Color.White,
-                      0f,
-                      new Vector2(ringGirlImages[matchNumber - 1].Width / 2, ringGirlImages[matchNumber - 1].Height / 2),
-                      2.2f,
-                      SpriteEffects.None,
-                      0.99f
-                      );
-            }
-            else if (!introTurn)
-            {
-                _spriteBatch.Draw(
-                      _allPosesImage,
-                      new Vector2(950, 850),
-                      null,
-                      Color.White,
-                      0f,
-                      new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
-                      0.75f,
-                      SpriteEffects.None,
-                      0f
-                      );
-            }
-
-           
-
-
-            //if (!String.IsNullOrWhiteSpace(overallWinnerString))
-            //{
-            //    _spriteBatch.DrawString(_overAllWinner, "Overall Winner: " + overallWinnerString, new Vector2(850, 150), Color.Fuchsia, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
-            //}
-
-            int picSpacing = 110;
-            int deltaLeftForPosePatternDisplayByMatch = (matchNumber - 1) * 55;
-
-            for (int i = 0; i < 5; i++)
-            {
-                if (i >= player1.GetPosePattern().Count)
-                {
-                    continue;
-                }
-
-                int poseNumberPlayerOne = (int)player1.GetPosePattern()[i].GetPoseName() - 1;
-
-                _spriteBatch.Draw(
-                    playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne],
-                    new Vector2(300 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
-                    null,
-                    Color.White,
-                    0f,
-                    new Vector2(playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Height / 2),
-                    0.9f,
-                    SpriteEffects.None,
-                    0f
-                    );
-            }
-
-            for (int i = 0; i < 5; i++)
-            {
-                if (i >= player2.GetPosePattern().Count)
-                {
-                    continue;
-                }
-                int poseNumberPlayerTwo = (int)player2.GetPosePattern()[i].GetPoseName() - 1;
-
-                _spriteBatch.Draw(
-                    playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo],
-                    new Vector2(1385 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
-                    null,
-                    Color.White,
-
-                    0f,
-                    new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Height / 2),
-                    0.9f,
-                    SpriteEffects.None,
-                    0f
-
-                    );
-            }
-
-            ///test section delte later
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    deltaLeftForPosePatternDisplayByMatch = (3 - 1) * 55;
-            //
-            //    _spriteBatch.Draw(
-            //        playerOneSelectedPoseSpritesToChooseFrom[0],
-            //        new Vector2(300 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
-            //        null,
-            //        Color.White,
-            //        0f,
-            //        new Vector2(playerOneSelectedPoseSpritesToChooseFrom[0].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[0].Height / 2),
-            //        0.9f,
-            //        SpriteEffects.None,
-            //        0f
-            //        );
-            //}
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    deltaLeftForPosePatternDisplayByMatch = (3 - 1) * 55;
-            //
-            //    _spriteBatch.Draw(
-            //        playerTwoSelectedPoseSpritesToChooseFrom[0],
-            //        new Vector2(1385 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
-            //        null,
-            //        Color.White,
-            //
-            //        0f,
-            //        new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[0].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[0].Height / 2),
-            //        0.9f,
-            //        SpriteEffects.None,
-            //        0f
-            //
-            //        );
-            //}
-            ///test section delete later
-
-
-            //blackscreenbackground, opacity change over time
-            _spriteBatch.Draw(
-                  _blackScreenBackground,
-                  new Vector2(960, 540),
-                  null,
-                  Color.White * blackScreenOpacity,
-                  0f,
-                  new Vector2(_blackScreenBackground.Width / 2, _blackScreenBackground.Height / 2),
-                  new Vector2(1f, 1f),
-                  SpriteEffects.None,
-                  1f
-                  );
-
-
-            float lightsScale = 1.6f;
-            float lightsOpacity = .7f;
-            if (aiTurn)
-            {
-                if(aiTurn && (roundNumber == 1) && (currentAI.GetPose() == poses[upIndexCurrentAIIdlePoseIndexForRingGirl]))
-                {
-                    DisplayLights(_ringGirlLightsBackground, lightsOpacity, lightsScale);
-                }
-                else
-                {
-                    DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale);
-                }
-
-            }
-            else if (playerTurn && !dontDisplayOutcome)
-            {
-                DisplayLights(_playerLightsBackground, lightsOpacity, lightsScale);
-            }
-            else if (dontDisplayOutcome)
-            {
-                if (introTurn)
-                {
-                    DisplayLights(_playerTwoLightsBackground, lightsOpacity, lightsScale);
-                }
-                else
-                {
-                    Player winner = WinningPlayer();
-                    if (winner == player1)
+                    if (i >= player2.GetPosePattern().Count)
                     {
-                        DisplayLights(_playerOneLightsBackground, lightsOpacity, lightsScale);
+                        continue;
+                    }
+                    int poseNumberPlayerTwo = (int)player2.GetPosePattern()[i].GetPoseName() - 1;
+
+                    _spriteBatch.Draw(
+                        playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo],
+                        new Vector2(1385 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
+                        null,
+                        Color.White,
+
+                        0f,
+                        new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Height / 2),
+                        0.9f,
+                        SpriteEffects.None,
+                        0f
+
+                        );
+                }
+
+                ///test section delte later
+                //for (int i = 0; i < 5; i++)
+                //{
+                //    deltaLeftForPosePatternDisplayByMatch = (3 - 1) * 55;
+                //
+                //    _spriteBatch.Draw(
+                //        playerOneSelectedPoseSpritesToChooseFrom[0],
+                //        new Vector2(300 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
+                //        null,
+                //        Color.White,
+                //        0f,
+                //        new Vector2(playerOneSelectedPoseSpritesToChooseFrom[0].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[0].Height / 2),
+                //        0.9f,
+                //        SpriteEffects.None,
+                //        0f
+                //        );
+                //}
+                //for (int i = 0; i < 5; i++)
+                //{
+                //    deltaLeftForPosePatternDisplayByMatch = (3 - 1) * 55;
+                //
+                //    _spriteBatch.Draw(
+                //        playerTwoSelectedPoseSpritesToChooseFrom[0],
+                //        new Vector2(1385 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch, 300),
+                //        null,
+                //        Color.White,
+                //
+                //        0f,
+                //        new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[0].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[0].Height / 2),
+                //        0.9f,
+                //        SpriteEffects.None,
+                //        0f
+                //
+                //        );
+                //}
+                ///test section delete later
+
+
+                //blackscreenbackground, opacity change over time
+                _spriteBatch.Draw(
+                      _blackScreenBackground,
+                      new Vector2(960, 540),
+                      null,
+                      Color.White * blackScreenOpacity,
+                      0f,
+                      new Vector2(_blackScreenBackground.Width / 2, _blackScreenBackground.Height / 2),
+                      new Vector2(1f, 1f),
+                      SpriteEffects.None,
+                      1f
+                      );
+
+
+                float lightsScale = 1.6f;
+                float lightsOpacity = .7f;
+                if (aiTurn)
+                {
+                    if (aiTurn && (roundNumber == 1) && (currentAI.GetPose() == poses[upIndexCurrentAIIdlePoseIndexForRingGirl]))
+                    {
+                        DisplayLights(_ringGirlLightsBackground, lightsOpacity, lightsScale);
                     }
                     else
                     {
+                        DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale);
+                    }
+
+                }
+                else if (playerTurn && !dontDisplayOutcome)
+                {
+                    DisplayLights(_playerLightsBackground, lightsOpacity, lightsScale);
+                }
+                else if (dontDisplayOutcome)
+                {
+                    if (introTurn)
+                    {
                         DisplayLights(_playerTwoLightsBackground, lightsOpacity, lightsScale);
                     }
+                    else
+                    {
+                        Player winner = WinningPlayer();
+                        if (winner == player1)
+                        {
+                            DisplayLights(_playerOneLightsBackground, lightsOpacity, lightsScale);
+                        }
+                        else
+                        {
+                            DisplayLights(_playerTwoLightsBackground, lightsOpacity, lightsScale);
+                        }
+                    }
+
                 }
+                else
+                {
 
+                }
             }
-            else
-            {
-
-            }
-
-
             _spriteBatch.End();
 
             base.Draw(gameTime);
@@ -1291,6 +1325,17 @@ namespace WrestlerPose
             player1.matchScore = 0;
             player2.matchScore = 0;
 
+        }
+
+        private void PlayButton_Click(object sender, System.EventArgs e)
+        {
+            gamestart = true;
+            
+            ResetGame();
+        }
+        private void QuitButton_Click(object sender, System.EventArgs e)
+        {
+            Exit();
         }
     }
 
