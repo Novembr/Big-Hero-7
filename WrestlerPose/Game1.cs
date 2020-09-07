@@ -471,8 +471,8 @@ namespace WrestlerPose
             AIPlayerList = new List<Player>
             {
                 //the 3rd parameter is the idle parameter for that ai, we now have 2, and idle for alt and bear are 12 and 18 respectively
-                new Player("luchadorAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[13], poses[13] }, new List<int>{ 13, 15, 17}, AIIntroSounds[0]),
-                new Player("bearAI", AIPosition, poses[18], new List<Pose>(3) { poses[19], poses[19], poses[19], poses[19] }, new List<int>{ 19, 20, 21, 22}, AIIntroSounds[1]),
+                new Player("luchadorAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[13], poses[13] }, new List<int>{ 13, 14, 15, 16}, AIIntroSounds[0]),
+                new Player("bearAI", AIPosition, poses[18], new List<Pose>(3) { poses[19], poses[19], poses[19], poses[19] }, new List<int>{ 19, 20, 21, 22, 23}, AIIntroSounds[1]),
                 new Player("raAI", AIPosition, poses[24], new List<Pose>(4) { poses[25], poses[25], poses[25], poses[25], poses[25] }, new List<int>{ 25, 26, 27, 28, 29}, AIIntroSounds[2]),
                 //new Player("raAI", AIPosition, poses[30], new List<Pose>(5) { poses[31], poses[31], poses[31], poses[31], poses[31] }, new List<int>{ 31, 32, 33, 34, 35}, AIIntroSounds[2]),
             };
@@ -1382,7 +1382,7 @@ namespace WrestlerPose
             //    _spriteBatch.DrawString(_overAllWinner, "Overall Winner: " + overallWinnerString, new Vector2(850, 150), Color.Fuchsia, 0, Vector2.Zero, 2, new SpriteEffects(), 1);
             //}
 
-            int picSpacing = 140;
+            int picSpacing = 120;
             int deltaLeftForPosePatternDisplayByMatch = (matchNumber - 1) * 55;
             int deltaUp = 100;
 
@@ -1419,7 +1419,7 @@ namespace WrestlerPose
                         color,
                         0f,
                         new Vector2(_ringWhite.Width / 2, _ringWhite.Height / 2),
-                        0.9f,
+                        0.7f,
                         SpriteEffects.None,
                         0.99f
                         );
@@ -1456,7 +1456,7 @@ namespace WrestlerPose
                         color,
                         0f,
                         new Vector2(_ringWhite.Width / 2, _ringWhite.Height / 2),
-                        0.9f,
+                        0.7f,
                         SpriteEffects.None,
                         0.99f
                         );
@@ -1481,7 +1481,7 @@ namespace WrestlerPose
                     Color.White,
                     0f,
                     new Vector2(playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Height / 2),
-                    0.9f,
+                    0.7f,
                     SpriteEffects.None,
                     1f
                     );
@@ -1503,7 +1503,7 @@ namespace WrestlerPose
 
                     0f,
                     new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Height / 2),
-                    0.9f,
+                    0.7f,
                     SpriteEffects.None,
                     1f
 
