@@ -559,6 +559,18 @@
 /processorParam:Quality=Best
 /build:cheer_2.wav
 
+#begin confettiNew.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:confettiNew.png
+
 #begin confettispritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -818,6 +830,18 @@
 /processorParam:TextureFormat=Color
 /build:losealt.png
 
+#begin losepix.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:losepix.png
+
 #begin main_stage_plane.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -897,6 +921,18 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:OverallWinner.spritefont
+
+#begin p1_and_p2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:p1_and_p2.png
 
 #begin playerlights.png
 /importer:TextureImporter
@@ -1447,6 +1483,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:winalt.png
+
+#begin winpix.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:winpix.png
 
 #begin Wrestler1.png
 /importer:TextureImporter

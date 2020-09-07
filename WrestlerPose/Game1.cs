@@ -126,6 +126,8 @@ namespace WrestlerPose
         private Texture2D _playerTwoLightsBackground;
         private Texture2D _aiLightsBackground;
         private Texture2D _ringGirlLightsBackground;
+        private Texture2D _playerNumbersBackground;
+
 
         private Texture2D _GreenSignLeft;
         private Texture2D _GreenSignRight;
@@ -222,14 +224,17 @@ namespace WrestlerPose
             _allPosesImage = Content.Load<Texture2D>("posechart1");
             _stageBackground = Content.Load<Texture2D>("main_stage_plane_audience");
             _stageBackgroundIntro = Content.Load<Texture2D>("main_stage_plane");
+            _playerNumbersBackground = Content.Load<Texture2D>("p1_and_p2");
             _scoreBoard = Content.Load<Texture2D>("scoreboardSingle");
             _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
             _aiLightsBackground = Content.Load<Texture2D>("ailights");
             _ringGirlLightsBackground = Content.Load<Texture2D>("ringgirllight");
 
             _GreenSignLeft = Content.Load<Texture2D>("Fail_Signs/Win_Signs");
+
             _GreenSignRight = Content.Load<Texture2D>("Fail_Signs/Win_Signs");
             _RedSignLeft = Content.Load<Texture2D>("Fail_Signs/Fail_Signs");
+
             _RedSignRight = Content.Load<Texture2D>("Fail_Signs/Fail_Signs");
 
             _blankOnScoreBoard = Content.Load<Texture2D>("0");
@@ -462,9 +467,9 @@ namespace WrestlerPose
             AIPlayerList = new List<Player>
             {
                 //the 3rd parameter is the idle parameter for that ai, we now have 2, and idle for alt and bear are 12 and 18 respectively
-                new Player("luchadorAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[13], poses[13] }, new List<int>{ 13, 14, 15}, AIIntroSounds[0]),
-                new Player("bearAI", AIPosition, poses[18], new List<Pose>(3) { poses[19], poses[19], poses[19] }, new List<int>{ 19, 20, 21, 22}, AIIntroSounds[1]),
-                new Player("raAI", AIPosition, poses[24], new List<Pose>(4) { poses[25], poses[25], poses[25], poses[25] }, new List<int>{ 25, 26, 27, 28, 29}, AIIntroSounds[2]),
+                new Player("luchadorAI", AIPosition, poses[12], new List<Pose>(3) { poses[13], poses[13], poses[13] }, new List<int>{ 13, 15, 17}, AIIntroSounds[0]),
+                new Player("bearAI", AIPosition, poses[18], new List<Pose>(3) { poses[19], poses[19], poses[19], poses[19] }, new List<int>{ 19, 20, 21, 22}, AIIntroSounds[1]),
+                new Player("raAI", AIPosition, poses[24], new List<Pose>(4) { poses[25], poses[25], poses[25], poses[25], poses[25] }, new List<int>{ 25, 26, 27, 28, 29}, AIIntroSounds[2]),
                 //new Player("raAI", AIPosition, poses[30], new List<Pose>(5) { poses[31], poses[31], poses[31], poses[31], poses[31] }, new List<int>{ 31, 32, 33, 34, 35}, AIIntroSounds[2]),
             };
 
@@ -1128,6 +1133,18 @@ namespace WrestlerPose
                         SpriteEffects.None,
                         0f
                         );
+
+                _spriteBatch.Draw(
+                  _playerNumbersBackground,
+                  new Vector2(960, 540),
+                  null,
+                  Color.White,
+                  0f,
+                  new Vector2(_playerNumbersBackground.Width / 2, _playerNumbersBackground.Height / 2),
+                  new Vector2(2.4f, 2.4f),
+                  SpriteEffects.None,
+                  1f
+                  );
             }
             else
             {
@@ -1204,6 +1221,30 @@ namespace WrestlerPose
             //confettiSprites[0].Draw(_spriteBatch);
             //confettiSprites[1].Draw(_spriteBatch);
 
+          //_spriteBatch.Draw(
+          //           _GreenSignRight,
+          //           new Vector2(1650, 470),
+          //           null,
+          //           Color.White,
+          //           0f,
+          //           new Vector2(_GreenSignRight.Width / 2, _GreenSignRight.Height / 2),
+          //           new Vector2(1.8f, 1.8f),
+          //           SpriteEffects.None,
+          //           0.8f
+          //           );
+          //
+          // _spriteBatch.Draw(
+          //           _RedSignLeft,
+          //           new Vector2(280, 470),
+          //           null,
+          //           Color.White,
+          //           0f,
+          //           new Vector2(_RedSignLeft.Width / 2, _RedSignLeft.Height / 2),
+          //           new Vector2(1.8f, 1.8f),
+          //           SpriteEffects.None,
+          //           0.8f
+          //           );
+            
             //now only display this i guess when? when do the cheering sounds go off?
             if (player1.CrowdMoving)
             {
@@ -1320,8 +1361,13 @@ namespace WrestlerPose
                       new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
                       0.75f,
                       SpriteEffects.None,
-                      0f
+                      .94f//layer depth
                       );
+            }
+            else
+            {
+                //does it go in here? for some reason can go in here after 4th pose but not after 5th and stop displying all poses image
+                int test = 5;
             }
 
 
@@ -1674,6 +1720,10 @@ namespace WrestlerPose
             matchNumber = 1;
             roundNumber = 1;
             currentAI = AIPlayerList[0];
+
+            //to play warrior cry for second time luchador comes up?
+            currentAI._AIIntroSound.CreateInstance().Play();
+
             player1.SetScore(0);
             player2.SetScore(0);
             player1.roundScore = 0;
