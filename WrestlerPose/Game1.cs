@@ -1042,7 +1042,7 @@ namespace WrestlerPose
                               new Vector2(_scoreBoard.Width / 2, _scoreBoard.Height / 2),
                               new Vector2(1.6f, 1.6f),
                               SpriteEffects.None,
-                              0.7f
+                              0.4f
                               );
 
                 }
@@ -1210,13 +1210,19 @@ namespace WrestlerPose
                 for (int i = 0; i < 3; i++)
                 {
                     Texture2D outcomeDisplay = RoundOutcomeTexturesForJumboTron[player1.RoundOutcomes[i]];
-                    DrawRoundScores(outcomeDisplay, 740, 65 + i * 130);
+                    if(player1.RoundOutcomes[i] != 0)
+                    {
+                        DrawRoundScores(outcomeDisplay, 740, 65 + i * 130);
+                    }
                 }
 
                 for (int i = 0; i < 3; i++)
                 {
                     Texture2D outcomeDisplay = RoundOutcomeTexturesForJumboTron[player2.RoundOutcomes[i]];
-                    DrawRoundScores(outcomeDisplay, 1286, 65 + i * 130);
+                    if (player2.RoundOutcomes[i] != 0)
+                    {
+                        DrawRoundScores(outcomeDisplay, 1286, 65 + i * 130);
+                    }
                 }
             }
 
