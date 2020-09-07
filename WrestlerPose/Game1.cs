@@ -1147,7 +1147,7 @@ namespace WrestlerPose
                   new Vector2(_playerNumbersBackground.Width / 2, _playerNumbersBackground.Height / 2),
                   new Vector2(2.4f, 2.4f),
                   SpriteEffects.None,
-                  1f
+                  0.98f
                   );
             }
             else
@@ -1384,8 +1384,9 @@ namespace WrestlerPose
 
             int picSpacing = 140;
             int deltaLeftForPosePatternDisplayByMatch = (matchNumber - 1) * 55;
+            int deltaUp = 100;
 
-            if (!introTurn)
+            if (!introTurn && !aiTurn)
             {
                 for (int i = 0; i < 5; i++)
                 {
@@ -1413,7 +1414,7 @@ namespace WrestlerPose
 
                     _spriteBatch.Draw(
                         _ringWhite,
-                        new Vector2(100, 540 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+                        new Vector2(120, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                         null,
                         color,
                         0f,
@@ -1450,7 +1451,7 @@ namespace WrestlerPose
 
                     _spriteBatch.Draw(
                         _ringWhite,
-                        new Vector2(1770, 540 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+                        new Vector2(1770, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                         null,
                         color,
                         0f,
@@ -1475,7 +1476,7 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne],
-                    new Vector2(100, 540 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+                    new Vector2(120, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                     null,
                     Color.White,
                     0f,
@@ -1496,7 +1497,7 @@ namespace WrestlerPose
 
                 _spriteBatch.Draw(
                     playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo],
-                    new Vector2(1770, 540 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+                    new Vector2(1770, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                     null,
                     Color.White,
 
