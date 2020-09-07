@@ -127,6 +127,8 @@ namespace WrestlerPose
         private Texture2D _aiLightsBackground;
         private Texture2D _ringGirlLightsBackground;
         private Texture2D _playerNumbersBackground;
+        private Texture2D _ringWhite;
+
 
 
         private Texture2D _GreenSignLeft;
@@ -229,6 +231,8 @@ namespace WrestlerPose
             _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
             _aiLightsBackground = Content.Load<Texture2D>("ailights");
             _ringGirlLightsBackground = Content.Load<Texture2D>("ringgirllight");
+            _ringWhite = Content.Load<Texture2D>("ringWhiteChunky");
+
 
             _GreenSignLeft = Content.Load<Texture2D>("Fail_Signs/Win_Signs");
 
@@ -1221,30 +1225,30 @@ namespace WrestlerPose
             //confettiSprites[0].Draw(_spriteBatch);
             //confettiSprites[1].Draw(_spriteBatch);
 
-          //_spriteBatch.Draw(
-          //           _GreenSignRight,
-          //           new Vector2(1650, 470),
-          //           null,
-          //           Color.White,
-          //           0f,
-          //           new Vector2(_GreenSignRight.Width / 2, _GreenSignRight.Height / 2),
-          //           new Vector2(1.8f, 1.8f),
-          //           SpriteEffects.None,
-          //           0.8f
-          //           );
-          //
-          // _spriteBatch.Draw(
-          //           _RedSignLeft,
-          //           new Vector2(280, 470),
-          //           null,
-          //           Color.White,
-          //           0f,
-          //           new Vector2(_RedSignLeft.Width / 2, _RedSignLeft.Height / 2),
-          //           new Vector2(1.8f, 1.8f),
-          //           SpriteEffects.None,
-          //           0.8f
-          //           );
-            
+            //_spriteBatch.Draw(
+            //           _GreenSignRight,
+            //           new Vector2(1650, 470),
+            //           null,
+            //           Color.White,
+            //           0f,
+            //           new Vector2(_GreenSignRight.Width / 2, _GreenSignRight.Height / 2),
+            //           new Vector2(1.8f, 1.8f),
+            //           SpriteEffects.None,
+            //           0.8f
+            //           );
+            //
+            // _spriteBatch.Draw(
+            //           _RedSignLeft,
+            //           new Vector2(280, 470),
+            //           null,
+            //           Color.White,
+            //           0f,
+            //           new Vector2(_RedSignLeft.Width / 2, _RedSignLeft.Height / 2),
+            //           new Vector2(1.8f, 1.8f),
+            //           SpriteEffects.None,
+            //           0.8f
+            //           );
+
             //now only display this i guess when? when do the cheering sounds go off?
             if (player1.CrowdMoving)
             {
@@ -1381,8 +1385,87 @@ namespace WrestlerPose
             int picSpacing = 140;
             int deltaLeftForPosePatternDisplayByMatch = (matchNumber - 1) * 55;
 
+            if (!introTurn)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    if (i >= currentAI.GetPosePattern().Count)
+                    {
+                        continue;
+                    }
+
+                    Color color = Color.White;
+
+                    int playerPoseOutcome = player1.PoseOutcomes[i];//will be player 2 in other loop
+
+                    if(playerPoseOutcome == 1)
+                    {
+                        color = Color.Green;
+                    }
+                    else if(playerPoseOutcome == 2)
+                    {
+                        color = Color.Red;
+                    }
+                    else if(playerPoseOutcome == 3)
+                    {
+                        color = Color.FromNonPremultiplied(17,135,255,256);
+                    }
+
+                    _spriteBatch.Draw(
+                        _ringWhite,
+                        new Vector2(100, 540 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+                        null,
+                        color,
+                        0f,
+                        new Vector2(_ringWhite.Width / 2, _ringWhite.Height / 2),
+                        0.9f,
+                        SpriteEffects.None,
+                        0.99f
+                        );
+                }
+
+                for (int i = 0; i < 5; i++)
+                {
+                    if (i >= currentAI.GetPosePattern().Count)
+                    {
+                        continue;
+                    }
+
+                    Color color = Color.White;
+
+                    int playerPoseOutcome = player2.PoseOutcomes[i];//will be player 2 in other loop
+
+                    if (playerPoseOutcome == 1)
+                    {
+                        color = Color.Green;
+                    }
+                    else if (playerPoseOutcome == 2)
+                    {
+                        color = Color.Red;
+                    }
+                    else if (playerPoseOutcome == 3)
+                    {
+                        color = Color.FromNonPremultiplied(17, 135, 255, 256);
+                    }
+
+                    _spriteBatch.Draw(
+                        _ringWhite,
+                        new Vector2(1770, 540 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+                        null,
+                        color,
+                        0f,
+                        new Vector2(_ringWhite.Width / 2, _ringWhite.Height / 2),
+                        0.9f,
+                        SpriteEffects.None,
+                        0.99f
+                        );
+                }
+            }
+
             for (int i = 0; i < 5; i++)
             {
+
+
                 if (i >= player1.GetPosePattern().Count)
                 {
                     continue;
@@ -1579,6 +1662,7 @@ namespace WrestlerPose
 
             if (poseName1 == poseName2)
             {
+                player.PoseOutcomes[poseIndex] = 3;
                 return null;
             }
 
@@ -1599,10 +1683,12 @@ namespace WrestlerPose
 
             if ((poseName2 == poseName1FirstPoseItBeats) || (poseName2 == poseName1SecondPoseItBeats))
             {
+                player.PoseOutcomes[poseIndex] = 1;
                 return player;
             }
             else
             {
+                player.PoseOutcomes[poseIndex] = 2;
                 return AI;
             }
         }
@@ -1636,7 +1722,11 @@ namespace WrestlerPose
             //winner.RoundOutcomes[roundNumber - 1] = 1;
             //Player loser = winner == player1 ? player2 : player1;
             //loser.RoundOutcomes[roundNumber - 1] = 2;
-
+            for (int i = 0; i < 5; i++)
+            {
+                player1.PoseOutcomes[i] = 0;
+                player2.PoseOutcomes[i] = 0;
+            }
 
             player1.SetScore(0);
             player2.SetScore(0);
