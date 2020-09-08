@@ -725,7 +725,7 @@ namespace WrestlerPose
                         {
                             player1CanInput = PlayerPoseSelection(1, 1, 0, player1);
                         }
-                        else if (inputState.IsKeyDown(Keys.S) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Up)))
+                        else if (inputState.IsKeyDown(Keys.F) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Up)))
                         {
                             player1CanInput = PlayerPoseSelection(4, 4, 3, player1);
 
@@ -734,7 +734,7 @@ namespace WrestlerPose
                         {
                             player1CanInput = PlayerPoseSelection(3, 3, 2, player1);
                         }
-                        else if (inputState.IsKeyDown(Keys.F) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Right)))
+                        else if (inputState.IsKeyDown(Keys.S) || ((playerOneLeftStick == StickDirection.Up) && (playerOneRightStick == StickDirection.Right)))
                         {
                             player1CanInput = PlayerPoseSelection(2, 2, 1, player1);
                         }
@@ -764,7 +764,7 @@ namespace WrestlerPose
                         {
                             player2CanInput = PlayerPoseSelection(7, 7, 0, player2);
                         }
-                        else if (inputState.IsKeyDown(Keys.NumPad2) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Up)))
+                        else if (inputState.IsKeyDown(Keys.NumPad4) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Up)))
                         {
                             player2CanInput = PlayerPoseSelection(10, 10, 3, player2);
                         }
@@ -772,7 +772,7 @@ namespace WrestlerPose
                         {
                             player2CanInput = PlayerPoseSelection(9, 9, 2, player2);
                         }
-                        else if (inputState.IsKeyDown(Keys.NumPad4) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Right)))
+                        else if (inputState.IsKeyDown(Keys.NumPad2) || ((playerTwoLeftStick == StickDirection.Up) && (playerTwoRightStick == StickDirection.Right)))
                         {
                             player2CanInput = PlayerPoseSelection(8, 8, 1, player2);
                         }
