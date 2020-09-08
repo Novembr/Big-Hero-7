@@ -1409,7 +1409,7 @@ namespace WrestlerPose
                           new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
                           0.75f,
                           SpriteEffects.None,
-                          .94f//layer depth
+                          .96f//layer depth
                           );
                 }
                 else
