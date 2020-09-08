@@ -24,9 +24,9 @@ namespace WrestlerPose
         public override void Update(GameTime gameTime)
         {
         }
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime gameTime, SpriteBatch _spriteBatch)
         {
-            spriteBatch.Draw(_texture, Rectangle, _color);
+            _spriteBatch.Draw(_texture, Rectangle, _color);
         }
     }
 }
