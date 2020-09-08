@@ -252,7 +252,7 @@ namespace WrestlerPose
             _match = Content.Load<SpriteFont>("Match");
             _overAllWinner = Content.Load<SpriteFont>("OverallWinner");
             _title = Content.Load<SpriteFont>("Title");
-            _allPosesImage = Content.Load<Texture2D>("posechart1");
+            _allPosesImage = Content.Load<Texture2D>("posechart");
             _stageBackground = Content.Load<Texture2D>("main_stage_plane_audience");
             _stageBackgroundIntro = Content.Load<Texture2D>("main_stage_plane");
             _playerNumbersBackground = Content.Load<Texture2D>("p1_and_p2");
