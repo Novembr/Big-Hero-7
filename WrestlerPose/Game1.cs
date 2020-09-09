@@ -38,6 +38,7 @@ namespace WrestlerPose
         List<Sprite> crowdSprites = new List<Sprite>(2);
         List<Sprite> signSprites = new List<Sprite>(4);
         List<Sprite> confettiSprites = new List<Sprite>(2);
+        Sprite controllerAllPosesSprite;
 
         List<Pose> poses = new List<Pose>(numAnimations);
 
@@ -134,10 +135,12 @@ namespace WrestlerPose
         private Texture2D _player1Wins;
         private Texture2D _player2Wins;
 
-        private Texture2D _GreenSignLeft;
-        private Texture2D _GreenSignRight;
-        private Texture2D _RedSignLeft;
-        private Texture2D _RedSignRight;
+       //private Texture2D _GreenSignLeft;
+       //private Texture2D _GreenSignRight;
+       //private Texture2D _RedSignLeft;
+       //private Texture2D _RedSignRight;
+       //
+       //private Texture2D allPosesControllerMovingImage;
 
         private Texture2D _checkOnScoreBoard;
         private Texture2D _XOnScoreBoard;
@@ -254,6 +257,7 @@ namespace WrestlerPose
             _stageBackground = Content.Load<Texture2D>("main_stage_plane_audience");
             _stageBackgroundIntro = Content.Load<Texture2D>("main_stage_plane");
             _playerNumbersBackground = Content.Load<Texture2D>("p1_and_p2");
+            
 
             _player1Wins = Content.Load<Texture2D>("Playerwins1");
             _player2Wins = Content.Load<Texture2D>("Playerwins2");
@@ -265,12 +269,12 @@ namespace WrestlerPose
             _ringWhite = Content.Load<Texture2D>("ringWhiteChunky");
 
 
-            _GreenSignLeft = Content.Load<Texture2D>("Fail_Signs/Win_Signs");
+            //_GreenSignLeft = Content.Load<Texture2D>("Fail_Signs/Win_Signs");
+            //_GreenSignRight = Content.Load<Texture2D>("Fail_Signs/Win_Signs");
+            //_RedSignLeft = Content.Load<Texture2D>("Fail_Signs/Fail_Signs");
+            //_RedSignRight = Content.Load<Texture2D>("Fail_Signs/Fail_Signs");
 
-            _GreenSignRight = Content.Load<Texture2D>("Fail_Signs/Win_Signs");
-            _RedSignLeft = Content.Load<Texture2D>("Fail_Signs/Fail_Signs");
-
-            _RedSignRight = Content.Load<Texture2D>("Fail_Signs/Fail_Signs");
+            //allPosesControllerMovingImage = Content.Load<Texture2D>("Fail_Signs/Fail_Signs");
 
             _blankOnScoreBoard = Content.Load<Texture2D>("0");
             _checkOnScoreBoard = Content.Load<Texture2D>("check");
@@ -362,6 +366,8 @@ namespace WrestlerPose
             displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("bluefeet"), 3), displayCircleScale, displayCircleLayer));
             displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("greenfeetthree"), 3), displayCircleScale, displayCircleLayer));
             displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("redfeet"), 3), displayCircleScale, displayCircleLayer));
+
+            controllerAllPosesSprite = new Sprite(new Animation(Content.Load<Texture2D>("Fail_Signs/Fail_Signs"), 3), 1f, 1);
 
 
             //crowdanimations
@@ -896,6 +902,8 @@ namespace WrestlerPose
                     displayCircles[i].Update(gameTime, new Vector2(1850 + changeXDisplay, 1000));
                 }
 
+                controllerAllPosesSprite.Update(gameTime, new Vector2(500, 500));
+
                 //crowdanimations update
                 crowdSprites[0].Update(gameTime, new Vector2(1060, 525));
                 crowdSprites[1].Update(gameTime, new Vector2(2420, 525));
@@ -1356,24 +1364,28 @@ namespace WrestlerPose
                           0.91f
                           );
                 }
-                else if (!introTurn && !displayMatchScore)
+                else if (!introTurn && !displayMatchScore && !aiTurn)
                 {
-                    _spriteBatch.Draw(
-                          _allPosesImage,
-                          new Vector2(950, 850),
-                          null,
-                          Color.White,
-                          0f,
-                          new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
-                          0.75f,
-                          SpriteEffects.None,
-                          .96f//layer depth
-                          );
+                   //_spriteBatch.Draw(
+                   //      _allPosesImage,
+                   //      new Vector2(950, 850),
+                   //      null,
+                   //      Color.White,
+                   //      0f,
+                   //      new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
+                   //      0.75f,
+                   //      SpriteEffects.None,
+                   //      .96f//layer depth
+                   //      );
+
+                    controllerAllPosesSprite.Draw(_spriteBatch);
                 }
                 else
                 {
                     int test = 5;
                 }
+
+                controllerAllPosesSprite.Draw(_spriteBatch);
 
                 int picSpacing = 120;
                 int deltaLeftForPosePatternDisplayByMatch = (matchNumber - 1) * 55;
