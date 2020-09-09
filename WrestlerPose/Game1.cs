@@ -1773,7 +1773,7 @@ namespace WrestlerPose
             player1.matchScore = 0;
             player2.matchScore = 0;
             showingFinalMatchScore = false;
-
+            
         }
     }
 
