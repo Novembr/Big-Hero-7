@@ -367,7 +367,7 @@ namespace WrestlerPose
             displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("greenfeetthree"), 3), displayCircleScale, displayCircleLayer));
             displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("redfeet"), 3), displayCircleScale, displayCircleLayer));
 
-            controllerAllPosesSprite = new Sprite(new Animation(Content.Load<Texture2D>("Fail_Signs/Fail_Signs"), 3), 1f, 1);
+            controllerAllPosesSprite = new Sprite(new Animation(Content.Load<Texture2D>("Animations/JoystickOnly-Posechart"), 24), 0.7f, 1);
 
 
             //crowdanimations
@@ -902,7 +902,7 @@ namespace WrestlerPose
                     displayCircles[i].Update(gameTime, new Vector2(1850 + changeXDisplay, 1000));
                 }
 
-                controllerAllPosesSprite.Update(gameTime, new Vector2(500, 500));
+                controllerAllPosesSprite.Update(gameTime, new Vector2(5792, 840));
 
                 //crowdanimations update
                 crowdSprites[0].Update(gameTime, new Vector2(1060, 525));
@@ -1385,7 +1385,7 @@ namespace WrestlerPose
                     int test = 5;
                 }
 
-                controllerAllPosesSprite.Draw(_spriteBatch);
+                //controllerAllPosesSprite.Draw(_spriteBatch);
 
                 int picSpacing = 120;
                 int deltaLeftForPosePatternDisplayByMatch = (matchNumber - 1) * 55;
