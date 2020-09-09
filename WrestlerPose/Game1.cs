@@ -94,6 +94,7 @@ namespace WrestlerPose
         float songVolume = .3f;
         private bool updatedScoreBoard = false;
         bool displayMatchScore = false;
+        bool showingFinalMatchScore = false;
 
         bool introPlayer1AudioHasPlayed = false;
         bool introPlayer2AudioHasPlayed = false;
@@ -130,7 +131,8 @@ namespace WrestlerPose
         private Texture2D _playerNumbersBackground;
         private Texture2D _ringWhite;
 
-
+        private Texture2D _player1Wins;
+        private Texture2D _player2Wins;
 
         private Texture2D _GreenSignLeft;
         private Texture2D _GreenSignRight;
@@ -252,6 +254,10 @@ namespace WrestlerPose
             _stageBackground = Content.Load<Texture2D>("main_stage_plane_audience");
             _stageBackgroundIntro = Content.Load<Texture2D>("main_stage_plane");
             _playerNumbersBackground = Content.Load<Texture2D>("p1_and_p2");
+
+            _player1Wins = Content.Load<Texture2D>("Playerwins1");
+            _player2Wins = Content.Load<Texture2D>("Playerwins2");
+
             _scoreBoard = Content.Load<Texture2D>("scoreboardSingle");
             _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
             _aiLightsBackground = Content.Load<Texture2D>("ailights");
@@ -836,9 +842,17 @@ namespace WrestlerPose
                             }
 
                             int lastRoundTimer = 5000;
+                            int addToLastMatchLastRound = 0;
                             if (roundNumber > 2)//so third round i think here...because roundnumber is increased in newround()
                             {
                                 lastRoundTimer = 8000;
+
+                                //MATCHCHANGE
+                                if (matchNumber == 3)//I think it will be 2 here for match 3 because match number is increased below in newround
+                                {
+                                    addToLastMatchLastRound = 5000;
+                                    showingFinalMatchScore = true;
+                                }
                             }
 
                             if (roundTimer > 5000)
@@ -857,7 +871,7 @@ namespace WrestlerPose
                                     displayMatchScore = true;
                                 }
 
-                                if (roundTimer > lastRoundTimer)
+                                if (roundTimer > (lastRoundTimer + addToLastMatchLastRound))
                                 {
                                     dontDisplayOutcome = false;
                                     displayMatchScore = false;
@@ -1119,15 +1133,71 @@ namespace WrestlerPose
                         DrawMatchScores(MatchOutcomeTexture, 850 + i * 100, 650);
                     }
 
+                    //END ROUND
                     if (localPlayer2MatchScore < localPlayer1MatchScore)
                     {
+
                         confettiSprites[0].Draw(_spriteBatch);
+
+                        //END GAME AND AFTER END OF LAST ROUND OF LAST MATCH
+                        if (matchNumber == 3 && (roundTimer > 8000))//endgame
+                        {
+                            _spriteBatch.Draw(
+                             _player1Wins,
+                             new Vector2(980, 540),
+                             null,
+                             Color.Yellow,
+                             0f,
+                             new Vector2(_player1Wins.Width / 2, _player1Wins.Height / 2),
+                             new Vector2(3f, 3f),
+                             SpriteEffects.None,
+                             0.98f
+                             );
+
+                            crowdSprites[0].Draw(_spriteBatch);
+                            signSprites[0].Draw(_spriteBatch);
+                        }
                     }
                     else
                     {
                         confettiSprites[1].Draw(_spriteBatch);
+
+                        if (matchNumber == 3 && (roundTimer > 8000))//MATCHCHANGE
+                        {
+                            _spriteBatch.Draw(
+                                _player2Wins,
+                                new Vector2(980, 540),
+                                null,
+                                Color.Yellow,
+                                0f,
+                                new Vector2(_player2Wins.Width / 2, _player2Wins.Height / 2),
+                                new Vector2(3f, 3f),
+                                SpriteEffects.None,
+                                0.98f
+                                );
+
+                            crowdSprites[1].Draw(_spriteBatch);
+                            signSprites[2].Draw(_spriteBatch);
+                        }
                     }
                 }
+
+                //if (showingFinalMatchScore)
+                //{
+                //    //are match scores finalized at this point?
+                //    if((player1.matchScore < player2.matchScore) || ((player1.matchScore == player2.matchScore) && (player1.roundScore > player2.roundScore)))
+                //    {
+                //        player1.CrowdMoving = true;
+                //        crowdSprites[0].Draw(_spriteBatch);
+                //        signSprites[0].Draw(_spriteBatch);
+                //    }
+                //    else
+                //    {
+                //        player2.CrowdMoving = true;
+                //        crowdSprites[1].Draw(_spriteBatch);
+                //        signSprites[2].Draw(_spriteBatch);
+                //    }
+                //}
 
                 if (!introTurn)
                 {
@@ -1235,34 +1305,40 @@ namespace WrestlerPose
                 //confettiSprites[1].Draw(_spriteBatch);
 
                 //now only display this i guess when? when do the cheering sounds go off?
-                if (player1.CrowdMoving)
+
+                //DOES IT'S OWN SIGN MOVING IN FINAL MATCH END SHOW PLAYER WIN PHASE
+                if (!showingFinalMatchScore)
                 {
-                    crowdSprites[0].Draw(_spriteBatch);
-
-                    
-
-                    if (player1.PlayerWinningForCrowd)
+                    if (player1.CrowdMoving)
                     {
-                        signSprites[0].Draw(_spriteBatch);
+                        crowdSprites[0].Draw(_spriteBatch);
+
+                        if (player1.PlayerWinningForCrowd)
+                        {
+                            signSprites[0].Draw(_spriteBatch);
+                        }
+                        else
+                        {
+                            signSprites[1].Draw(_spriteBatch);
+                        }
                     }
-                    else
+                    if (player2.CrowdMoving)
                     {
-                        signSprites[1].Draw(_spriteBatch);
+                        crowdSprites[1].Draw(_spriteBatch);
+
+                        if (player2.PlayerWinningForCrowd)
+                        {
+                            signSprites[2].Draw(_spriteBatch);
+                        }
+                        else
+                        {
+                            signSprites[3].Draw(_spriteBatch);
+                        }
                     }
                 }
-                if (player2.CrowdMoving)
-                {
-                    crowdSprites[1].Draw(_spriteBatch);
 
-                    if (player2.PlayerWinningForCrowd)
-                    {
-                        signSprites[2].Draw(_spriteBatch);
-                    }
-                    else
-                    {
-                        signSprites[3].Draw(_spriteBatch);
-                    }
-                }
+
+              
 
                 int upIndexCurrentAIIdlePoseIndexForRingGirl = (matchNumber - 1) * 6 + 12;
 
@@ -1696,6 +1772,7 @@ namespace WrestlerPose
             player2.roundScore = 0;
             player1.matchScore = 0;
             player2.matchScore = 0;
+            showingFinalMatchScore = false;
 
         }
     }
