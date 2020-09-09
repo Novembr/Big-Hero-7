@@ -875,6 +875,9 @@ namespace WrestlerPose
                                     player1.SetPose(poses[0]);
                                     player2.SetPose(poses[6]);
                                     displayMatchScore = true;
+                                    player1.CrowdMoving = false;
+                                    player2.CrowdMoving = false;
+
                                 }
 
                                 if (roundTimer > (lastRoundTimer + addToLastMatchLastRound))
@@ -1366,26 +1369,12 @@ namespace WrestlerPose
                 }
                 else if (!introTurn && !displayMatchScore && !aiTurn)
                 {
-                   //_spriteBatch.Draw(
-                   //      _allPosesImage,
-                   //      new Vector2(950, 850),
-                   //      null,
-                   //      Color.White,
-                   //      0f,
-                   //      new Vector2(_allPosesImage.Width / 2, _allPosesImage.Height / 2),
-                   //      0.75f,
-                   //      SpriteEffects.None,
-                   //      .96f//layer depth
-                   //      );
-
                     controllerAllPosesSprite.Draw(_spriteBatch);
                 }
                 else
                 {
                     int test = 5;
                 }
-
-                //controllerAllPosesSprite.Draw(_spriteBatch);
 
                 int picSpacing = 120;
                 int deltaLeftForPosePatternDisplayByMatch = (matchNumber - 1) * 55;
