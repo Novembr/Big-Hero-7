@@ -809,7 +809,7 @@ namespace WrestlerPose
 
                             if (player1.GetScore() > player2.GetScore())
                             {
-                                player1.SetPose(outComePoses[0]);
+                                player1.SetPose(outComePoses[0]);//INHEREONEND
                                 player2.SetPose(outComePoses[3]);
                                 player1.CrowdMoving = true;
                                 player2.CrowdMoving = false;
@@ -872,11 +872,12 @@ namespace WrestlerPose
                                     //they will be called over and over for these 2 seconds but that shouldn't matter
                                     player1.displayCircle = DisplayCircle.Tied;
                                     player2.displayCircle = DisplayCircle.Tied;
-                                    player1.SetPose(poses[0]);
+                                    player1.SetPose(poses[0]);//INHEREONEND
                                     player2.SetPose(poses[6]);
                                     displayMatchScore = true;
                                     player1.CrowdMoving = false;
                                     player2.CrowdMoving = false;
+
 
                                 }
 
@@ -1167,6 +1168,17 @@ namespace WrestlerPose
 
                             crowdSprites[0].Draw(_spriteBatch);
                             signSprites[0].Draw(_spriteBatch);
+
+                            if (player1.GetPose() != outComePoses[0])
+                            {
+                                player1.SetPose(outComePoses[0]);
+
+                            }
+
+                            if (player2.GetPose() != outComePoses[3])
+                            {
+                                player2.SetPose(outComePoses[3]);
+                            }
                         }
                     }
                     else
@@ -1189,6 +1201,19 @@ namespace WrestlerPose
 
                             crowdSprites[1].Draw(_spriteBatch);
                             signSprites[2].Draw(_spriteBatch);
+
+
+                            if (player1.GetPose() != outComePoses[1])
+                            {
+                                player1.SetPose(outComePoses[1]);
+
+                            }
+
+                            if (player2.GetPose() != outComePoses[2])
+                            {
+                                player2.SetPose(outComePoses[2]);
+                            }
+
                         }
                     }
                 }
