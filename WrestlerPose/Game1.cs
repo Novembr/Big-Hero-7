@@ -189,7 +189,7 @@ namespace WrestlerPose
 
         protected override void Initialize()
         {
-            _graphics.IsFullScreen = true;
+            _graphics.IsFullScreen = false;
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
             _graphics.ApplyChanges();
@@ -963,9 +963,33 @@ namespace WrestlerPose
                         }
                         if (counterAI < 0)
                         {
-                            Random rnd = new Random();
-                            int randomPoseIndexFromThisAisPoseNumberslist = rnd.Next(0, currentAI._poseValuesForThisAI.Count);
-                            int poseValueFromThisAisRandomSelection = currentAI._poseValuesForThisAI[randomPoseIndexFromThisAisPoseNumberslist];
+                            bool IsNewPose = false;
+                            int randomPoseIndexFromThisAisPoseNumberslist = 0;
+                            int poseValueFromThisAisRandomSelection = 0;
+
+                            while (!IsNewPose)
+                            {
+                                Random rnd = new Random();
+                                randomPoseIndexFromThisAisPoseNumberslist = rnd.Next(0, currentAI._poseValuesForThisAI.Count);
+                                poseValueFromThisAisRandomSelection = currentAI._poseValuesForThisAI[randomPoseIndexFromThisAisPoseNumberslist];
+
+                                if(numPosesDisplayedAI == 0)
+                                {
+                                    IsNewPose = true;
+                                }
+                                else
+                                {
+                                    Pose thisSelectedPose = poses[poseValueFromThisAisRandomSelection];
+                                    Pose previousAIPose = currentAI.GetPose();
+                                    if(thisSelectedPose != previousAIPose)
+                                    {
+                                        IsNewPose = true;
+                                    }
+                                }
+                            }
+
+                            //insert redo of random
+
                             currentAI.SetPose(poses[poseValueFromThisAisRandomSelection]);
                             currentAI.SetPosePattern(numPosesDisplayedAI, poses[poseValueFromThisAisRandomSelection]);
                             soundEffects[randomPoseIndexFromThisAisPoseNumberslist].CreateInstance().Play();
