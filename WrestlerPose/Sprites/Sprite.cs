@@ -49,7 +49,6 @@ namespace WrestlerPose.Sprites
                     Position, 
                     null,
                     Color.White,
-
                     0f,
                     new Vector2(_texture.Width / 2, _texture.Height / 2),
                     0.3f,

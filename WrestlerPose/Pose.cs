@@ -25,12 +25,6 @@ namespace WrestlerPose
         PoseName _poseName;
         Sprite _sprite;
 
-        //public Pose(Texture2D singleFrameAnimation, PoseName poseName)
-        //{
-        //    _poseName = poseName;
-        //    _sprite = new Sprite(singleFrameAnimation);
-        //}
-
         public Pose(Animation animation, PoseName poseName, float scale, float layer)
         {
             _poseName = poseName;
