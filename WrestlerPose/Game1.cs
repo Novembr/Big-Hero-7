@@ -345,10 +345,10 @@ namespace WrestlerPose
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("winalt"), 12));
             outcomeAnimations.Add(new Animation(Content.Load<Texture2D>("losealt"), 12));
 
-            outComePoses.Add(new Pose(outcomeAnimations[0], PoseName.Idle, 2.5f, 0.9f));//scale is 2 for player, does posename matter here though?
-            outComePoses.Add(new Pose(outcomeAnimations[1], PoseName.Idle, 2.5f, 0.9f));//scale is 2 for player, does posename matter here though?
-            outComePoses.Add(new Pose(outcomeAnimations[2], PoseName.Idle, 2.5f, 0.9f));//scale is 2 for player, does posename matter here though?
-            outComePoses.Add(new Pose(outcomeAnimations[3], PoseName.Idle, 2.5f, 0.9f));//scale is 2 for player, does posename matter here though?
+            outComePoses.Add(new Pose(outcomeAnimations[0], PoseName.Idle, 2.5f, 0.9f));
+            outComePoses.Add(new Pose(outcomeAnimations[1], PoseName.Idle, 2.5f, 0.9f));
+            outComePoses.Add(new Pose(outcomeAnimations[2], PoseName.Idle, 2.5f, 0.9f));
+            outComePoses.Add(new Pose(outcomeAnimations[3], PoseName.Idle, 2.5f, 0.9f));
 
             //List<List<Pose>> allPoseList = new List<List<Pose>>();
             //allPoseList.Add(defaultPoses);
@@ -382,7 +382,7 @@ namespace WrestlerPose
             {
                 int poseInt = i;
                 float scale = 2.5f;
-                //should make this a non-arbitrary number later
+                
                 if (i > 5)
                 {
                     poseInt = poseInt - 6;
@@ -409,7 +409,6 @@ namespace WrestlerPose
             player1 = new Player("Player One", WrestlerPosition1, poses[0], new List<Pose>(), booInstancePlayerOne, cheerInstancePlayerOne, murmurInstancePlayerOne);
             player2 = new Player("Player Two", WrestlerPosition2, poses[6], new List<Pose>(), booInstancePlayerTwo, cheerInstancePlayerTwo, murmurInstancePlayerTwo);
 
-            //the new pose list with poses below doesn't really matter because they are later randomized based on the in list after it
             AIPlayerList = new List<Player>
             {
                 //the 3rd parameter is the idle parameter for that ai, we now have 2, and idle for alt and bear are 12 and 18 respectively
@@ -423,7 +422,6 @@ namespace WrestlerPose
 
         protected override void Update(GameTime gameTime)
         {
-            //this is a default condition, currently only player 1 controller can exit game?
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -775,7 +773,6 @@ namespace WrestlerPose
                     }
                 }
 
-                //updates section:
                 player1.GetPose().GetSprite().Update(gameTime, player1.GetPosition());
                 player2.GetPose().GetSprite().Update(gameTime, player2.GetPosition());
 
@@ -854,7 +851,8 @@ namespace WrestlerPose
                             currentAI.SetPosePattern(numPosesDisplayedAI, poses[poseValueFromThisAisRandomSelection]);
                             soundEffects[randomPoseIndexFromThisAisPoseNumberslist].CreateInstance().Play();
                             float animationTime = currentAI.GetPosePattern()[numPosesDisplayedAI].GetSprite().GetAnimationTime();
-                            int roundedUp = (int)Math.Ceiling(animationTime);
+                            //int roundedUp = (int)Math.Ceiling(animationTime);//didn't end up needing this, but is to determine pose display time by animation time instead of 
+                            //using a fixed value
                             counterAI = 3;
                             numPosesDisplayedAI++;
                         }
@@ -881,7 +879,7 @@ namespace WrestlerPose
             base.Update(gameTime);
         }
 
-        private bool PlayerPoseSelection(int poseToSet, int poseForPosePattern, int soundEffect, Player player/*, ref int playerInputCounter*/)
+        private bool PlayerPoseSelection(int poseToSet, int poseForPosePattern, int soundEffect, Player player)
         {
             player.SetPose(poses[poseToSet]);
             player.AddToPosePattern(poses[poseForPosePattern]);
@@ -926,7 +924,6 @@ namespace WrestlerPose
                     player.BooInstance.Play();
                     player.CrowdMoving = true;
                     player.PlayerWinningForCrowd = false;
-                    //values should all default to zero?
                 }
             }
             else
@@ -974,8 +971,8 @@ namespace WrestlerPose
 
                     for (int i = 0; i < 3; i++)
                     {
-                        //this section basically copies a lot of tghe functionality from NewsRound() and ResetMatch() but it needs to be done here
-                        //again to display the right en match socre values before the match actually ends, I could refactor to avoid this but it wouldbe 
+                        //this section basically copies a lot of the functionality from NewRound() and ResetMatch(), but it needs to be done here
+                        //again to display the right match score values before the match actually ends. I could refactor to avoid this but it would be 
                         //too much of a buggy pain this late 
                         int localPlayer1RoundScore = player1.roundScore;
                         int localPlayer2RoundScore = player2.roundScore;
@@ -1362,11 +1359,9 @@ namespace WrestlerPose
                         0.7f,
                         SpriteEffects.None,
                         1f
-
                         );
                 }
 
-                //blackscreenbackground, opacity change over time
                 _spriteBatch.Draw(
                       _blackScreenBackground,
                       new Vector2(960, 540),
