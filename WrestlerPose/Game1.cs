@@ -224,7 +224,7 @@ namespace WrestlerPose
             three = Content.Load<Texture2D>("3");
             dash = Content.Load<Texture2D>("-");
 
-            twoForPoseStillDoubleScore = Content.Load<Texture2D>("2");
+            twoForPoseStillDoubleScore = Content.Load<Texture2D>("x2");
 
             RoundOutcomeTexturesForJumboTron.Add(_blankOnScoreBoard);
             RoundOutcomeTexturesForJumboTron.Add(_checkOnScoreBoard);
