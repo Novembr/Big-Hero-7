@@ -279,7 +279,7 @@ namespace WrestlerPose
             SoundEffectInstance cheerInstancePlayerTwo = crowdSounds[1].CreateInstance();
             SoundEffectInstance murmurInstancePlayerTwo = crowdSounds[7].CreateInstance();
 
-            SoundEffect.MasterVolume = 0.5f;
+            SoundEffect.MasterVolume = 1f;// 0.5f;
 
             List<string> stillAnimationImageNameStrings = new List<string>(5) { "twodownclear", "pointingclear", "oneupclear", "twoupclear", "herculesclear" };
             for (int i = 0; i < 5; i++)
@@ -1437,7 +1437,7 @@ namespace WrestlerPose
                         twoForPoseStillDoubleScore,
                         new Vector2(120, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                         null,
-                        Color.Red * poseStillAndRingOpacity,
+                        Color.Red * 0.7f,
                         0f,
                         new Vector2(twoForPoseStillDoubleScore.Width / 2, twoForPoseStillDoubleScore.Height / 2),
                         0.7f,
@@ -1474,7 +1474,7 @@ namespace WrestlerPose
                         twoForPoseStillDoubleScore,
                         new Vector2(1770, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                         null,
-                        Color.Red * poseStillAndRingOpacity,
+                        Color.Red * 0.7f,
                         0f,
                         new Vector2(twoForPoseStillDoubleScore.Width / 2, twoForPoseStillDoubleScore.Height / 2),
                         0.7f,
@@ -1698,7 +1698,6 @@ namespace WrestlerPose
                 player1.WasDoublePoseScore[i] = false;
                 player2.WasDoublePoseScore[i] = false;
             }
-
 
             player1.SetScore(0);
             player2.SetScore(0);
