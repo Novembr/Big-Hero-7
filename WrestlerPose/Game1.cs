@@ -1388,6 +1388,8 @@ namespace WrestlerPose
                     {
                         DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
                         DisplayLights(_aiLightsColored, 0.75f, lightsScale, true, 0.89f);
+                        DisplayLights(_aiLightsColored, 0.3f, lightsScale, true, 0.95f);
+
                     }
 
                 }
