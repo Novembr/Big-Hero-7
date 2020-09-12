@@ -1310,6 +1310,7 @@ namespace WrestlerPose
 
                 int picSpacing = 120;
                 int deltaLeftForPosePatternDisplayByMatch = (matchNumber - 1) * 55;
+                float poseStillAndRingOpacity = 1f;
 
                 if (!introTurn && !aiTurn)
                 {
@@ -1340,7 +1341,7 @@ namespace WrestlerPose
                             _ringWhite,
                             new Vector2(120, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                             null,
-                            color,
+                            color * poseStillAndRingOpacity,
                             0f,
                             new Vector2(_ringWhite.Width / 2, _ringWhite.Height / 2),
                             0.7f,
@@ -1377,7 +1378,7 @@ namespace WrestlerPose
                             _ringWhite,
                             new Vector2(1770, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                             null,
-                            color,
+                            color * poseStillAndRingOpacity,
                             0f,
                             new Vector2(_ringWhite.Width / 2, _ringWhite.Height / 2),
                             0.7f,
@@ -1400,7 +1401,7 @@ namespace WrestlerPose
                         playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne],
                         new Vector2(120, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                         null,
-                        Color.White,
+                        Color.White * poseStillAndRingOpacity,
                         0f,
                         new Vector2(playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Height / 2),
                         0.7f,
@@ -1422,7 +1423,7 @@ namespace WrestlerPose
                         playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo],
                         new Vector2(1770, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
                         null,
-                        Color.White,
+                        Color.White * poseStillAndRingOpacity,
                         0f,
                         new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Height / 2),
                         0.7f,
@@ -1454,8 +1455,8 @@ namespace WrestlerPose
                     else
                     {
                         DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
-                        DisplayLights(_aiLightsColored, 0.75f, lightsScale, true, 0.89f);
-                        DisplayLights(_aiLightsColored, 0.3f, lightsScale, true, 0.95f);
+                        DisplayLights(_aiLightsColored, 0.45f, lightsScale, true, 0.89f);
+                        DisplayLights(_aiLightsColored, 0.15f, lightsScale, true, 0.95f);
 
                     }
 
