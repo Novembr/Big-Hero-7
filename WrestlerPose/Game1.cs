@@ -111,6 +111,7 @@ namespace WrestlerPose
         private Texture2D _playerTwoLightsBackground;
         private Texture2D _aiLightsBackground;
         private Texture2D _aiLightsColored;
+        private Texture2D _aiLightsColored2;
         private Texture2D _ringGirlLightsBackground;
         private Texture2D _playerNumbersBackground;
         private Texture2D _ringWhite;
@@ -207,7 +208,9 @@ namespace WrestlerPose
             _scoreBoard = Content.Load<Texture2D>("scoreboardSingle");
             _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
             _aiLightsBackground = Content.Load<Texture2D>("ailights");
-            _aiLightsColored = Content.Load<Texture2D>("Colours - lights&glow/colour-spotlight");
+            _aiLightsColored = Content.Load<Texture2D>("Colours - lights&glow/colour-glow1");
+            _aiLightsColored2 = Content.Load<Texture2D>("Colours - lights&glow/colour-glow2");
+
             _ringGirlLightsBackground = Content.Load<Texture2D>("ringgirllight");
             _ringWhite = Content.Load<Texture2D>("ringWhiteChunky");
             _blankOnScoreBoard = Content.Load<Texture2D>("0");
@@ -1456,8 +1459,10 @@ namespace WrestlerPose
                     else
                     {
                         DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
-                        DisplayLights(_aiLightsColored, 1f, lightsScale, true, 0.89f);
-                        DisplayLights(_aiLightsColored, 0.4f, lightsScale, true, 0.95f);
+                        DisplayLights(_aiLightsColored, 0.8f, lightsScale, true, 0.89f);
+                        DisplayLights(_aiLightsColored2, 0.3f, lightsScale, true, 0.89f);
+
+                        //DisplayLights(_aiLightsColored, 0.4f, lightsScale, true, 0.95f);
 
                     }
 
