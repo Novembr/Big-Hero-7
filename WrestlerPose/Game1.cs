@@ -98,6 +98,7 @@ namespace WrestlerPose
         bool introPlayer2AudioHasPlayed = false;
         bool introAIAudioHasPlayed = false;
         bool Positionupdated = false;
+        bool IsExit = false;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -654,10 +655,10 @@ namespace WrestlerPose
                         Positionupdated = false;
                     }
 
+                    IsExit = true;
 
-
-                    ResetGame();
                     ResetMatch();
+                    ResetGame();
                     //Exit();
                 }
 
@@ -1455,8 +1456,8 @@ namespace WrestlerPose
                     else
                     {
                         DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
-                        DisplayLights(_aiLightsColored, 0.45f, lightsScale, true, 0.89f);
-                        DisplayLights(_aiLightsColored, 0.15f, lightsScale, true, 0.95f);
+                        DisplayLights(_aiLightsColored, 1f, lightsScale, true, 0.89f);
+                        DisplayLights(_aiLightsColored, 0.4f, lightsScale, true, 0.95f);
 
                     }
 
@@ -1705,7 +1706,12 @@ namespace WrestlerPose
             else
             {
                 currentAI = AIPlayerList[matchNumber - 1];
-                //currentAI._AIIntroSound.CreateInstance().Play();
+
+                if (!IsExit)
+                {
+                    currentAI._AIIntroSound.CreateInstance().Play();
+                }
+
                 player1.SetPosePattern(new List<Pose>(currentAI.GetPosePattern().Count));
                 player2.SetPosePattern(new List<Pose>(currentAI.GetPosePattern().Count));
                 roundNumber = 1;
@@ -1729,6 +1735,7 @@ namespace WrestlerPose
             player1.matchScore = 0;
             player2.matchScore = 0;
             showingFinalMatchScore = false;
+            IsExit = false;
         }
     }
 
