@@ -19,6 +19,8 @@ namespace WrestlerPose
         private Texture2D _texture;
         private Texture2D _textureActive;
 
+        private string buttonName = "";
+
         public event EventHandler Click;
         public bool Clicked { get; private set; }
         #endregion
@@ -36,6 +38,7 @@ namespace WrestlerPose
             // load textures
             _texture = texture;
             _textureActive = textureActive;
+            buttonName = _texture.Name;
         }
 
 
@@ -65,6 +68,43 @@ namespace WrestlerPose
                 if (currentMouse.LeftButton == ButtonState.Released && previousMouse.LeftButton == ButtonState.Pressed)
                 {
                     Click?.Invoke(this, new EventArgs());
+                }
+            }
+
+            GamePadCapabilities capabilities = GamePad.GetCapabilities(0);
+            GamePadState state = GamePad.GetState(0);
+            if (capabilities.HasAButton && capabilities.HasDPadDownButton && capabilities.HasDPadUpButton && capabilities.HasStartButton)
+            {
+                if(state.DPad.Down == ButtonState.Pressed)
+                {
+                    if(buttonName == "START")
+                    {
+                        isHovering = false;
+                    }
+                    else
+                    {
+                        isHovering = true;
+                        if (state.Buttons.A == ButtonState.Pressed)
+                        {
+                            Click?.Invoke(this, new EventArgs());
+                        }
+                    }
+                }
+
+                if (state.DPad.Up == ButtonState.Pressed)
+                {
+                    if (buttonName == "EXIT")
+                    {
+                        isHovering = false;
+                    }
+                    else
+                    {
+                        isHovering = true;
+                        if (state.Buttons.A == ButtonState.Pressed)
+                        {
+                            Click?.Invoke(this, new EventArgs());
+                        }
+                    }
                 }
             }
 

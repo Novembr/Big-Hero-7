@@ -605,7 +605,7 @@ namespace WrestlerPose
                     }
                 }
 
-                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || (GamePad.GetState(PlayerIndex.One).Buttons.Start == ButtonState.Pressed))
                 {
                     gamestart = false;
                     playerTurn = false;
@@ -619,6 +619,14 @@ namespace WrestlerPose
                     introPlayer1AudioHasPlayed = false;
                     introPlayer2AudioHasPlayed = false;
                     introAIAudioHasPlayed = false;
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        player1.PoseOutcomes[i] = 0;
+                        player2.PoseOutcomes[i] = 0;
+                        player1.WasDoublePoseScore[i] = false;
+                        player2.WasDoublePoseScore[i] = false;
+                    }
 
                     counter = 3;
                     counterStart = 3;
