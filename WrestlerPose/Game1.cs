@@ -1454,8 +1454,8 @@ namespace WrestlerPose
                     else
                     {
                         DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
-                        DisplayLights(_aiLightsColored, 0.75f, lightsScale, true, 0.89f);
-                        DisplayLights(_aiLightsColored, 0.3f, lightsScale, true, 0.95f);
+                        DisplayLights(_aiLightsColored, 1f, lightsScale, true, 0.89f);
+                        DisplayLights(_aiLightsColored, 0.4f, lightsScale, true, 0.95f);
 
                     }
 
