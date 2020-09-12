@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace WrestlerPose
 {
-    class Image : Component
+    class Background : Component
     {
         private Texture2D _texture;
         private Color _color;
@@ -15,7 +15,7 @@ namespace WrestlerPose
         {
             get; set;
         }
-        public Image(Texture2D texture, Color color)
+        public Background(Texture2D texture, Color color)
         {
             _texture = texture;
             _color = color;

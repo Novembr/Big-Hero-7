@@ -97,6 +97,7 @@ namespace WrestlerPose
         bool introPlayer1AudioHasPlayed = false;
         bool introPlayer2AudioHasPlayed = false;
         bool introAIAudioHasPlayed = false;
+        bool Positionupdated = false;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -171,7 +172,7 @@ namespace WrestlerPose
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            var menuBackground = new Image(Content.Load<Texture2D>("bighero72"), Color.White)
+            var menuBackground = new Background(Content.Load<Texture2D>("bighero72"), Color.White)
             {
                 Rectangle = new Rectangle(0, 0, 1920, 1080),
             };
@@ -579,9 +580,14 @@ namespace WrestlerPose
                                         roundTimer = 0;
                                         introTurn = false;
 
-                                        for (int i = 0; i < AIPlayerList.Count; i++)
+
+                                        if (!Positionupdated)
                                         {
-                                            AIPlayerList[i].IncreaseXPosition(-40);
+                                            for (int i = 0; i < AIPlayerList.Count; i++)
+                                            {
+                                                AIPlayerList[i].IncreaseXPosition(-40);
+                                            }
+                                            Positionupdated = true;
                                         }
 
                                         soundEffects[5].CreateInstance().Play();
@@ -606,7 +612,52 @@ namespace WrestlerPose
                     introPlayer1AudioHasPlayed = false;
                     introPlayer2AudioHasPlayed = false;
                     introAIAudioHasPlayed = false;
+
+                    counter = 3;
+                    counterStart = 3;
+                    countDuration = .4f;
+                    currentTime = 0f;
+
+                    counter2 = 3;
+                    counterStart2 = 3;
+                    countDuration2 = .4f;
+                    currentTime2 = 0f;
+
+                    counterAI = 5;
+                    countDurationAI = .6f;
+                    currentTimeAI = 0f;
+
+                    roundTimer = 0;
+                    roundNumber = 1;
+                    matchNumber = 1;
+
+                    songVolume = .3f;
+                    numPosesDisplayedAI = 0;
+
+                    currentAI.SetPose(poses[12]);
+                    player1.SetPose(poses[0]);
+                    player2.SetPose(poses[6]);
+                    player1.CrowdMoving = false;
+                    player2.CrowdMoving = false;
+                    player1.PlayerWinningForCrowd = false;
+                    player2.PlayerWinningForCrowd = false;
+
+                    player1.displayCircle = DisplayCircle.Tied;
+                    player2.displayCircle = DisplayCircle.Tied;
+
+                    if (Positionupdated)
+                    {
+                        for (int i = 0; i < AIPlayerList.Count; i++)
+                        {
+                            AIPlayerList[i].IncreaseXPosition(40);
+                        }
+                        Positionupdated = false;
+                    }
+
+
+
                     ResetGame();
+                    ResetMatch();
                     //Exit();
                 }
 
@@ -1653,7 +1704,7 @@ namespace WrestlerPose
             else
             {
                 currentAI = AIPlayerList[matchNumber - 1];
-                currentAI._AIIntroSound.CreateInstance().Play();
+                //currentAI._AIIntroSound.CreateInstance().Play();
                 player1.SetPosePattern(new List<Pose>(currentAI.GetPosePattern().Count));
                 player2.SetPosePattern(new List<Pose>(currentAI.GetPosePattern().Count));
                 roundNumber = 1;
@@ -1668,7 +1719,7 @@ namespace WrestlerPose
             roundNumber = 1;
             currentAI = AIPlayerList[0];
 
-            currentAI._AIIntroSound.CreateInstance().Play();
+            //currentAI._AIIntroSound.CreateInstance().Play();
 
             player1.SetScore(0);
             player2.SetScore(0);
