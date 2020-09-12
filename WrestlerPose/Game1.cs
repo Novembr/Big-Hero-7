@@ -422,8 +422,6 @@ namespace WrestlerPose
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
 
             if (!gamestart)
                 foreach (var button in menuComponents)
@@ -590,6 +588,24 @@ namespace WrestlerPose
                             }
                         }
                     }
+                }
+
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                {
+                    gamestart = false;
+                    playerTurn = false;
+                    aiTurn = false;
+                    introTurn = true;
+                    player1CanInput = true;
+                    player2CanInput = true;
+                    updatedScoreBoard = false;
+                    displayMatchScore = false;
+                    showingFinalMatchScore = false;
+                    introPlayer1AudioHasPlayed = false;
+                    introPlayer2AudioHasPlayed = false;
+                    introAIAudioHasPlayed = false;
+                    ResetGame();
+                    //Exit();
                 }
 
                 if (playerTurn)
