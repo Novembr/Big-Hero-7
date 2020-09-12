@@ -108,6 +108,7 @@ namespace WrestlerPose
         private Texture2D _playerOneLightsBackground;
         private Texture2D _playerTwoLightsBackground;
         private Texture2D _aiLightsBackground;
+        private Texture2D _aiLightsColored;
         private Texture2D _ringGirlLightsBackground;
         private Texture2D _playerNumbersBackground;
         private Texture2D _ringWhite;
@@ -204,6 +205,7 @@ namespace WrestlerPose
             _scoreBoard = Content.Load<Texture2D>("scoreboardSingle");
             _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
             _aiLightsBackground = Content.Load<Texture2D>("ailights");
+            _aiLightsColored = Content.Load<Texture2D>("Colours - lights&glow/colour-spotlight");
             _ringGirlLightsBackground = Content.Load<Texture2D>("ringgirllight");
             _ringWhite = Content.Load<Texture2D>("ringWhiteChunky");
             _blankOnScoreBoard = Content.Load<Texture2D>("0");
@@ -1380,34 +1382,35 @@ namespace WrestlerPose
                 {
                     if (aiTurn && (roundNumber == 1) && (currentAI.GetPose() == poses[upIndexCurrentAIIdlePoseIndexForRingGirl]))
                     {
-                        DisplayLights(_ringGirlLightsBackground, lightsOpacity, lightsScale);
+                        DisplayLights(_ringGirlLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
                     }
                     else
                     {
-                        DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale);
+                        DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
+                        DisplayLights(_aiLightsColored, 0.75f, lightsScale, true, 0.89f);
                     }
 
                 }
                 else if (playerTurn && !dontDisplayOutcome)
                 {
-                    DisplayLights(_playerLightsBackground, lightsOpacity, lightsScale);
+                    DisplayLights(_playerLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
                 }
                 else if (dontDisplayOutcome)
                 {
                     if (introTurn)
                     {
-                        DisplayLights(_playerTwoLightsBackground, lightsOpacity, lightsScale);
+                        DisplayLights(_playerTwoLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
                     }
                     else
                     {
                         Player winner = WinningPlayer();
                         if (winner == player1)
                         {
-                            DisplayLights(_playerOneLightsBackground, lightsOpacity, lightsScale);
+                            DisplayLights(_playerOneLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
                         }
                         else
                         {
-                            DisplayLights(_playerTwoLightsBackground, lightsOpacity, lightsScale);
+                            DisplayLights(_playerTwoLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
                         }
                     }
 
@@ -1453,18 +1456,48 @@ namespace WrestlerPose
                );
         }
 
-        private void DisplayLights(Texture2D texture, float opacity, float scale)
+        private void DisplayLights(Texture2D texture, float opacity, float scale, bool isColoredLight, float layer)
         {
+            Color color = Color.White;
+            PoseName aIPose = currentAI.GetPose().GetPoseName();
+
+            if (isColoredLight)
+            {
+                switch (aIPose)
+                {
+                    case PoseName.Idle:
+                        color = Color.White;//don't actually need this one but just in case will put here
+                        break;
+                    case PoseName.LowHands:
+                        color = Color.FromNonPremultiplied(254, 242, 141, 256);
+                        break;
+                    case PoseName.Pointing:
+                        color = Color.FromNonPremultiplied(131, 129, 190, 256);
+                        break;
+                    case PoseName.OneHandUp:
+                        color = Color.FromNonPremultiplied(155, 205, 236, 256);
+                        break;
+                    case PoseName.HighHands:
+                        color = Color.FromNonPremultiplied(205, 153, 155, 256);
+                        break;
+                    case PoseName.Hercules:
+                        color = Color.FromNonPremultiplied(164, 202, 156, 256);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             _spriteBatch.Draw(
                 texture,
                 new Vector2(960, 540),
                 null,
-                Color.White * opacity,
+                color * opacity,
                 0f,
                 new Vector2(texture.Width / 2, texture.Height / 2),
                 scale,
                 SpriteEffects.None,
-                0.95f
+                layer
                 );
         }
 
@@ -1626,7 +1659,6 @@ namespace WrestlerPose
             player1.matchScore = 0;
             player2.matchScore = 0;
             showingFinalMatchScore = false;
-            
         }
     }
 
