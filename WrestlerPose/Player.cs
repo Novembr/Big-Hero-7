@@ -43,6 +43,7 @@ namespace WrestlerPose
         public bool PlayerWinningForCrowd { get; set; }
         public List<int> RoundOutcomes { get; set; }//0 = not yet determined, 1 = win and 2 = lose
         public List<int> PoseOutcomes { get; set; }//0 = not yet determined (White) , 1 = win and 2 = lose, 3 = tie
+        public List<bool> WasDoublePoseScore { get; set; }
 
         private SoundEffectInstance _cheerInstance;
         public SoundEffectInstance CheerInstance
@@ -78,6 +79,7 @@ namespace WrestlerPose
             CrowdMoving = false;
             RoundOutcomes = new List<int>(); RoundOutcomes.Add(0); RoundOutcomes.Add(0); RoundOutcomes.Add(0);//for max 3 rounds
             PoseOutcomes = new List<int>(); PoseOutcomes.Add(0); PoseOutcomes.Add(0); PoseOutcomes.Add(0); PoseOutcomes.Add(0); PoseOutcomes.Add(0);//for max 5 poses
+            WasDoublePoseScore = new List<bool>(); WasDoublePoseScore.Add(false); WasDoublePoseScore.Add(false); WasDoublePoseScore.Add(false); WasDoublePoseScore.Add(false); WasDoublePoseScore.Add(false);
         }
 
         public Player(string name, Vector2 wrestlerPosition, Pose currentPose, List<Pose> currentPosePattern, List<int> poseValuesForThisAi, SoundEffect aIIntroSound)

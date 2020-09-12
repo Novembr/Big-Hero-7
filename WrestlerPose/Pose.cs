@@ -9,7 +9,7 @@ using WrestlerPose.Sprites;
 
 namespace WrestlerPose
 {
-    
+    //"twodownclear", "pointingclear", "oneupclear", "twoupclear", "herculesclear"
     public enum PoseName
     {
         Idle,

@@ -126,6 +126,7 @@ namespace WrestlerPose
         private Texture2D three;
         private Texture2D dash;
 
+        private Texture2D twoForPoseStillDoubleScore;
 
         private void PlayButton_Click(object sender, System.EventArgs e)
         {
@@ -208,8 +209,8 @@ namespace WrestlerPose
             _scoreBoard = Content.Load<Texture2D>("scoreboardSingle");
             _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
             _aiLightsBackground = Content.Load<Texture2D>("ailights");
-            _aiLightsColored = Content.Load<Texture2D>("Colours - lights&glow/colour-glow1");
-            _aiLightsColored2 = Content.Load<Texture2D>("Colours - lights&glow/colour-glow2");
+            _aiLightsColored = Content.Load<Texture2D>("Colours - lights&glow/colour-spotlightOG");
+            //_aiLightsColored2 = Content.Load<Texture2D>("Colours - lights&glow/colour-glow2");
 
             _ringGirlLightsBackground = Content.Load<Texture2D>("ringgirllight");
             _ringWhite = Content.Load<Texture2D>("ringWhiteChunky");
@@ -222,6 +223,8 @@ namespace WrestlerPose
             two = Content.Load<Texture2D>("2");
             three = Content.Load<Texture2D>("3");
             dash = Content.Load<Texture2D>("-");
+
+            twoForPoseStillDoubleScore = Content.Load<Texture2D>("2");
 
             RoundOutcomeTexturesForJumboTron.Add(_blankOnScoreBoard);
             RoundOutcomeTexturesForJumboTron.Add(_checkOnScoreBoard);
@@ -973,7 +976,8 @@ namespace WrestlerPose
 
         void ComparePosesAndSetScores(int posePatternIndex, Player player, Player currentAI)
         {
-            Player winnerBetweenPlayerTwoAndAI = ComparePoses(player, currentAI, posePatternIndex);
+            //bool isTwoPointPlayerVictory = false;
+            Player winnerBetweenPlayerTwoAndAI = ComparePoses(player, currentAI, posePatternIndex, out bool isTwoPointPlayerVictory);
             player.CrowdMoving = false;
             player.PlayerWinningForCrowd = false;
 
@@ -981,13 +985,18 @@ namespace WrestlerPose
             {
                 if (winnerBetweenPlayerTwoAndAI == player)
                 {
-                    player.SetScore(player.GetScore() + 1);
+                    int ScoreToAdd = 1;
+                    if (isTwoPointPlayerVictory)
+                    {
+                        ScoreToAdd = 2;
+                        player.WasDoublePoseScore[posePatternIndex] = true;
+                    }
+                    player.SetScore(player.GetScore() + ScoreToAdd);
                     player.displayCircle = DisplayCircle.Won;
                     player.CheerInstance.Stop();
                     player.CheerInstance.Play();
                     player.CrowdMoving = true;
                     player.PlayerWinningForCrowd = true;
-
                 }
                 else
                 {
@@ -1350,7 +1359,7 @@ namespace WrestlerPose
                             new Vector2(_ringWhite.Width / 2, _ringWhite.Height / 2),
                             0.7f,
                             SpriteEffects.None,
-                            0.99f
+                            0.98f
                             );
                     }
 
@@ -1387,13 +1396,14 @@ namespace WrestlerPose
                             new Vector2(_ringWhite.Width / 2, _ringWhite.Height / 2),
                             0.7f,
                             SpriteEffects.None,
-                            0.99f
+                            0.98f
                             );
                     }
                 }
 
                 for (int i = 0; i < 5; i++)
                 {
+
                     if (i >= player1.GetPosePattern().Count)
                     {
                         continue;
@@ -1410,8 +1420,23 @@ namespace WrestlerPose
                         new Vector2(playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Width / 2, playerOneSelectedPoseSpritesToChooseFrom[poseNumberPlayerOne].Height / 2),
                         0.7f,
                         SpriteEffects.None,
+                        0.99f
+                        );
+
+                    if (player1.WasDoublePoseScore[i])
+                    {
+                        _spriteBatch.Draw(
+                        twoForPoseStillDoubleScore,
+                        new Vector2(120, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+                        null,
+                        Color.Red * poseStillAndRingOpacity,
+                        0f,
+                        new Vector2(twoForPoseStillDoubleScore.Width / 2, twoForPoseStillDoubleScore.Height / 2),
+                        0.7f,
+                        SpriteEffects.None,
                         1f
                         );
+                    }
                 }
 
                 for (int i = 0; i < 5; i++)
@@ -1432,8 +1457,23 @@ namespace WrestlerPose
                         new Vector2(playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Width / 2, playerTwoSelectedPoseSpritesToChooseFrom[poseNumberPlayerTwo].Height / 2),
                         0.7f,
                         SpriteEffects.None,
+                        0.99f
+                        );
+
+                    if (player2.WasDoublePoseScore[i])
+                    {
+                        _spriteBatch.Draw(
+                        twoForPoseStillDoubleScore,
+                        new Vector2(1770, 440 + i * picSpacing - deltaLeftForPosePatternDisplayByMatch),
+                        null,
+                        Color.Red * poseStillAndRingOpacity,
+                        0f,
+                        new Vector2(twoForPoseStillDoubleScore.Width / 2, twoForPoseStillDoubleScore.Height / 2),
+                        0.7f,
+                        SpriteEffects.None,
                         1f
                         );
+                    }
                 }
 
                 _spriteBatch.Draw(
@@ -1459,10 +1499,9 @@ namespace WrestlerPose
                     else
                     {
                         DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
-                        DisplayLights(_aiLightsColored, 0.8f, lightsScale, true, 0.89f);
-                        DisplayLights(_aiLightsColored2, 0.3f, lightsScale, true, 0.89f);
-
-                        //DisplayLights(_aiLightsColored, 0.4f, lightsScale, true, 0.95f);
+                        DisplayLights(_aiLightsColored, 0.6f, lightsScale, true, 0.89f);
+                        DisplayLights(_aiLightsColored, 0.06f, lightsScale, true, 0.95f);
+                        //DisplayLights(_aiLightsColored2, 0.3f, lightsScale, true, 0.89f);
 
                     }
 
@@ -1577,10 +1616,11 @@ namespace WrestlerPose
                 );
         }
 
-        public Player ComparePoses(Player player, Player AI, int poseIndex)
+        public Player ComparePoses(Player player, Player AI, int poseIndex, out bool isTwoPointPlayerVictory)
         {
             PoseName poseName1 = player.GetPosePattern()[poseIndex].GetPoseName();//got an out of range exception here?***
             PoseName poseName2 = AI.GetPosePattern()[poseIndex].GetPoseName();
+            isTwoPointPlayerVictory = false;
 
             if (poseName1 == poseName2)
             {
@@ -1606,6 +1646,10 @@ namespace WrestlerPose
             if ((poseName2 == poseName1FirstPoseItBeats) || (poseName2 == poseName1SecondPoseItBeats))
             {
                 player.PoseOutcomes[poseIndex] = 1;
+                if(poseName2 == poseName1SecondPoseItBeats)
+                {
+                    isTwoPointPlayerVictory = true;
+                }
                 return player;
             }
             else
@@ -1643,7 +1687,10 @@ namespace WrestlerPose
             {
                 player1.PoseOutcomes[i] = 0;
                 player2.PoseOutcomes[i] = 0;
+                player1.WasDoublePoseScore[i] = false;
+                player2.WasDoublePoseScore[i] = false;
             }
+
 
             player1.SetScore(0);
             player2.SetScore(0);
