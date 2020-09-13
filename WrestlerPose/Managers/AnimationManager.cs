@@ -18,7 +18,7 @@ namespace WrestlerPose.Managers
             _animation = animation;
         }
 
-        public void Draw(SpriteBatch spriteBatch, float scale, float layer)
+        public void Draw(SpriteBatch spriteBatch, float scale, float layer, Color color)
         {
 
             spriteBatch.Draw(
@@ -29,7 +29,7 @@ namespace WrestlerPose.Managers
                     0,
                     _animation.FrameWidth,
                     _animation.FrameHeight),
-                Color.White,
+                color,
                 0f,
                 new Vector2(_animation.Texture.Width / 2, _animation.Texture.Height / 2),
                 scale,

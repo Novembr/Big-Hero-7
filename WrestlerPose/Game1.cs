@@ -47,6 +47,8 @@ namespace WrestlerPose
         private List<Component> menuComponents;
 
         Sprite controllerAllPosesSprite;
+        Sprite _sparklerSprites;
+
 
         //List<Pose> defaultPoses = new List<Pose>(8);
         //List<Pose> altPoses = new List<Pose>(8);
@@ -209,7 +211,7 @@ namespace WrestlerPose
             _scoreBoard = Content.Load<Texture2D>("scoreboardSingle");
             _blackScreenBackground = Content.Load<Texture2D>("blackscreen");
             _aiLightsBackground = Content.Load<Texture2D>("ailights");
-            _aiLightsColored = Content.Load<Texture2D>("Colours - lights&glow/colour-spotlightOG");
+            _aiLightsColored = Content.Load<Texture2D>("colour-spotlightuse");//Colours - lights&glow/colour-spotlightOG
             //_aiLightsColored2 = Content.Load<Texture2D>("Colours - lights&glow/colour-glow2");
 
             _ringGirlLightsBackground = Content.Load<Texture2D>("ringgirllight");
@@ -298,6 +300,8 @@ namespace WrestlerPose
             displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("redfeet"), 3), displayCircleScale, displayCircleLayer));
 
             controllerAllPosesSprite = new Sprite(new Animation(Content.Load<Texture2D>("Animations/JoystickOnly-Posechart"), 24), 0.7f, 1);
+            _sparklerSprites = new Sprite(new Animation(Content.Load<Texture2D>("Colours - lights&glow/sparkler sprite sheet"), 12), 1.5f, 0.89f);//player on .9 so want behind ai
+
 
             float crowdScale = 2.4f;
             float crowdLayer = .5f;
@@ -310,6 +314,9 @@ namespace WrestlerPose
             signSprites.Add(new Sprite(new Animation(Content.Load<Texture2D>("redSignsAnim"), 3), signScale, signLayer));
             signSprites.Add(new Sprite(new Animation(Content.Load<Texture2D>("greenSignsAnim"), 3), signScale, signLayer));
             signSprites.Add(new Sprite(new Animation(Content.Load<Texture2D>("redSignsAnim"), 3), signScale, signLayer));
+
+
+
 
             confettiSprites.Add(new Sprite(new Animation(Content.Load<Texture2D>("confettispritesheet"), 3), 1.6f, 0.98f));
             confettiSprites.Add(new Sprite(new Animation(Content.Load<Texture2D>("confettispritesheet2"), 3), 1.6f, 0.98f));
@@ -869,7 +876,8 @@ namespace WrestlerPose
                     displayCircles[i].Update(gameTime, new Vector2(1930, 1000));
                 }
 
-                controllerAllPosesSprite.Update(gameTime, new Vector2(5792, 840));
+                controllerAllPosesSprite.Update(gameTime, new Vector2(5792, 640));
+                _sparklerSprites.Update(gameTime, new Vector2(10875, 450));
                 crowdSprites[0].Update(gameTime, new Vector2(1060, 525));
                 crowdSprites[1].Update(gameTime, new Vector2(2420, 525));
                 signSprites[0].Update(gameTime, new Vector2(1060, 525));
@@ -1107,7 +1115,7 @@ namespace WrestlerPose
                     if (localPlayer2MatchScore < localPlayer1MatchScore)
                     {
 
-                        confettiSprites[0].Draw(_spriteBatch);
+                        confettiSprites[0].Draw(_spriteBatch, false, currentAI);
 
                         //END GAME AND AFTER END OF LAST ROUND OF LAST MATCH
                         if (matchNumber == 3 && (roundTimer > 8000))
@@ -1124,8 +1132,8 @@ namespace WrestlerPose
                              0.98f
                              );
 
-                            crowdSprites[0].Draw(_spriteBatch);
-                            signSprites[0].Draw(_spriteBatch);
+                            crowdSprites[0].Draw(_spriteBatch, false, currentAI);
+                            signSprites[0].Draw(_spriteBatch, false, currentAI);
 
                             if (player1.GetPose() != outComePoses[0])
                             {
@@ -1140,7 +1148,7 @@ namespace WrestlerPose
                     }
                     else
                     {
-                        confettiSprites[1].Draw(_spriteBatch);
+                        confettiSprites[1].Draw(_spriteBatch, false, currentAI);
 
                         if (matchNumber == 3 && (roundTimer > 8000))//MATCHCHANGE
                         {
@@ -1156,8 +1164,8 @@ namespace WrestlerPose
                                 0.98f
                                 );
 
-                            crowdSprites[1].Draw(_spriteBatch);
-                            signSprites[2].Draw(_spriteBatch);
+                            crowdSprites[1].Draw(_spriteBatch, false, currentAI);
+                            signSprites[2].Draw(_spriteBatch, false, currentAI);
 
 
                             if (player1.GetPose() != outComePoses[1])
@@ -1216,22 +1224,22 @@ namespace WrestlerPose
                        );
                 }
 
-                player1.GetPose().GetSprite().Draw(_spriteBatch);
-                player2.GetPose().GetSprite().Draw(_spriteBatch);
-                currentAI.GetPose().GetSprite().Draw(_spriteBatch);
+                player1.GetPose().GetSprite().Draw(_spriteBatch, false, currentAI);
+                player2.GetPose().GetSprite().Draw(_spriteBatch, false, currentAI);
+                currentAI.GetPose().GetSprite().Draw(_spriteBatch, false, currentAI);
 
                 if (!dontDisplayOutcome)
                 {
                     switch (player1.displayCircle)
                     {
                         case DisplayCircle.Tied:
-                            displayCircles[0].Draw(_spriteBatch);
+                            displayCircles[0].Draw(_spriteBatch, false, currentAI);
                             break;
                         case DisplayCircle.Won:
-                            displayCircles[1].Draw(_spriteBatch);
+                            displayCircles[1].Draw(_spriteBatch, false, currentAI);
                             break;
                         case DisplayCircle.Lost:
-                            displayCircles[2].Draw(_spriteBatch);
+                            displayCircles[2].Draw(_spriteBatch, false, currentAI);
                             break;
                         default:
                             break;
@@ -1240,13 +1248,13 @@ namespace WrestlerPose
                     switch (player2.displayCircle)
                     {
                         case DisplayCircle.Tied:
-                            displayCircles[3].Draw(_spriteBatch);
+                            displayCircles[3].Draw(_spriteBatch, false, currentAI);
                             break;
                         case DisplayCircle.Won:
-                            displayCircles[4].Draw(_spriteBatch);
+                            displayCircles[4].Draw(_spriteBatch, false, currentAI);
                             break;
                         case DisplayCircle.Lost:
-                            displayCircles[5].Draw(_spriteBatch);
+                            displayCircles[5].Draw(_spriteBatch, false, currentAI);
                             break;
                         default:
                             break;
@@ -1278,28 +1286,28 @@ namespace WrestlerPose
                 {
                     if (player1.CrowdMoving)
                     {
-                        crowdSprites[0].Draw(_spriteBatch);
+                        crowdSprites[0].Draw(_spriteBatch, false, currentAI);
 
                         if (player1.PlayerWinningForCrowd)
                         {
-                            signSprites[0].Draw(_spriteBatch);
+                            signSprites[0].Draw(_spriteBatch, false, currentAI);
                         }
                         else
                         {
-                            signSprites[1].Draw(_spriteBatch);
+                            signSprites[1].Draw(_spriteBatch, false, currentAI);
                         }
                     }
                     if (player2.CrowdMoving)
                     {
-                        crowdSprites[1].Draw(_spriteBatch);
+                        crowdSprites[1].Draw(_spriteBatch, false, currentAI);
 
                         if (player2.PlayerWinningForCrowd)
                         {
-                            signSprites[2].Draw(_spriteBatch);
+                            signSprites[2].Draw(_spriteBatch, false, currentAI);
                         }
                         else
                         {
-                            signSprites[3].Draw(_spriteBatch);
+                            signSprites[3].Draw(_spriteBatch, false, currentAI);
                         }
                     }
                 }
@@ -1322,7 +1330,7 @@ namespace WrestlerPose
                 }
                 else if (!introTurn && !displayMatchScore && !aiTurn)
                 {
-                    controllerAllPosesSprite.Draw(_spriteBatch);
+                    controllerAllPosesSprite.Draw(_spriteBatch, false, currentAI);
                 }
                 else
                 {
@@ -1496,6 +1504,9 @@ namespace WrestlerPose
                       1f
                       );
 
+                //test
+                //_sparklerSprites.Draw(_spriteBatch, false, currentAI);
+
                 float lightsScale = 1.6f;
                 float lightsOpacity = .7f;
                 if (aiTurn)
@@ -1509,6 +1520,7 @@ namespace WrestlerPose
                         DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
                         DisplayLights(_aiLightsColored, 0.3f, lightsScale, true, 0.89f);
                         DisplayLights(_aiLightsColored, 0.06f, lightsScale, true, 0.95f);
+                        _sparklerSprites.Draw(_spriteBatch, true, currentAI);
                         //DisplayLights(_aiLightsColored2, 0.3f, lightsScale, true, 0.89f);
 
                     }

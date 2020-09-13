@@ -40,15 +40,45 @@ namespace WrestlerPose.Sprites
             return animationTime;
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch, bool isColoredLight, Player currentAI)
         {
+            Color color = Color.White;
+            PoseName aIPose = currentAI.GetPose().GetPoseName();
+
+            if (isColoredLight)
+            {
+                switch (aIPose)
+                {
+                    case PoseName.Idle:
+                        color = Color.White;//don't actually need this one but just in case will put here
+                        break;
+                    case PoseName.LowHands:
+                        color = Color.FromNonPremultiplied(254, 242, 141, 256);
+                        break;
+                    case PoseName.Pointing:
+                        color = Color.FromNonPremultiplied(131, 129, 190, 256);
+                        break;
+                    case PoseName.OneHandUp:
+                        color = Color.FromNonPremultiplied(155, 205, 236, 256);
+                        break;
+                    case PoseName.HighHands:
+                        color = Color.FromNonPremultiplied(205, 153, 155, 256);
+                        break;
+                    case PoseName.Hercules:
+                        color = Color.FromNonPremultiplied(164, 202, 156, 256);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             if (_texture != null)
             {
                 spriteBatch.Draw(
                     _texture, 
                     Position, 
                     null,
-                    Color.White,
+                    color,
                     0f,
                     new Vector2(_texture.Width / 2, _texture.Height / 2),
                     0.3f,
@@ -60,7 +90,7 @@ namespace WrestlerPose.Sprites
             }
             else if (_animationManager != null)
             {
-                _animationManager.Draw(spriteBatch, _scale, _layer);//it's position is the sprite position
+                _animationManager.Draw(spriteBatch, _scale, _layer, color);//it's position is the sprite position
             }
             else throw new Exception("This ain't right..!");
         }

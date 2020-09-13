@@ -631,7 +631,7 @@
 /processorParam:TextureFormat=Color
 /build:Colours - lights&glow/colours.png
 
-#begin Colours - lights&glow/colour-spotlight.png
+#begin Colours - lights&glow/colour-sparkler base.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -641,9 +641,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Colours - lights&glow/colour-spotlight.png
+/build:Colours - lights&glow/colour-sparkler base.png
 
-#begin Colours - lights&glow/colour-spotlightOG.png
+#begin Colours - lights&glow/colour-sparkler.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -653,7 +653,31 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Colours - lights&glow/colour-spotlightOG.png
+/build:Colours - lights&glow/colour-sparkler.png
+
+#begin Colours - lights&glow/sparkler sprite sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Colours - lights&glow/sparkler sprite sheet.png
+
+#begin colour-spotlightuse.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:colour-spotlightuse.png
 
 #begin confettiNew.png
 /importer:TextureImporter
