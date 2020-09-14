@@ -48,6 +48,8 @@ namespace WrestlerPose
 
         Sprite controllerAllPosesSprite;
         Sprite _sparklerSprites;
+        Sprite _sparklerSpritesFixed;
+
 
 
         //List<Pose> defaultPoses = new List<Pose>(8);
@@ -127,6 +129,7 @@ namespace WrestlerPose
         private Texture2D two;
         private Texture2D three;
         private Texture2D dash;
+        Animation sparklerAnimation;
 
         private Texture2D twoForPoseStillDoubleScore;
 
@@ -204,7 +207,7 @@ namespace WrestlerPose
             _stageBackground = Content.Load<Texture2D>("main_stage_plane_audience");
             _stageBackgroundIntro = Content.Load<Texture2D>("main_stage_plane");
             _playerNumbersBackground = Content.Load<Texture2D>("p1_and_p2");
-            
+
             _player1Wins = Content.Load<Texture2D>("Playerwins1");
             _player2Wins = Content.Load<Texture2D>("Playerwins2");
 
@@ -300,7 +303,12 @@ namespace WrestlerPose
             displayCircles.Add(new Sprite(new Animation(Content.Load<Texture2D>("redfeet"), 3), displayCircleScale, displayCircleLayer));
 
             controllerAllPosesSprite = new Sprite(new Animation(Content.Load<Texture2D>("Animations/JoystickOnly-Posechart"), 24), 0.7f, 1);
-            _sparklerSprites = new Sprite(new Animation(Content.Load<Texture2D>("Colours - lights&glow/sparkler sprite sheet"), 12), 1.5f, 0.89f);//player on .9 so want behind ai
+
+            sparklerAnimation = new Animation(Content.Load<Texture2D>("Colours - lights&glow/sparkler sprite sheet"), 12, false);
+            _sparklerSprites = new Sprite(sparklerAnimation, 1.5f, 0.89f);//player on .9 so want behind ai
+            _sparklerSpritesFixed = new Sprite(new Animation(Content.Load<Texture2D>("Colours - lights&glow/sparkler sprite sheet"), 12), 1.5f, 0.89f);
+
+
 
 
             float crowdScale = 2.4f;
@@ -399,7 +407,7 @@ namespace WrestlerPose
             {
                 int poseInt = i;
                 float scale = 2.5f;
-                
+
                 if (i > 5)
                 {
                     poseInt = poseInt - 6;
@@ -891,6 +899,9 @@ namespace WrestlerPose
                 {
                     dontDisplayOutcome = true;
 
+                    float sparklerAnimationTime = sparklerAnimation.FrameCount * sparklerAnimation.FrameSpeed;
+
+
                     if (numPosesDisplayedAI < currentAI.GetPosePattern().Count)
                     {
                         currentTimeAI += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -912,6 +923,7 @@ namespace WrestlerPose
                         {
                             counterAI--;
                             currentTimeAI -= countDurationAI;
+                            sparklerAnimation.IsLooping = false;
                         }
                         if (counterAI < 0)
                         {
@@ -919,13 +931,29 @@ namespace WrestlerPose
                             int randomPoseIndexFromThisAisPoseNumberslist = 0;
                             int poseValueFromThisAisRandomSelection = 0;
 
+                            //it only goes in here once on each move so time is not gonna work 
+                            //float animationTime = sparklerAnimation.FrameCount * sparklerAnimation.FrameSpeed;
+                            //if (currentTimeAI > animationTime) 
+                            //{ 
+                            //    sparklerAnimation.IsLooping = true; 
+                            //}
+                            //else
+                            //{
+                            //    sparklerAnimation.IsLooping = false;
+                            //}
+
+                            sparklerAnimation.IsLooping = true;
+
+
+
+
                             while (!IsNewPose)
                             {
                                 Random rnd = new Random();
                                 randomPoseIndexFromThisAisPoseNumberslist = rnd.Next(0, currentAI._poseValuesForThisAI.Count);
                                 poseValueFromThisAisRandomSelection = currentAI._poseValuesForThisAI[randomPoseIndexFromThisAisPoseNumberslist];
 
-                                if(numPosesDisplayedAI == 0)
+                                if (numPosesDisplayedAI == 0)
                                 {
                                     IsNewPose = true;
                                 }
@@ -933,7 +961,7 @@ namespace WrestlerPose
                                 {
                                     Pose thisSelectedPose = poses[poseValueFromThisAisRandomSelection];
                                     Pose previousAIPose = currentAI.GetPose();
-                                    if(thisSelectedPose != previousAIPose)
+                                    if (thisSelectedPose != previousAIPose)
                                     {
                                         IsNewPose = true;
                                     }
@@ -942,7 +970,7 @@ namespace WrestlerPose
                             currentAI.SetPose(poses[poseValueFromThisAisRandomSelection]);
                             currentAI.SetPosePattern(numPosesDisplayedAI, poses[poseValueFromThisAisRandomSelection]);
                             soundEffects[randomPoseIndexFromThisAisPoseNumberslist].CreateInstance().Play();
-                            float animationTime = currentAI.GetPosePattern()[numPosesDisplayedAI].GetSprite().GetAnimationTime();
+                            //float animationTime = currentAI.GetPosePattern()[numPosesDisplayedAI].GetSprite().GetAnimationTime();
                             //int roundedUp = (int)Math.Ceiling(animationTime);//didn't end up needing this, but is to determine pose display time by animation time instead of 
                             //using a fixed value
                             counterAI = 3;
@@ -953,7 +981,12 @@ namespace WrestlerPose
 
                     if (numPosesDisplayedAI >= currentAI.GetPosePattern().Count)
                     {
+
                         roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                        if (roundTimer > 700)//this is length of sparkler animation about
+                        {
+                            sparklerAnimation.IsLooping = false;
+                        }
                         if (roundTimer > 2000)
                         {
                             int upIndexCurrentAIIdlePoseIndex = (matchNumber - 1) * 6 + 12;// 1: 12 //first ai idle // 2: 18 //second ai idle  // 3: 24 //third ai idle
@@ -1666,7 +1699,7 @@ namespace WrestlerPose
             if ((poseName2 == poseName1FirstPoseItBeats) || (poseName2 == poseName1SecondPoseItBeats))
             {
                 player.PoseOutcomes[poseIndex] = 1;
-                if(poseName2 == poseName1SecondPoseItBeats)
+                if (poseName2 == poseName1SecondPoseItBeats)
                 {
                     isTwoPointPlayerVictory = true;
                 }

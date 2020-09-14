@@ -64,7 +64,7 @@ namespace WrestlerPose.Managers
 
                 _animation.CurrentFrame++;
 
-                if(_animation.CurrentFrame >= _animation.FrameCount)
+                if(_animation.CurrentFrame >= _animation.FrameCount && _animation.IsLooping)
                 {
                     _animation.CurrentFrame = 0;
                 }

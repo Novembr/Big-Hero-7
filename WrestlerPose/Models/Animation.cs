@@ -15,6 +15,14 @@ namespace WrestlerPose.Models
         public bool IsLooping { get; set; }
         public Texture2D Texture { get; private set; }
 
+        public Animation(Texture2D texture, int frameCount, bool isLooping)
+        {
+            Texture = texture;
+            FrameCount = frameCount;
+            IsLooping = isLooping;
+            FrameSpeed = 0.06f;
+        }
+
         public Animation(Texture2D texture, int frameCount)
         {
             Texture = texture;
