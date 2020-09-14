@@ -306,7 +306,7 @@ namespace WrestlerPose
 
             sparklerAnimation = new Animation(Content.Load<Texture2D>("Colours - lights&glow/sparkler sprite sheet"), 12, false);
             _sparklerSprites = new Sprite(sparklerAnimation, 1.5f, 0.89f);//player on .9 so want behind ai
-            _sparklerSpritesFixed = new Sprite(new Animation(Content.Load<Texture2D>("Colours - lights&glow/sparkler sprite sheet"), 12), 1.5f, 0.89f);
+            _sparklerSpritesFixed = new Sprite(new Animation(Content.Load<Texture2D>("Colours - lights&glow/sparklerloop"), 12), 1.5f, 0.89f);
 
 
 
@@ -886,6 +886,7 @@ namespace WrestlerPose
 
                 controllerAllPosesSprite.Update(gameTime, new Vector2(5792, 640));
                 _sparklerSprites.Update(gameTime, new Vector2(10875, 450));
+                _sparklerSpritesFixed.Update(gameTime, new Vector2(10875, 450));
                 crowdSprites[0].Update(gameTime, new Vector2(1060, 525));
                 crowdSprites[1].Update(gameTime, new Vector2(2420, 525));
                 signSprites[0].Update(gameTime, new Vector2(1060, 525));
@@ -899,12 +900,17 @@ namespace WrestlerPose
                 {
                     dontDisplayOutcome = true;
 
-                    float sparklerAnimationTime = sparklerAnimation.FrameCount * sparklerAnimation.FrameSpeed;
+                    float sparklerAnimationTime = sparklerAnimation.FrameCount * sparklerAnimation.FrameSpeed;//not tested
 
 
                     if (numPosesDisplayedAI < currentAI.GetPosePattern().Count)
                     {
                         currentTimeAI += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        //if (numPosesDisplayedAI == 0 && (currentTimeAI > sparklerAnimationTime))
+                        //{
+                        //    sparklerAnimation.IsLooping = false;
+                        //}
 
                         if (blackScreenOpacity > 0)
                         {
@@ -983,7 +989,8 @@ namespace WrestlerPose
                     {
 
                         roundTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                        if (roundTimer > 700)//this is length of sparkler animation about
+                        
+                        if (roundTimer > (sparklerAnimationTime* 1000))//this is length of sparkler animation about
                         {
                             sparklerAnimation.IsLooping = false;
                         }
@@ -1552,8 +1559,19 @@ namespace WrestlerPose
                     {
                         DisplayLights(_aiLightsBackground, lightsOpacity, lightsScale, false, 0.95f);
                         DisplayLights(_aiLightsColored, 0.3f, lightsScale, true, 0.89f);
-                        DisplayLights(_aiLightsColored, 0.06f, lightsScale, true, 0.95f);
-                        _sparklerSprites.Draw(_spriteBatch, true, currentAI);
+                        DisplayLights(_aiLightsColored, 0.03f, lightsScale, true, 0.95f);
+
+
+                        if(currentAI.GetPose().GetPoseName() != PoseName.Idle)
+                        {
+                            _sparklerSprites.Draw(_spriteBatch, true, currentAI);
+
+                            if (!sparklerAnimation.IsLooping)
+                            {
+                                _sparklerSpritesFixed.Draw(_spriteBatch, true, currentAI);
+                            }
+                        }
+
                         //DisplayLights(_aiLightsColored2, 0.3f, lightsScale, true, 0.89f);
 
                     }
