@@ -129,6 +129,7 @@ namespace WrestlerPose
         private Texture2D two;
         private Texture2D three;
         private Texture2D dash;
+        private Texture2D sparklerEmitter;
         Animation sparklerAnimation;
 
         private Texture2D twoForPoseStillDoubleScore;
@@ -206,6 +207,7 @@ namespace WrestlerPose
 
             _stageBackground = Content.Load<Texture2D>("main_stage_plane_audience");
             _stageBackgroundIntro = Content.Load<Texture2D>("main_stage_plane");
+            sparklerEmitter = Content.Load<Texture2D>("Colours - lights&glow/colour-sparkler base");
             _playerNumbersBackground = Content.Load<Texture2D>("p1_and_p2");
 
             _player1Wins = Content.Load<Texture2D>("Playerwins1");
@@ -1223,6 +1225,20 @@ namespace WrestlerPose
                     }
                 }
 
+                //_spriteBatch.Draw(
+                //            sparklerEmitter,
+                //            new Vector2(975, 450),
+                //            null,
+                //            Color.White,
+                //            0f,
+                //            new Vector2(sparklerEmitter.Width / 2, sparklerEmitter.Height / 2),
+                //            1.5f,
+                //            SpriteEffects.None,
+                //            0.89f
+                //            );
+
+                //_sparklerSpritesFixed.Draw(_spriteBatch, true, currentAI);
+
                 if (!introTurn)
                 {
                     _spriteBatch.Draw(
@@ -1235,6 +1251,18 @@ namespace WrestlerPose
                             new Vector2(2.4f, 2.4f),
                             SpriteEffects.None,
                             0f
+                            );
+
+                    _spriteBatch.Draw(
+                            sparklerEmitter,
+                            new Vector2(975, 450),
+                            null,
+                            Color.White,
+                            0f,
+                            new Vector2(sparklerEmitter.Width / 2, sparklerEmitter.Height / 2),
+                            1.5f,
+                            SpriteEffects.None,
+                            0.89f
                             );
 
                     _spriteBatch.Draw(
